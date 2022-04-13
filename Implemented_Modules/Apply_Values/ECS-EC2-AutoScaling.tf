@@ -1,5 +1,5 @@
 module "AUTO_SCALING_GROUPS" {
-  source = "Implemented_Modules/Compute/ECS-EC2-AutoScaling-Modules"
+  source = "../Compute/ECS-EC2-AutoScaling-Modules"
 
 ##################
 ## ECS: Cluster ##

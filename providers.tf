@@ -23,7 +23,7 @@ provider "aws" {
 # ############################       
 
 module "GET_APPLY_FOLDER" {
-source = "Implemented_Modules/Apply_Values"
+source = "./Implemented_Modules/Apply_Values"
 }
 
 # #####################
