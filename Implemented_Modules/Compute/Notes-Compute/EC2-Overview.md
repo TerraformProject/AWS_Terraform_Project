@@ -20,7 +20,7 @@ operating costs lows and applications running smoothly.
 
 There are multiple ways of purchasing EC2 instances with the following options
    
-• On-Deman Instances: Pay by the second. For the instances you launch.   
+• On-Demand Instances: Pay by the second. For the instances you launch.   
 • Spot Instances: Request unused EC2 instances.   
 • Reserved Instances: Commitment to instances with consistent configuration, instance type, and region for a term of 1 to 3 years.   
 • Capacity Reservations: Reserve capacity for you instances in a specific availability zone for any duration.   
