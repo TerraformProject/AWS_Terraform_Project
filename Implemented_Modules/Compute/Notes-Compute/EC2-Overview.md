@@ -20,13 +20,13 @@ operating costs lows and applications running smoothly.
 
 There are multiple ways of purchasing EC2 instances with the following options
    
-• On-Demand Instances: Pay by the second. For the instances you launch.   
-• Spot Instances: Request unused EC2 instances.   
-• Reserved Instances: Commitment to instances with consistent configuration, instance type, and region for a term of 1 to 3 years.   
-• Capacity Reservations: Reserve capacity for you instances in a specific availability zone for any duration.   
-• Saving Plans: Commitment to instances with a consistent amount of usage ($USD/hr) for a term of 1 to 3 years.   
-• Dedicated Instances: Pay by the hour, for instances that run on single tenant hardware.   
-• Dedicated Hosts: Paid physical host fully dedicated to running instances. Bring existing per-socket, per-core, per-VM software licences.
+• **On-Demand Instances:** Pay by the second. For the instances you launch.   
+• **Spot Instances:** Request unused EC2 instances.   
+• **Reserved Instances:** Commitment to instances with consistent configuration, instance type, and region for a term of 1 to 3 years.   
+• **Capacity Reservations:** Reserve capacity for you instances in a specific availability zone for any duration.   
+• **Saving Plans:** Commitment to instances with a consistent amount of usage ($USD/hr) for a term of 1 to 3 years.   
+• **Dedicated Instances:** Pay by the hour, for instances that run on single tenant hardware.   
+• **Dedicated Hosts:** Paid physical host fully dedicated to running instances. Bring existing per-socket, per-core, per-VM software licences.
 
 ## Instance Types
 
@@ -36,12 +36,12 @@ based on these capabilities.
 
 These instance families are categorized in the following ways   
    
-• General Purpose Instance   
-• Compute Optimized instances   
-• Memory Optimized Instances   
-• Storage Optimized Instances   
-• Linux Accelerated Computing Instances  
-• Instances Built on the Nitro System
+• **General Purpose Instance**   
+• **Compute Optimized instances**   
+• **Memory Optimized Instances**   
+• **Storage Optimized Instances**   
+• **Linux Accelerated Computing Instances**  
+• **Instances Built on the Nitro System**
 
 ## Instance Fleets
 
@@ -85,12 +85,12 @@ Example: You can use Amazon S3 to stora snapshot of EBS volumes in S3 Buckets at
 
 ## Additional Resources involved with EC2   
 
-• Amazon AMI  
-• Amazon Launch Templates   
-• Amazon Auto Scaling Groups   
-• Amazon Launch Configurations   
-• Amazon Load Balancers       
-• Amazon Networking/Security Section
+• **Amazon AMI**  
+• **Amazon Launch Templates**   
+• **Amazon Auto Scaling Groups**   
+• **Amazon Launch Configurations**   
+• **Amazon Load Balancers**       
+• **Amazon Networking/Security Section**
 
    
 
