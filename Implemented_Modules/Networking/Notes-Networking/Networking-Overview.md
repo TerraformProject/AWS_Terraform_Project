@@ -15,9 +15,10 @@ Within a VPC you are able to provision the following networking resources.
 
 ** A VPC spans all Availability Zones within an AWS region.   
 
-## VPC Route Table Concepts
+# VPC Route Table Concepts
 
-The following are the key concepts route tables   
+**The following are the key concepts route tables**   
+
 • **Main Route Table:** The route table that automatically comes with your VPC. It controls initialy the routing for all subnets that are not explicitly associated to a route table.    
 • **Custom Route Table:** A route table that is created in addition to the main route table.   
 • **Destination:** The range of IP addresses where you want traffic to go (destination CIDR).    
@@ -31,6 +32,7 @@ The following are the key concepts route tables
 • **Local Gateway Route table:** A route table that is associated with an Outpost local gateway.   
 
 ## VPC Subnet Basics   
+
 A subnet is a range of IP addresses in your VPC. You can launch AWS resources, into specific subnet. When you create a subnet you specify the IPv4 CIDR block for the subnet, which is a subset of the VPC CIDR block.  
 
 Each subnet must reside entirely withn one Availability Zone and cannot span multiple zones. One subnet per availability zone allows for protection of applications that fail within a single Availability Zone.  
@@ -38,6 +40,7 @@ Each subnet must reside entirely withn one Availability Zone and cannot span mul
 You can optionally add subnets in a Local Zone, which is an AWS infrastructure deployment that places compute, storage, database, and other selected services closer to you end users. This enables applications to meet their requirement of single-digit millisecond latencies.
 
 ### Subnet Types   
+
 • IPv4 only    
 • IPv4 and IPv6 (Dualstack)  
 • IPv6-only        
@@ -45,7 +48,7 @@ You can optionally add subnets in a Local Zone, which is an AWS infrastructure d
 • Private Subnet     
 • VPN-Only Subnet  
 
-## VPC DHCP Options Sets
+# VPC DHCP Options Sets
 
 Allows you to specify how devices in your VPC use the Dynamic Host Configuration Protocol (DHCP). The DHCP options set gives you the control over the following aspects with your VPC.   
 
@@ -79,7 +82,7 @@ You can create your own DHCP option set in a VPC. This enables you to configure 
 2) Interact with Non-Amazon DNS, NTP, and NetBIOS servers (From a corporate data center).    
 3) Connect to other devices in the network through you VPC router.   
 
-## Amazon DNS Server  
+# Amazon DNS Server  
 
 The Amazon DNS server is an Amazon Route 53 Resolver server. This server enables DNS for instances that need to communicate over the VPC's Internate Gateway.
 
@@ -89,9 +92,11 @@ The Amazon DNS server is an Amazon Route 53 Resolver server. This server enables
 • A Reserved IP address at the base of the VPC CIDR IPv4 network range + 2. Example: 10.0.0.0/16, DNS Server - 10.0.0.2 *If VPC contains multiple CIDR blocks , the DNS server is located in the primary CIDR block.      
 • fd00:ec2::253   
 
-When you launch an instance into a VPC, Amazon provides the instance with a Private DNS hostname. Amazon also provides a public DNS hostname if the instance is configured with a Public IPv4 address and the VPC DNS attributes are enabled.
+When you launch an instance into a VPC, Amazon provides the instance with a Private DNS hostname. Amazon also provides a public DNS hostname if the instance is configured with a Public IPv4 address and the VPC DNS attributes are enabled.  
 
-## VPC Gateways  
+**AWS Route53 provides a wide range of control of DNS Resolving within VPCs** 
+
+# VPC Gateways  
 
 **You can connect your VPC to other networks such as VPCs, the internet, or on-premise network in the following ways.**
 
