@@ -6,6 +6,7 @@ Within a VPC you are able to provision the following networking resources.
 • **Route Tables**   
 • **Subnets**   
 • **DHCP Options sets**   
+• **Amazon Domain Name Resolver**  
 • **Gateways**   
 • **Endpoint Services**   
 • **VPC Peering Connections**   
@@ -84,8 +85,40 @@ The Amazon DNS server is an Amazon Route 53 Resolver server. This server enables
 
 ** The Amazon DNS Server does not reside within a specific subnet or Availability Zone within a VPC. More so, this DNS server is located at the following.**   
 
-• 169.254.169.253
-• A Reserved IP address at the base of the VPC CIDR IPv4 network range + 2. Example: 10.0.0.0/16, DNS Server - 10.0.0.2 *If VPC contains multiple CIDR blocks , the DNS server is located in the primary CIDR block.   
+• 169.254.169.253   
+• A Reserved IP address at the base of the VPC CIDR IPv4 network range + 2. Example: 10.0.0.0/16, DNS Server - 10.0.0.2 *If VPC contains multiple CIDR blocks , the DNS server is located in the primary CIDR block.      
 • fd00:ec2::253   
 
 When you launch an instance into a VPC, Amazon provides the instance with a Private DNS hostname. Amazon also provides a public DNS hostname if the instance is configured with a Public IPv4 address and the VPC DNS attributes are enabled.
+
+## VPC Gateways  
+
+**You can connect your VPC to other networks such as VPCs, the internet, or on-premise network in the following ways.**
+
+#### Internet Gateway     
+
+An internet gateway is a horizontally scaled, redundant, and highly available VPC component that allows communications between your VPC and the internet. An internet gateway enables resources in your public subnets to connect to the internet if the resource has a public IPv4 address or an IPv6 address. Similarly, resources on the internet can initiate a connection to resources in your subnet using the public IPv4 or IPv6 address.
+
+An internet gateway serves two purposes.  
+• To provide a target on your VPC route tables for internet-routable traffic.  
+• To perform network address translation (NAT) for instances that have been a assigned public IPv4 addresses.   
+   
+#### Egress-only Internet Gateways     
+   
+An egress-only internet gateway is a horizontally scaled, redundant, and highly available VPC component that allows for outbound only communications over IPv6 from instances in your VPC to the internet and prevents the internet from initiating an IPv6 connection with your instances.    
+     
+An egress-only internet gateway is **stateful**: It forwards traffic from the instances in the subnet or other AWS servicesm and then sends the response back to the instances.
+
+#### NAT Gateways      
+
+A NAT Gateway is a Network Address Translation (NAT) service. You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services cann initiate a connection with those instances.   
+
+** When you create a NAT Gateway, you specify one of the following types.**     
+   
+**• Public:** (Defaul) Instances within private subnets can connect to the internet through a Public NAT Gatewat, but are unable to receive unsolicited inbound connections from the internet. You must associate an Elastic IP (EIP) with the NAT Gateway at creation. You route traffic from the NAT Gateway to the internet gateway for the VPC. Alternatively, you can use a public NAT Gateway to connect to other VPCs or your on-premise network.   
+   
+**• Private:** Instances within private subnets can connect to other VPCs or your on-premise network through a private NAT gateway. You can route traffic from the NAT gateway through a Transit Gateway or a Virtual Private Gateway. You cannot associate an elastic IP (EIP) address with a private NAT Gatewat. You can attach an internet gateway to a VPC with a privte NAT Gateway, but if you route traffic from the private NAT Gateway to the internet gateway, the internet gateway drops the traffic.    
+
+#### Transit Gateways   
+
+You can connect your virtual private clouds (VPCs) and on-premesis networks using a transit gateway, which acts as a central hub, routing traffic between VPCs, VPN connections, and AWS Direct Connect connections. 
