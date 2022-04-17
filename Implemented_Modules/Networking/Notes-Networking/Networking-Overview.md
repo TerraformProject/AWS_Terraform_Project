@@ -9,8 +9,7 @@ Within a VPC you are able to provision the following networking resources.
 • **Amazon Domain Name Resolver**  
 • **Gateways**   
 • **VPC Peering Connections**   
-• **Endpoint Services**      
-• **Firewall Management**   
+• **Endpoint Services**         
 • **Network Analytics**
 
 ** A VPC spans all Availability Zones within an AWS region.   
@@ -146,8 +145,40 @@ Although the term VPN connection is a general term, a VPN connection refers to t
    
 **• VPN Connection:** A secure connection between your on-premesis equipment and your VPCs.     
 **• VPN Tunnel:** An encrypted link where data can pass from the customer network to or from AWS. Each VPN connection includes two VPN tunnels wich you can simultaneously use for high availability.    
-**• Customer:** An AWS resource which provides information to AWS about your customer gateway device.   
+**• Customer Gateway:** An AWS resource which provides information to AWS about your customer gateway device.   
 **• Customer Gateway Device:** A physical device or software application on your of the Sit-to-Site VPN connection.    
 **• Target Gateway:** A generic term for the VPN Endpoint on the Amazon side of the Site-to-Site VPN conenction.    
-**• Virtual Private Gateway: A virtual private gateway is a VPN endpoint on the Amazon side of your Site-to-Site VPN connection that can be attached to a single VPC.   
-**• Transit Gateway:** A Transit hub that can be used to interconnect multiple VPCs and on-premise networks, and a VPN endpoint for the Amazon side of the Site-to-Site VPN connection.    
+**• Virtual Private Gateway:** A virtual private gateway is a VPN endpoint on the Amazon side of your Site-to-Site VPN connection that can be attached to a single VPC.   
+**• Transit Gateway:** A Transit hub that can be used to interconnect multiple VPCs and on-premise networks, and a VPN endpoint for the Amazon side of the Site-to-Site VPN connection.   
+
+# VPC Endpoints    
+
+A VPC Endpoint enables connections between a VPC and supported services, without requiring the use of internet gateways, NAT Devices, VPN connections, AWS Direct Connect connections. Therefore, you control the specific API endpoints, sites, and services that are reachable from your VPC.   
+
+VPC Endpoints are virtual devices. They are horizontally scaled, redundant, and highly available VPC components. The following are the different types of VPC Endpoints that is is required by the supported device.   
+
+**• Interface Endpoints:** An interface endpoint is an elastic network interface with a private IP address from the IP address range of your subnet. It serves as an entry point for traffic destined to a service that is owned by AWS or owned by an AWS customer or partner.    
+**• Gateway Loadbalance Endpoints:** A Gateway Load Balancer Endpoint os an elastic network interface with a private IP address from the IP address range of your subnet. It serves as an entry point to intercept traffic and route it to a network or security service that you've configured using a Gateway Load Balancer. You specify a Gateway Load Balancer Endpoint as a target for a route in a route table. Gateway Load Balancer Endpoint are supported only for endpoint services that are configured using the Gateway Load Balancer.     
+**• Gateway Endpoints:** A Gateway Endpoint is a gateway that is a target for a route in your route table used for traffic destined to either Amazon S3 or DynamoDB.  
+   
+**Endpoint Services: Are referred to as the application or service in your VPC. Other AWS principals can create an endpoint from their VPC to your endpoint service.**   
+
+# Network Analytics  
+
+**You can use the following tools to monitor traffic or network access in your virtual private network.**    
+
+**• VPC Flows Logs:** VPC Flows Logs capture detailed information about the traffic going to and from network interfaces within your VPC.    
+**• VPC IP Address Manager (IPAM):** IPAM plans, tracks, and monitors IP addresses for your workloads. More so an IP address assignment manager.   
+**• VPC Traffic Mirroring:** You can use this feature to copy network traffic from a network interface of an Amazon EC2 instance and send it to out-of-band security and monitoring appliances for deep packet inspection. You can detect network and security anomolies, gain operational insights, implement compliance and security controls, and troubleshoot issues.   
+**• VPC Reachability Analyzer:** Used to analyze and debug reachability between two resources in your VPC. After you specify the source and destination resources, Reachability Analyzer produces hop-by-hop details of the virtual path between them when they are reachable, and identifies a blocking component when they are unreachable.    
+**• Network Access Analyzer:** Used to understand network access to your resources. This helps you indentify improvements to your network security posture and demonstrate that your network meets specific compliance requirements.   
+**• CloudTrail Logs:** Captures detailed information about the calls made to the Amazon VPC API. You can use the generated CloudTrail logs to determine which calls were made, the source IP address where the call came from, who made the cal, when the call was made, and so on.    
+   
+# Additional Resources involved with Amazon VPC   
+
+**• Network Security Groups**
+**• Network Access Control Lists (ACLs)
+**• Route53**    
+**• DNS Firewall**  
+**• Network Firewall**
+    
