@@ -54,9 +54,9 @@ Use the example below as reference to create a DHCP options set for the VPC:
 
 # AWS Route Tables   
  
-## Default Route Table 
+### Default Route Table 
 
-Use the following example to create a default route table and routes for the VPC:
+**Use the following example to create a default route table and routes for the VPC.**
 
 [AWS Documentation: Default Route Table Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)     
       
@@ -84,9 +84,9 @@ Use the following example to create a default route table and routes for the VPC
     }
 ```
 
-## Route Tables 
+### Route Tables 
 
-Use the following example to to create multiple instances of route tables and routes:
+**Use the following example to to create multiple instances of route tables and routes.**
 
 [AWS Documentation: Route Table Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)   
     
