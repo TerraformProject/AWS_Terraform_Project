@@ -5,6 +5,7 @@ source = ""
 ## VPC ##
 #########
 
+    ## VPC SETTINGS ##
     create_vpc = false
     vpc_name = ""
     cidr_block       = ""
@@ -14,15 +15,11 @@ source = ""
     enable_dns_hostnames = false
     enable_classiclink = false
     enable_classiclink_dns_support = false
-    
+    ## VPC TAGS ##
     vpc_tags = {
         "" = ""
     }
-
-#################################
-## VPC CIDR BLOCK ASSOCIATIONS ##
-#################################
-
+    ## VPC CIDR BLOCK ASSOCIATIONS ##
     associate_cidr_blocks = false
     cidr_blocks_associated = []
 
@@ -30,6 +27,7 @@ source = ""
 ## VPC DHCP OPTIONS SET ##
 ##########################
 
+    ## VPC DHCP OPTIONS SET SETTINGS ##
     enable_dhcp_options = false
     dhcp_options_set_name = ""
     dhcp_options_domain_name = ""
@@ -37,7 +35,7 @@ source = ""
     dhcp_options_ntp_servers = []
     dhcp_options_netbios_name_servers = []
     dhcp_options_netbios_node_type = 0
-
+    ## VPC DHCP OPTIONS SET TAGS ##
     dhcp_options_tags = {
         "" = ""
     }
@@ -46,12 +44,13 @@ source = ""
 ## VPC DEFAULT ROUTE TABLE ##
 #############################
 
+    ## VPC DEFAULT ROUTE TABLE SETTINGS ##
     manage_default_route_table = false
     default_route_table_name = ""
     default_route_table_id = ""
     default_route_table_propagating_vgws = [] 
     default_route_table_routes = {}
-
+    ## VPC DEFAULT ROUTE TABLE TAGS ##
     default_route_table_tags = {
         "" = ""
     }
@@ -63,7 +62,7 @@ source = ""
 route_tables = {       
     #####################################################        
         Route_Table_1 = {
-            ## ROUTE TABLE SETTIINGS ##
+            ## VPC ROUTE TABLE SETTIINGS ##
             route_table_name = ""
             vpc_id = ""
             propagating_vgws = []
@@ -82,7 +81,7 @@ route_tables = {
     #####################################################
     #####################################################        
         Route_Table_1 = {
-            ## ROUTE TABLE SETTIINGS ##
+            ## VPC ROUTE TABLE SETTIINGS ##
             route_table_name = ""
             vpc_id = ""
             propagating_vgws = []
@@ -108,7 +107,7 @@ route_tables = {
 subnets = {
     #####################################################   
         subnet_1 = {
-            ## SUBNET SETTINGS ##
+            ## VPC SUBNET SETTINGS ##
             subnet_name = ""
             vpc_id = ""
             cidr_block = ""
@@ -119,9 +118,9 @@ subnets = {
             map_customer_owned_ip_on_launch = false
             map_public_ip_on_launch = false
             outpost_arn = ""
-            ## SUBNET ASSOCIATIONS ##
+            ## VPC SUBNET ASSOCIATIONS ##
             route_table_association = ""
-            ## SUBNET TAGS ##
+            ## VPC SUBNET TAGS ##
             tags = {
                 "" = "",
             }
