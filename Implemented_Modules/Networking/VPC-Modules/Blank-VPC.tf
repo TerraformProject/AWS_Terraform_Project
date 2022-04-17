@@ -60,10 +60,7 @@ source = ""
 ## Route Tables ##
 ##################
 
-route_tables = {
-
-    ## Public Route Table ## 
-            
+route_tables = {       
     #####################################################        
         Route_Table_1 = {
             ## ROUTE TABLE SETTIINGS ##
@@ -102,7 +99,6 @@ route_tables = {
                 }
         }
     #####################################################
-
 }
 
 ###################
@@ -110,64 +106,73 @@ route_tables = {
 ###################
 
        
-     ## VPC Peering Connection ##
-
-        vpc_peering_connections = {}
-
-    ## Internet Gateways ##
+## VPC Peering Connection ##
+vpc_peering_connections = {
+    #####################################################
         
-        internet_gateways = {
+    #####################################################
+}
 
-            Internet_Gateway_1_VPC1 = {
-                igw_name = ""
-
-                vpc_id = module.VPC_VPC1.vpc.id
-
-                tags = {
-                    "" = ""
-                }
+## Internet Gateways ##
+internet_gateways = {
+    #####################################################
+        Internet_Gateway_1_VPC1 = {
+            ## INTERNET GATEWAY SETTINGS ##   
+            igw_name = ""
+            vpc_id = module.VPC_VPC1.vpc.id
+            ## INTERNET GATEWAY TAGS ##
+            tags = {
+                "" = ""
             }
         }
-
+    #####################################################
+}
+   
+## Egress Only Internet Gateways ##
+egress_internet_gateways = {
+    #####################################################
         
-    ## Egress Only Internet Gateways ##
-        
-        # assign_generated_ipv6_cidr_block in VPC1 module must = true
-        egress_internet_gateways = {}
+    #####################################################
+}
 
-    ## NAT Gateways ##
-        
-        nat_gateways = {
-
-            nat_gateway_1 = {
-                nat_gateway_name = ""
-                subnet_id =  ""
-                create_new_eip = false
-                new_eip_index = 0
-                eip_allocation_id = ""
-                
-                tags = { "" = "" }
-            }
-
+## NAT Gateways ##
+nat_gateways = {
+    #####################################################
+        nat_gateway_1 = {
+            ## NAT GATEWAY SETTINGS ##
+            nat_gateway_name = ""
+            subnet_id =  ""
+            create_new_eip = false
+            new_eip_index = 0
+            eip_allocation_id = ""
+            ## NAT GATEWAY TAGS ##
+            tags = { "" = "" }
         }
+    #####################################################
+}
+    
+## VPC Endpoints ##
+vpc_endpoints = {
+    #####################################################
+        
+    #####################################################
+}
 
+## Transit Gateways ##
+transit_gateways = {
+    #####################################################
         
-    ## VPC Endpoints ##
-        
-        vpc_endpoints = {}
-
-    ## Transit Gateways ##
-        
-        transit_gateways = {}
+    #####################################################
+}
 
 ######################
 ## Declared Subnets ##
 ######################
-subnets = {
 
-    ## Subnets ##
-        
+subnets = {
+    #####################################################   
         subnet_1 = {
+            ## SUBNET SETTINGS ##
             subnet_name = ""
             vpc_id = ""
             cidr_block = ""
@@ -178,14 +183,28 @@ subnets = {
             map_customer_owned_ip_on_launch = false
             map_public_ip_on_launch = false
             outpost_arn = ""
-
+            ## SUBNET ASSOCIATIONS ##
             route_table_association = ""
-
+            ## SUBNET TAGS ##
             tags = {
                 "" = "",
             }
         }
+    #####################################################
+}
 
-  
-    }
+
+
+
+
+
+
+
+
+
+
+
+###################
+## END OF MODULE ##
+###################    
 }
