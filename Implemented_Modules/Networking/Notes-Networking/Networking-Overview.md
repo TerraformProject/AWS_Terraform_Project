@@ -8,8 +8,8 @@ Within a VPC you are able to provision the following networking resources.
 • **DHCP Options sets**   
 • **Amazon Domain Name Resolver**  
 • **Gateways**   
-• **Endpoint Services**   
 • **VPC Peering Connections**   
+• **Endpoint Services**      
 • **Firewall Management**   
 • **Network Analytics**
 
@@ -61,7 +61,7 @@ You can optionally add subnets in a Local Zone, which is an AWS infrastructure d
 
 #### Default DHCP Option set   
    
-Each VPC in a Region uses the same default DHCP option set, which contacins the following network configurations.  
+Each VPC in a Region uses the same default DHCP option set, which contains the following network configurations.  
    
 **• Domain Name:** The domain name that a client should use when resolving hostnames via the Domain Name System.  
 **• Domain Name Servers:** The DNS sers that your network interfaces will use for domain name resolution.   
@@ -118,7 +118,7 @@ An egress-only internet gateway is **stateful**: It forwards traffic from the in
 
 A NAT Gateway is a Network Address Translation (NAT) service. You can use a NAT gateway so that instances in a private subnet can connect to services outside your VPC but external services cann initiate a connection with those instances.   
 
-**When you create a NAT Gateway, you specify one of the following types.**     
+When you create a NAT Gateway, you specify one of the following types.     
    
 **• Public:** (Defaul) Instances within private subnets can connect to the internet through a Public NAT Gatewat, but are unable to receive unsolicited inbound connections from the internet. You must associate an Elastic IP (EIP) with the NAT Gateway at creation. You route traffic from the NAT Gateway to the internet gateway for the VPC. Alternatively, you can use a public NAT Gateway to connect to other VPCs or your on-premise network.   
    
@@ -126,4 +126,28 @@ A NAT Gateway is a Network Address Translation (NAT) service. You can use a NAT 
 
 ### Transit Gateways   
 
-You can connect your virtual private clouds (VPCs) and on-premesis networks using a transit gateway, which acts as a central hub, routing traffic between VPCs, VPN connections, and AWS Direct Connect connections. 
+You can connect your virtual private clouds (VPCs) and on-premesis networks using a transit gateway, which acts as a central hub, routing traffic between VPCs, VPN connections, and AWS Direct Connect connections.   
+
+# VPC Peering Connections   
+
+A VPC Peering connection is a networking connection between two VPCs that enables you to route traffic between them privately. You can create a VPC Peering connection between your own VPCs, with a VPC in another AWS account, or with a VPC in a separate region.   
+   
+AWS uses the existing infrastructure of a VPC to create a VPC peering connection; it is neither a gateway nor a VPN connection, and does not rely on a separate piece of physical hardware. There is no single point of failure for communications or a bandwidth bottleneck.
+
+This allows VPC resources including EC2 instances, Amazon RDS databases and Lambda functions that run in different AWS accounts or regions to communicate with each other using private IP addresses, without requiring gateways, VPN connections, or seperate network appliances. The traffic remains encrypted on the via inter-regions and never traverse the public internet.   
+   
+# VPC Site-to-Site VPN    
+    
+By default, instances that you launch within a VPC are unable to communicate with your own (remote) network. You can enable access to your remote network from your VPC by createing an AWS Site-to-Site VPN, and configure routing to pass through the connection.    
+  
+Although the term VPN connection is a general term, a VPN connection refers to the connection between your VPC and your own on-premise network. Site-to-Site VPN supports Internet Protocol securtiy (IPsec) VPN connections.   
+   
+**The following are the key concepts for Site-to-Site VPN**   
+   
+**• VPN Connection:** A secure connection between your on-premesis equipment and your VPCs.     
+**• VPN Tunnel:** An encrypted link where data can pass from the customer network to or from AWS. Each VPN connection includes two VPN tunnels wich you can simultaneously use for high availability.    
+**• Customer:** An AWS resource which provides information to AWS about your customer gateway device.   
+**• Customer Gateway Device:** A physical device or software application on your of the Sit-to-Site VPN connection.    
+**• Target Gateway:** A generic term for the VPN Endpoint on the Amazon side of the Site-to-Site VPN conenction.    
+**• Virtual Private Gateway: A virtual private gateway is a VPN endpoint on the Amazon side of your Site-to-Site VPN connection that can be attached to a single VPC.   
+**• Transit Gateway:** A Transit hub that can be used to interconnect multiple VPCs and on-premise networks, and a VPN endpoint for the Amazon side of the Site-to-Site VPN connection.    
