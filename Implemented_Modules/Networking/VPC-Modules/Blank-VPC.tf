@@ -64,12 +64,12 @@ route_tables = {
 
     ## Public Route Table ## 
             
+    #####################################################        
         Route_Table_1 = {
             ## ROUTE TABLE SETTIINGS ##
             route_table_name = ""
             vpc_id = ""
             propagating_vgws = []
-
             ## ASSOCIATED ROUTES ##
             associated_routes = {
                 Public_Route_1 =  {
@@ -77,12 +77,12 @@ route_tables = {
                     gateway_id     = ""
                     }
             }
-
             ## ROUTE TABLE TAGS ##
             tags = {
                 Public_Route_Table = ""
                 }
         }
+    #####################################################
 
 }
 

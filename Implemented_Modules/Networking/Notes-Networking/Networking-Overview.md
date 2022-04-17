@@ -177,7 +177,7 @@ VPC Endpoints are virtual devices. They are horizontally scaled, redundant, and 
 # Additional Resources involved with Amazon VPC   
 
 **• Network Security Groups**
-**• Network Access Control Lists (ACLs)
+**• Network Access Control Lists (ACLs)   
 **• Route53**    
 **• DNS Firewall**  
 **• Network Firewall**
