@@ -83,6 +83,25 @@ route_tables = {
                 }
         }
     #####################################################
+    #####################################################        
+        Route_Table_1 = {
+            ## ROUTE TABLE SETTIINGS ##
+            route_table_name = ""
+            vpc_id = ""
+            propagating_vgws = []
+            ## ASSOCIATED ROUTES ##
+            associated_routes = {
+                Public_Route_1 =  {
+                    cidr_block = ""
+                    gateway_id     = ""
+                    }
+            }
+            ## ROUTE TABLE TAGS ##
+            tags = {
+                Public_Route_Table = ""
+                }
+        }
+    #####################################################
 
 }
 
