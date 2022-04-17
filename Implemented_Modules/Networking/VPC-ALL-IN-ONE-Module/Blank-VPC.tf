@@ -1,4 +1,4 @@
-module "VPC_VPC1" {
+module "VPC_ALL_IN_ONE" {
 source = ""
 
 #########
@@ -58,44 +58,24 @@ source = ""
 ######################
 ## VPC ROUTE TABLES ##
 ######################
-
 route_tables = {       
     #####################################################        
-        Route_Table_1 = {
-            ## VPC ROUTE TABLE SETTIINGS ##
-            route_table_name = ""
-            vpc_id = ""
-            propagating_vgws = []
-            ## ASSOCIATED ROUTES ##
-            associated_routes = {
-                Public_Route_1 =  {
-                    cidr_block = ""
-                    gateway_id     = ""
-                    }
+    Example_Route_Table = {
+        ## VPC ROUTE TABLE SETTIINGS ##
+        route_table_name = ""
+        vpc_id = ""
+        propagating_vgws = []
+        ## ASSOCIATED ROUTES ##
+        associated_routes = {
+            Example_Route_1 =  {
+                cidr_block = ""
+                gateway_id     = ""
             }
-            ## ROUTE TABLE TAGS ##
-            tags = {
-                Public_Route_Table = ""
-                }
         }
-    #####################################################
-    #####################################################        
-        Route_Table_1 = {
-            ## VPC ROUTE TABLE SETTIINGS ##
-            route_table_name = ""
-            vpc_id = ""
-            propagating_vgws = []
-            ## ASSOCIATED ROUTES ##
-            associated_routes = {
-                Public_Route_1 =  {
-                    cidr_block = ""
-                    gateway_id     = ""
-                    }
+        ## ROUTE TABLE TAGS ##
+        tags = {
+            Example_Route_Table = ""
             }
-            ## ROUTE TABLE TAGS ##
-            tags = {
-                Public_Route_Table = ""
-                }
         }
     #####################################################
 }
@@ -103,26 +83,25 @@ route_tables = {
 #################
 ## VPC SUBNETS ##
 #################
-
 subnets = {
     #####################################################   
-        subnet_1 = {
-            ## VPC SUBNET SETTINGS ##
-            subnet_name = ""
-            vpc_id = ""
-            cidr_block = ""
-            availability_zone = ""
-            customer_owned_ipv4_pool = "" 
-            assign_ipv6_address_on_creation = false
-            ipv6_cidr_block = ""
-            map_customer_owned_ip_on_launch = false
-            map_public_ip_on_launch = false
-            outpost_arn = ""
-            ## VPC SUBNET ASSOCIATIONS ##
-            route_table_association = ""
-            ## VPC SUBNET TAGS ##
-            tags = {
-                "" = "",
+    Example_Subnet = {
+        ## VPC SUBNET SETTINGS ##
+        subnet_name = ""
+        vpc_id = ""
+        cidr_block = ""
+        availability_zone = ""
+        customer_owned_ipv4_pool = "" 
+        assign_ipv6_address_on_creation = false
+        ipv6_cidr_block = ""
+        map_customer_owned_ip_on_launch = false
+        map_public_ip_on_launch = false
+        outpost_arn = ""
+        ## VPC SUBNET ASSOCIATIONS ##
+        route_table_association = ""
+        ## VPC SUBNET TAGS ##
+        tags = {
+            "" = "",
             }
         }
     #####################################################
@@ -131,16 +110,15 @@ subnets = {
 #######################
 ## INTERNET GATEWAYS ##
 #######################
-
 internet_gateways = {
     #####################################################
-        Internet_Gateway_1_VPC1 = {
-            ## INTERNET GATEWAY SETTINGS ##   
-            igw_name = ""
-            vpc_id = module.VPC_VPC1.vpc.id
-            ## INTERNET GATEWAY TAGS ##
-            tags = {
-                "" = ""
+    Example_Internet_Gateway = {
+        ## INTERNET GATEWAY SETTINGS ##   
+        igw_name = ""
+        vpc_id = module.VPC_VPC1.vpc.id
+        ## INTERNET GATEWAY TAGS ##
+        tags = {
+            "" = ""
             }
         }
     #####################################################
@@ -149,7 +127,6 @@ internet_gateways = {
 ###################################   
 ## EGRESS-ONLY INTERNET GATEWAYS ##
 ###################################
-
 egress_internet_gateways = {
     #####################################################
         
@@ -159,18 +136,19 @@ egress_internet_gateways = {
 ##################
 ## NAT GATEWAYS ##
 ##################
-
 nat_gateways = {
     #####################################################
-        nat_gateway_1 = {
-            ## NAT GATEWAY SETTINGS ##
-            nat_gateway_name = ""
-            subnet_id =  ""
-            create_new_eip = false
-            new_eip_index = 0
-            eip_allocation_id = ""
-            ## NAT GATEWAY TAGS ##
-            tags = { "" = "" }
+    Example_NAT_Gateway = {
+        ## NAT GATEWAY SETTINGS ##
+        nat_gateway_name = ""
+        subnet_id =  ""
+        create_new_eip = false
+        new_eip_index = 0
+        eip_allocation_id = ""
+        ## NAT GATEWAY TAGS ##
+        tags = { 
+            "" = ""
+            }
         }
     #####################################################
 }
@@ -178,7 +156,6 @@ nat_gateways = {
 ###################    
 ## VPC ENDPOINTS ##
 ###################
-
 vpc_endpoints = {
     #####################################################
         
@@ -188,7 +165,6 @@ vpc_endpoints = {
 ######################
 ## TRANSIT GATEWAYS ##
 ######################
-
 transit_gateways = {
     #####################################################
         
@@ -198,25 +174,11 @@ transit_gateways = {
 #############################
 ## VPC PEERING CONNECTIONS ##
 #############################
-
 vpc_peering_connections = {
     #####################################################
         
     #####################################################
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ###################
 ## END OF MODULE ##
