@@ -1,4 +1,4 @@
-module "VPC_ALL_IN_ONE" {
+module "Blank_VPC_ALL_IN_ONE" {
 source = ""
 
 #########

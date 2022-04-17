@@ -135,24 +135,6 @@ variable "dhcp_options_tags" {
     default = {}
 }
 
-######################################
-## VPC Peering Connection Variables ##
-######################################
-
-variable "vpc_peering_connections" {
-    description = "The VPC peering connections to be created and used by routing tables"
-    type = map(object({
-        peer_owner_id = string
-        peer_vpc_id = string
-        vpc_id = string
-        auto_accept = bool
-        peer_region = string
-        acceptor = map(bool)
-        requester = map(bool)
-        tags = map(string)
-    }))
-}
-
 ################################
 ## Internet Gateway Variables ##
 ################################
@@ -233,6 +215,24 @@ variable "transit_gateways" {
         dns_support = string
         vpn_ecmp_support = string
 
+        tags = map(string)
+    }))
+}
+
+######################################
+## VPC Peering Connection Variables ##
+######################################
+
+variable "vpc_peering_connections" {
+    description = "The VPC peering connections to be created and used by routing tables"
+    type = map(object({
+        peer_owner_id = string
+        peer_vpc_id = string
+        vpc_id = string
+        auto_accept = bool
+        peer_region = string
+        acceptor = map(bool)
+        requester = map(bool)
         tags = map(string)
     }))
 }
