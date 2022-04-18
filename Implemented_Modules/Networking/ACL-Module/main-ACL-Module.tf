@@ -88,7 +88,7 @@ resource "aws_network_acl" "acl_group" {
 
   tags = merge(
     {
-      "Name" = each.value.public_network_acl_name
+      "Name" = each.value.acl_name
     },
     each.value.tags,
   )

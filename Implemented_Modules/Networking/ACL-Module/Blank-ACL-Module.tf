@@ -98,9 +98,10 @@ acl_group = {
         }
         ## ACL TAGS ##
         tags = {
-            "public_network_acls" = "VPC1_Public_ACL_1"
+            "" = ""
         }
     }
+    
 }
 
 ###################
