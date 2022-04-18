@@ -52,7 +52,7 @@ default_network_acl = {
                 }
             ####################################
         }
-        ## DEFAULT ACL SETTINGS ##
+        ## DEFAULT ACL TAGS ##
         tags = {
             "key" = "value" # Tags to associate with the default ACL
         }
@@ -66,7 +66,7 @@ default_network_acl = {
 
 [AWS Documentation: Default Network ACL Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html#custom-network-acl)
 
-[HashiCorp Terraform Documentation: Default Network ACL Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl)
+[HashiCorp Terraform Documentation: Default Network ACL Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl)      
 
 ```terrafrom
 ########################
@@ -86,8 +86,8 @@ acl_group = {
                     action = string # Whether to "Allow" || "Deny" access to the ports and protocol below
                     cidr_block = string # Location from where the traffic is coming from
                     from_port = number # Starting port
-                    icmp_code       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
-                    icmp_type       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
+                    icmp_code = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
+                    icmp_type = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
                     ipv6_cidr_block = string # Specify Null for Terraform to ignore. Otherwise, the IPv6 CIDR Block to use
                     protocol = string || -1 # Use -1 to specify all protocol. To/From port must == 0 if protocol = -1. Otherwise, "tcp" || "udp" 
                     rule_no = number # The rule number to give the rule. Lower rule numbers give precedence over higher rule numbers
@@ -102,8 +102,8 @@ acl_group = {
                     action = string # Whether to "Allow" || "Deny" access to the ports and protocol below
                     cidr_block = string # Location from where the traffic is coming from
                     from_port = number # Starting port
-                    icmp_code       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
-                    icmp_type       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
+                    icmp_code = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
+                    icmp_type = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
                     ipv6_cidr_block = string # Specify Null for Terraform to ignore. Otherwise, the IPv6 CIDR Block to use
                     protocol = string || -1 # Use -1 to specify all protocol. To/From port must == 0 if protocol = -1. Otherwise, "tcp" || "udp" 
                     rule_no = number # The rule number to give the rule. Lower rule numbers give precedence over higher rule numbers

@@ -50,14 +50,14 @@ resource "aws_default_network_acl" "default_acl" {
 ## Public NACl ##
 #################
 
-resource "aws_network_acl" "public_acls" {
-  for_each = var.public_network_acl 
+resource "aws_network_acl" "acl_group" {
+  for_each = var.acl_group 
 
   vpc_id = each.value.vpc_id
-  subnet_ids = each.value.public_acl_subnet_ids
+  subnet_ids = each.value.acl_subnet_ids
 
  dynamic "ingress" {
-      for_each = lookup(each.value, "public_network_acl_ingress", null)
+      for_each = lookup(each.value, "acl_ingress_rules", null)
       content {
         action          = ingress.value.action
         cidr_block      = ingress.value.cidr_block
@@ -72,7 +72,7 @@ resource "aws_network_acl" "public_acls" {
     }
 
   dynamic "egress" {
-    for_each = lookup(each.value, "public_network_acl_egress", null)
+    for_each = lookup(each.value, "acl_egress_rules", null)
     content {
       action            = egress.value.action
         cidr_block      = egress.value.cidr_block
