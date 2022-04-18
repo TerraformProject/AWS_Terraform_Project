@@ -168,41 +168,6 @@ subnets = {
 }
 ```
 
-# Destination Routes Overview 
-
-## VPC Peering Connection 
-
-Use the follwoing example to create as many VPC peering connections as desired:
-
-[VPC Peering Connection Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection)
-
-```terraform
-vpc_peering_connections = {
-
-    Example_Peering_Connetion = {
-            peer_owner_id = string # The AWS account ID of the owner for which the peering connection will connect with
-            peer_vpc_id = string # ID of the VPC for which you will be creating the peering connection with
-            vpc_id = string # The ID of this VPC
-            auto_accept = bool # Auto accept peering connection. **Both VPCs must be in the same account for this to be true
-            peer_region = bool # The region for which the VPC resides in
-            acceptor = {
-                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
-                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
-                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
-            }
-            requester = {
-                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
-                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
-                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
-            }
-            tags = { 
-                "key" = "value" # Tags to be assocaited with the VPC peering connection
-            }
-        }
-
-}
-```    
-
 # AWS VPC Gateways   
 
 ### AWS Internet Gateways (IGWs)
@@ -252,7 +217,7 @@ egress_internet_gateways = {
             vpc_id = string # VPC ID for where the Egress only IGW will reside in
             ## EGRESS-ONLY INTERNET GATEWAY TAGS ##
             tags = {
-                "Key = "Value" # Tags to associate with the Egress only IGW
+                "Key" = "Value" # Tags to associate with the Egress only IGW
             }
         }
 
@@ -330,16 +295,22 @@ nat_gateways = {
 #                       will receive the second new EIP
 ```
 
-## VPC Endpoints 
+### AWS VPC Endpoints 
 
-Use the follwoing example to create as many VPC Endpoints as desired:
+**Use the follwoing example to create as many VPC Endpoints as needed.**
 
-[VPC Endpoint Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint)
+[AWS Documentation: VPC Endpoint Resource Reference](https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints.html)
+
+[HashiCorp Terraform Documentation: VPC Endpoint Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint)
 
 ```terraform
+###################    
+## VPC ENDPOINTS ##
+###################
 vpc_endpoints = {
-
+        #####################################################
         Example_VPC_Endpoint = {
+            ## VPC ENDPOINT SETTINGS ##
             vpc_endpoint_type = string # Type of VPC Endpoint
             service_name = string # Service name for the VPC Endpoint
             vpc_id = string # VPC ID for where the endpoint will reside in
@@ -349,25 +320,31 @@ vpc_endpoints = {
             route_table_ids = list(string) # One ore more route table IDs to associate with the endpoint. Type must == Gateway
             subnet_ids = list(string) # One or more Subnet IDs to associate with the endpoint. Type must == GatewayLoadBalancer || Interface
             security_group_ids = list(string) # One ore security groups to assocaite with the endpoint. Type muss == Interface
-
+            ## VPC ENDPOINT TAGS ##
             tags = {
                 "key" = "value" # Tags to associate with the VPC Endpoint.
+                }
             }
-        }
-
+        #####################################################
 }
 ```
 
-## Transit Gateways 
+### AWS Transit Gateways 
 
-Use the follwoing example to create as many Transit Gateways as desired:
+**Use the following example to create as many Transit Gateways as desired.**
 
-[Transit Gateway Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway)
+[AWS Documentation: Transit Gateway Resource Reference](https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html)
+
+[HashiCorp Terraform Documentation: Transit Gateway Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ec2_transit_gateway)
 
 ```terraform
+######################
+## TRANSIT GATEWAYS ##
+######################
 transit_gateways = {
-
+        #####################################################
         Example_Transit_Gateway = {
+            ## TRANSIT GATEWAY SETTINGS ##
             description = string # Description of Transit Gateway
             amazon_side_asn = number # ASN for the Amazon side BGP session.  
             auto_accept_shared_attachments = string # Whether resource attachment requests are automatically accepted
@@ -375,11 +352,87 @@ transit_gateways = {
             default_route_table_propagation = string # Whether resoure attachments automatically propagate routes to the default propagation route table
             dns_support = string # Whether DNS support is enabled or not
             vpn_ecmp_support = string # Whether VPN Equal Cost Multipath Protocol support is enabled
-
+            ## TRANSIT GATEWAY TAGS ##
             tags = {
                 "key" = "value" # Tags to associate with the Transit Gateway
+                }
+            }
+        #####################################################
+}
+``` 
+
+## VPC Peering Connection 
+
+Use the follwoing example to create as many VPC peering connections as desired:
+
+[VPC Peering Connection Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection)
+
+```terraform
+vpc_peering_connections = {
+
+    Example_Peering_Connetion = {
+            peer_owner_id = string # The AWS account ID of the owner for which the peering connection will connect with
+            peer_vpc_id = string # ID of the VPC for which you will be creating the peering connection with
+            vpc_id = string # The ID of this VPC
+            auto_accept = bool # Auto accept peering connection. **Both VPCs must be in the same account for this to be true
+            peer_region = bool # The region for which the VPC resides in
+            acceptor = {
+                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
+                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
+                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
+            }
+            requester = {
+                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
+                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
+                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
+            }
+            tags = { 
+                "key" = "value" # Tags to be assocaited with the VPC peering connection
             }
         }
-    
+
+}
+``` 
+
+### AWS VPC Peering Connection 
+
+**Use the follwoing example to create as many VPC peering connections as desired.**
+
+[AWS Documentation: VPC Peering Connection Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection)
+
+[HashiCorp Terraform Documentation: VPC Peering Connection Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection)
+
+```terraform
+#############################
+## VPC PEERING CONNECTIONS ##
+#############################
+vpc_peering_connections = {
+        #####################################################
+        Example_Peering_Connetion = {
+            ## VPC PEERING SETTINGS
+            peer_owner_id = string # The AWS account ID of the owner for which the peering connection will connect with
+            peer_vpc_id = string # ID of the VPC for which you will be creating the peering connection with
+            vpc_id = string # The ID of this VPC
+            auto_accept = bool # Auto accept peering connection. **Both VPCs must be in the same account for this to be true
+            peer_region = bool # The region for which the VPC resides in
+            ## VPC PEERING ACCEPTOR SETTINGS ##
+            acceptor = {
+                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
+                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
+                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
+            }
+            ## VPC PEERING REQUESTOR SETTINGS ##
+            requester = {
+                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
+                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
+                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
+            }
+            ## VPC PEERING TAGS ##
+            tags = { 
+                "key" = "value" # Tags to be assocaited with the VPC peering connection
+                }
+            }
+        #####################################################
 }
 ```
+
