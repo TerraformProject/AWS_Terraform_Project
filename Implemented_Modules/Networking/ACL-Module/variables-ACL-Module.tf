@@ -2,6 +2,12 @@
 ## VPC1: Default NACl Varaibles ##
 ##################################
 
+variable "create_default_network_acl" {
+  description = "Whether or not to create a default network ACL for associated VPC."
+  type = bool
+  default = false
+}
+
 variable "default_network_acl" {
     type = map(object({
         default_network_acl_name = string
@@ -38,12 +44,12 @@ variable "default_network_acl" {
 ## VPC1: Public NACl  Variables ##
 ##################################
 
-variable "public_network_acl" {
+variable "acl_group" {
     type = map(object({
-        public_network_acl_name = string
+        acl_name = string
         vpc_id = string
-        public_acl_subnet_ids = list(string)
-        public_network_acl_ingress = map(object({
+        acl_subnet_ids = list(string)
+        acl_ingress_rules = map(object({
             action = string
             cidr_block = string
             from_port = number
@@ -54,7 +60,7 @@ variable "public_network_acl" {
             rule_no = number
             to_port = number
         }))
-        public_network_acl_egress = map(object({
+        acl_egress_rules = map(object({
             action = string
             cidr_block = string
             from_port = number

@@ -4,6 +4,7 @@ source = ""
 ##################
 ## ACL: Default ##
 ##################
+create_default_network_acl = false
 default_network_acl = {
 
     Default_Network_ACL = {
@@ -53,16 +54,16 @@ default_network_acl = {
 ########################
 ## ACL GROUP: EXAMPLE ##
 ########################
-acl_group_example = {
+acl_group = {
 
     ##################
     ## ACL: Example ##
     ##################
     Example_ACL = {
         ## ACL SETTINGS ##
-        public_network_acl_name = ""
+        acl_name = ""
         vpc_id = ""
-        public_acl_subnet_ids = []
+        acl_subnet_ids = []
         ## INGRESS RULE DECLARATIONS ##
         acl_ingress_rules = {
             ####################################
@@ -80,6 +81,7 @@ acl_group_example = {
             ####################################
         }
         ## EGRESS RULE DECLARATIONS ##
+        acl_ingress_rules = {
             ####################################
                 egress_rule_1 = {
                     action = "Deny"
@@ -93,6 +95,7 @@ acl_group_example = {
                     to_port = 0
                 }
             ####################################
+        }
         ## ACL TAGS ##
         tags = {
             "public_network_acls" = "VPC1_Public_ACL_1"

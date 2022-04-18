@@ -3,7 +3,7 @@
 ###################
 
 resource "aws_default_network_acl" "default_acl" {
-  for_each = var.default_network_acl 
+  for_each = var.create_default_network_acl == true ? var.default_network_acl : {} 
 
   default_network_acl_id = each.value.default_network_acl_id
   subnet_ids = each.value.default_acl_subnet_ids
