@@ -20,7 +20,7 @@ source = ""
       enable = false
     }}
 
-  load_balancer_tags = { "LB_useast1" = "LB_001" }
+  load_balancer_tags = { "" = "" }
 ########################################################
 
 
@@ -48,7 +48,7 @@ network = {
     existing_subnets = [] # Updateing forces new resource
     new_subnet_keys = [] # Updateing forces new resource
     customer_owned_ipv4_pool = ""
-    ip_address_type = "ipv4"
+    ip_address_type = ""
     enable_cross_zone_load_balancing = false
 }}
 ## GATEWAY LOAD BALANCER CONFIG ##
@@ -57,7 +57,7 @@ gateway = {
     existing_subnets = [] 
     new_subnet_keys = []
     customer_owned_ipv4_pool = ""
-    ip_address_type = "ipv4"
+    ip_address_type = ""
 }}
 ## SUBNET MAPPING ##
 create_subnet_mapping = false
@@ -68,7 +68,7 @@ subnet_mapping = {
     new_subnet_key = ""
     allocation_id = ""
     private_ipv4_address = ""
-    ipv6_address = "ipv4"
+    ipv6_address = ""
   }
   #-----------------------------------------#
 }
@@ -88,7 +88,7 @@ new_subnets = {
     map_public_ip_on_launch = false
     outpost_arn = ""
     route_table_id_association = ""
-    tags = { "key" = "value", }
+    tags = { "" = "", }
   }
   #-----------------------------------------#
 }
@@ -157,55 +157,48 @@ listeners = {
   #-----------------------------------------#
   listener_1 = {
       ## Listener Settings ##
-      port = 80
-      protocol = "HTTP"
+      port = 0
+      protocol = ""
       ## Listener SSL Certificates ##
       use_ssl_certificate = false
           ssl_certificates = {
             default_certificate = {
-              default_ssl_policy = "ELBSecurityPolicy-2016-08"
+              default_ssl_policy = ""
               default_certificate_arn = ""
         }}
         use_additional_ssl_certificates = false
         additional_certificates = {
             #-------------------------------#
             cert_1 = {
-              module_key = "1" # Must be unique
-              listener_key = "listener_1"
-              certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+              module_key = "" # Must be unique
+              listener_key = ""
+              certificate_arn = ""
             }
             #-------------------------------#
-            #-------------------------------#         
-            cert_2 = {
-              module_key = "2" # Must be unique
-              listener_key = "listener_1"
-              certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-1289012"
-            }
-            #-------------------------------#
-          }
+        }
       ## Listener Default Actions ##
         default_actions = {
             #-------------------------------#
             action_1 = {
-              type = "forward"
+              type = ""
               values = {
               target_groups = {
                   #-------------------------#
                   target_group_1 = {
-                    arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
-                    weight = 50
+                    arn = ""
+                    weight = 0
                   }
                   #-------------------------#
                   #-------------------------#
                   target_group_2 = {
-                    arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
-                    weight = 50
+                    arn = ""
+                    weight = 0
                   }
                   #-------------------------#
                 } 
               stickiness = {
-                enabled = true
-                duration = 100
+                enabled = false
+                duration = 0
               }
             }}  
             #-------------------------------#
@@ -217,105 +210,94 @@ create_listener_rules = false
 listener_rules = {
   #-----------------------------------------#
   rule_1 = {
-      listener_map_key_name = "listener_1"
-      priority = 20
-  ## Listener Rule Actions ##
+      ## Listener Rule Settings ##
+      listener_map_key_name = ""
+      priority = 0
+      ## Listener Rule Actions ##
       actions = {
           #---------------------------------#
           action_1 = {
-            type = "forward"
+            type = ""
             values = {
             target_groups = {
                 #---------------------------#
                 target_group_1 = {
-                  arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
-                  weight = 50
+                  arn = ""
+                  weight = 0
                 }
                 #---------------------------#
                 #---------------------------#
                 target_group_2 = {
-                  arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
-                  weight = 50
+                  arn = ""
+                  weight = 0
                 }
                 #---------------------------#
               } 
               stickiness = {
-                enabled = true
-                duration = 100
+                enabled = false
+                duration = 0
               }
             }}
           #---------------------------------#
       }
-    ## Listener Rule Conditions ##
+      ## Listener Rule Conditions ##
       conditions = {
           #---------------------------------#
-          source_ip = {
-            ip_1 = {
-              values = ["107.11.41.205/32"]
-            }
-          }
           #---------------------------------#
       }}   
   #-----------------------------------------#
 }
+########################################################
 
 
 
 
-
-
-
-
-
-
-
-## SECURITY GROUP CONFIG ##############################
-create_new_security_groups = true
+###################################
+## LOAD BALANCER SECURITY GROUPS ##
+########################################################
+create_new_security_groups = false
 new_security_groups = {
-
+  #-----------------------------------------#
   app_lb_security_group = {
-    name        = "lb_001_app_security_group"
-    description = "This is the security group for the LB 001" 
-    vpc_id      = module.VPC_VPC1.vpc.id 
-
+    ## Security Group Settings ##
+    name        = ""
+    description = "" 
+    vpc_id      = "" 
+    ## Ingress Rule Declarations ##
     ingress_rules = { 
-      rule_1 = {
-        description      = "all" 
-        from_port        = 0 
-        to_port          = 0 
-        protocol         = "-1" 
-        cidr_blocks      = ["0.0.0.0/0"] 
-        ipv6_cidr_blocks = []   
-        self = false  
-        }}
-
+          #---------------------------------#
+          rule_1 = {
+            description      = "" 
+            from_port        = 0 
+            to_port          = 0 
+            protocol         = "" 
+            cidr_blocks      = [] 
+            ipv6_cidr_blocks = []   
+            self = false  
+          }
+          #---------------------------------#
+    }
+    ## Egress Rule Declarations ##
     egress_rules = {  
-      rule_1 = {
-        description      = "all" 
-        from_port        = 0 
-        to_port          = 0 
-        protocol         = "-1" 
-        cidr_blocks      = ["0.0.0.0/0"] 
-        ipv6_cidr_blocks = []   
-        self = false 
-        }}
-
-      tags = {
-          "key" = "value" # Tags to associate with security group
-        }}
-
+          #---------------------------------#
+          rule_1 = {
+            description      = "" 
+            from_port        = 0 
+            to_port          = 0 
+            protocol         = "" 
+            cidr_blocks      = [] 
+            ipv6_cidr_blocks = []   
+            self = false 
+            }
+          #---------------------------------#
+    }
+    ## Security Group Tags ##
+    tags = {
+        "" = "" # Tags to associate with security group
+      }}
+  #-----------------------------------------#
 }
-
-
-
-
-
-
-
-
-
-
-
+########################################################
 
 
 
