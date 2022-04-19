@@ -4,6 +4,7 @@ source = ""
 ###################
 ## LOAD BALANCER ##
 ########################################################
+  ## Load Balancer Settings ##
   create_load_balancer = false
   load_balancer_name = ""
   use_name_prefix = false
@@ -11,7 +12,7 @@ source = ""
   load_balancer_type = ""
   internal_load_balancer = false
   enable_deletion_protection = false
-
+  ## Access Log Settings ##
   create_s3_access_logs = false
   s3_access_logs = {
     values = {
@@ -19,7 +20,7 @@ source = ""
       prefix = ""
       enable = false
     }}
-
+  ## Load Balancer Tags ##
   load_balancer_tags = { "" = "" }
 ########################################################
 
@@ -98,12 +99,14 @@ vpc_id = ""
 lb_target_groups = {
   #-----------------------------------------#
   target_group_1 = {
+    ## Target Group Settings ##
     name = ""
     protocol = ""
     port = 0
     target_type = ""
     app_lb_algorithm_type = ""
     slow_start = 0
+    ## Health Check Settings ##
     health_check = {
       enabled = false
       path = ""
@@ -115,22 +118,26 @@ lb_target_groups = {
       timeout = 0
       unhealthy_threshold = 0
     }
+    ## Stickiness Settings ##
     stickiness = {
       enabled = false
       type = "lb_cookie"
       cookie_duration = 0 
     }
+    ## Target Group Tags ##
     tags = { "" = "" }
   }
   #-----------------------------------------#
   #-----------------------------------------#
   target_group_2 = {
+    ## Target Group Settings ##
     name = ""
     protocol = ""
     port = 0
     target_type = ""
     app_lb_algorithm_type = ""
     slow_start = 0
+    ## Health Check Settings ##
     health_check = {
       enabled = false
       path = ""
@@ -142,11 +149,13 @@ lb_target_groups = {
       timeout = 0
       unhealthy_threshold = 0
     }
+    ## Stickiness Settings ##
     stickiness = {
       enabled = false
       type = "lb_cookie"
       cookie_duration = 0 
     }
+    ## Target Group Tags ##
     tags = { "" = "" }
   }
   #-----------------------------------------#
