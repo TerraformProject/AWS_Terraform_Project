@@ -2,11 +2,8 @@ module "Blank_LOADBALANCER" {
 source = ""
     
 ###################
-## Load Balancer ##
-###################
-
+## LOAD BALANCER ##
 ########################################################
-### LOAD BALANCER SETTINGS #############################
   create_load_balancer = false
   load_balancer_name = ""
   use_name_prefix = false
@@ -14,7 +11,22 @@ source = ""
   load_balancer_type = ""
   internal_load_balancer = false
   enable_deletion_protection = false
-### APPLICATION LOAD BALANCER CONFIG ###################
+
+  create_s3_access_logs = false
+  s3_access_logs = {
+    values = {
+      bucket = ""
+      prefix = ""
+      enable = false
+    }}
+
+  load_balancer_tags = { "LB_useast1" = "LB_001" }
+########################################################
+
+##################################
+## LOAD BALANCER CONFIGURATIONS ##
+########################################################
+## APPLICATION LOAD BALANCER CONFIG ##
 application = {
   application = {
     existing_subnets = []
@@ -27,7 +39,7 @@ application = {
     drop_invalid_header_fields = false
     idle_timeout = 0
 }}
-### NETWORK LOAD BALANCER CONFIG ######################
+## NETWORK LOAD BALANCER CONFIG ##
 network = {
   network = {
     existing_subnets = [] # Updateing forces new resource
@@ -36,7 +48,7 @@ network = {
     ip_address_type = "ipv4"
     enable_cross_zone_load_balancing = false
 }}
-### GATEWAY LOAD BALANCER CONFIG ######################
+## GATEWAY LOAD BALANCER CONFIG ##
 gateway = {
   gateway = {
     existing_subnets = [] 
@@ -44,8 +56,7 @@ gateway = {
     customer_owned_ipv4_pool = ""
     ip_address_type = "ipv4"
 }}
-#######################################################
-### SUBNET MAPPING ####################################
+## SUBNET MAPPING ##
 create_subnet_mapping = false
 subnet_mapping = {
   mapping_1 = {
@@ -56,43 +67,108 @@ subnet_mapping = {
     ipv6_address = "ipv4"
   }
 }
-#######################################################
-### CREATE NEW SUBNETS ################################
+## CREATE NEW SUBNETS ##
 create_new_subnets = false
 new_subnets = {
-    subnet_1 = {
-      subnet_name = ""
-      vpc_id = ""
-      cidr_block = ""
-      availability_zone = ""
-      customer_owned_ipv4_pool = "" 
-      assign_ipv6_address_on_creation = false
-      ipv6_cidr_block = ""
-      map_customer_owned_ip_on_launch = false
-      map_public_ip_on_launch = false
-      outpost_arn = ""
-      route_table_id_association = ""
-      tags = { "key" = "value", }
-    }
+  ##########################################
+  subnet_1 = {
+    subnet_name = ""
+    vpc_id = ""
+    cidr_block = ""
+    availability_zone = ""
+    customer_owned_ipv4_pool = "" 
+    assign_ipv6_address_on_creation = false
+    ipv6_cidr_block = ""
+    map_customer_owned_ip_on_launch = false
+    map_public_ip_on_launch = false
+    outpost_arn = ""
+    route_table_id_association = ""
+    tags = { "key" = "value", }
+  }
+  ##########################################
 }
-#######################################################
-### LOAD BALANCER ACCESS LOGS #########################
-  create_s3_access_logs = false
-  s3_access_logs = {
-    values = {
-      bucket = ""
-      prefix = ""
-      enable = false
+## CREATE NEW TARGET GROUPS ##
+create_lb_target_groups = ""
+vpc_id = ""
+lb_target_groups = {
+  ##########################################
+  target_group_1 = {
+    name = ""
+    protocol = ""
+    port = 0
+    target_type = ""
+    app_lb_algorithm_type = ""
+    slow_start = 0
+    health_check = {
+      enabled = false
+      path = ""
+      port = 0
+      protocol = ""
+      healthy_threshold = 0
+      interval = 0
+      matcher = "0"
+      timeout = 0
+      unhealthy_threshold = 0
     }
+    stickiness = {
+      enabled = false
+      type = "lb_cookie"
+      cookie_duration = 0 
+    }
+    tags = { "" = "" }
   }
-#######################################################
-### LOAD BALANCER TAGS ################################
-  load_balancer_tags = {
-    "LB_useast1" = "LB_001"
+  ##########################################
+  ##########################################
+  target_group_2 = {
+    name = ""
+    protocol = ""
+    port = 0
+    target_type = ""
+    app_lb_algorithm_type = ""
+    slow_start = 0
+    health_check = {
+      enabled = false
+      path = ""
+      port = 0
+      protocol = ""
+      healthy_threshold = 0
+      interval = 0
+      matcher = "0"
+      timeout = 0
+      unhealthy_threshold = 0
+    }
+    stickiness = {
+      enabled = false
+      type = "lb_cookie"
+      cookie_duration = 0 
+    }
+    tags = { "" = "" }
   }
+  ##########################################
+}
 
 
-### SECURITY GROUP CONFIG #############################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## SECURITY GROUP CONFIG ##############################
 create_new_security_groups = true
 new_security_groups = {
 
