@@ -212,11 +212,52 @@ listeners = {
         }}
   #-----------------------------------------#
 }
-
-
-
-
-
+## CREATE NEW LISTENER RULES ##
+create_listener_rules = false
+listener_rules = {
+  #-----------------------------------------#
+  rule_1 = {
+      listener_map_key_name = "listener_1"
+      priority = 20
+  ## Listener Rule Actions ##
+      actions = {
+          #---------------------------------#
+          action_1 = {
+            type = "forward"
+            values = {
+            target_groups = {
+                #---------------------------#
+                target_group_1 = {
+                  arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
+                  weight = 50
+                }
+                #---------------------------#
+                #---------------------------#
+                target_group_2 = {
+                  arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
+                  weight = 50
+                }
+                #---------------------------#
+              } 
+              stickiness = {
+                enabled = true
+                duration = 100
+              }
+            }}
+          #---------------------------------#
+      }
+    ## Listener Rule Conditions ##
+      conditions = {
+          #---------------------------------#
+          source_ip = {
+            ip_1 = {
+              values = ["107.11.41.205/32"]
+            }
+          }
+          #---------------------------------#
+      }}   
+  #-----------------------------------------#
+}
 
 
 
@@ -277,56 +318,9 @@ new_security_groups = {
 
 
 
-###############################################
-## Application Load Balancer: Listener Rules ##
-###############################################
-
-create_listener_rules = false
-listener_rules = {
-
-  rule_1 = {
-    listener_map_key_name = "listener_1"
-    priority = 20
-
-  ## Listener Rule Actions ##
-    actions = {
-
-      action_1 = {
-        type = "forward"
-        values = {
-          target_groups = {
-            target_group_1 = {
-              arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
-              weight = 50
-            }
-            target_group_2 = {
-              arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
-              weight = 50
-            }
-          } 
-          stickiness = {
-            enabled = true
-            duration = 100
-          }
-        }
-      }
-
-  }
-
-  ## Listener Rule Conditions ##
-    conditions = {
-      source_ip = {
-        ip_1 = {
-          values = ["107.11.41.205/32"]
-        }
-      }
-
-    }
-  }   
-
-}
 
 
-
-
+###################
+## END OF MODULE ##
+###################
 }
