@@ -23,6 +23,9 @@ source = ""
   load_balancer_tags = { "LB_useast1" = "LB_001" }
 ########################################################
 
+
+
+
 ##################################
 ## LOAD BALANCER CONFIGURATIONS ##
 ########################################################
@@ -59,6 +62,7 @@ gateway = {
 ## SUBNET MAPPING ##
 create_subnet_mapping = false
 subnet_mapping = {
+  #-----------------------------------------#
   mapping_1 = {
     subnet_id = ""
     new_subnet_key = ""
@@ -66,6 +70,7 @@ subnet_mapping = {
     private_ipv4_address = ""
     ipv6_address = "ipv4"
   }
+  #-----------------------------------------#
 }
 ## CREATE NEW SUBNETS ##
 create_new_subnets = false
@@ -88,7 +93,7 @@ new_subnets = {
   #-----------------------------------------#
 }
 ## CREATE NEW TARGET GROUPS ##
-create_lb_target_groups = ""
+create_lb_target_groups = false
 vpc_id = ""
 lb_target_groups = {
   #-----------------------------------------#
@@ -146,12 +151,67 @@ lb_target_groups = {
   }
   #-----------------------------------------#
 }
-
-
-
-
-
-
+## CREATE NEW TARGET GROUP LISTENERS ##
+create_listeners = true
+listeners = {
+  #-----------------------------------------#
+  listener_1 = {
+      ## Listener Settings ##
+      port = 80
+      protocol = "HTTP"
+      ## Listener SSL Certificates ##
+      use_ssl_certificate = false
+          ssl_certificates = {
+            default_certificate = {
+              default_ssl_policy = "ELBSecurityPolicy-2016-08"
+              default_certificate_arn = ""
+        }}
+        use_additional_ssl_certificates = false
+        additional_certificates = {
+            #-------------------------------#
+            cert_1 = {
+              module_key = "1" # Must be unique
+              listener_key = "listener_1"
+              certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+            }
+            #-------------------------------#
+            #-------------------------------#         
+            cert_2 = {
+              module_key = "2" # Must be unique
+              listener_key = "listener_1"
+              certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-1289012"
+            }
+            #-------------------------------#
+          }
+      ## Listener Default Actions ##
+        default_actions = {
+            #-------------------------------#
+            action_1 = {
+              type = "forward"
+              values = {
+              target_groups = {
+                  #-------------------------#
+                  target_group_1 = {
+                    arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
+                    weight = 50
+                  }
+                  #-------------------------#
+                  #-------------------------#
+                  target_group_2 = {
+                    arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
+                    weight = 50
+                  }
+                  #-------------------------#
+                } 
+              stickiness = {
+                enabled = true
+                duration = 100
+              }
+            }}  
+            #-------------------------------#
+        }}
+  #-----------------------------------------#
+}
 
 
 
@@ -215,66 +275,7 @@ new_security_groups = {
 
 
 
-##########################################
-## Application Load Balancer: Listeners ##
-##########################################
 
-create_listeners = true
-listeners = {
-
-  listener_1 = {
-
-    ## Listener Settings ##
-      port = 80
-      protocol = "HTTP"
-
-    ## Listener SSL Certificates ##
-      use_ssl_certificate = false
-        ssl_certificates = {
-          default_certificate = {
-            default_ssl_policy = "ELBSecurityPolicy-2016-08"
-            default_certificate_arn = ""
-          }
-        }
-      use_additional_ssl_certificates = false
-        additional_certificates = {
-          cert_1 = {
-            module_key = "1" # Must be unique
-            listener_key = "listener_1"
-            certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
-          }
-          cert_2 = {
-            module_key = "2" # Must be unique
-            listener_key = "listener_1"
-            certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-1289012"
-          }
-        }
-
-    ## Listener Default Actions ##
-      default_actions = {
-        action_1 = {
-          type = "forward"
-          values = {
-            target_groups = {
-              target_group_1 = {
-                arn = module.AUTO_SCALING_GROUPS.target_group_1.arn
-                weight = 50
-              }
-              target_group_2 = {
-                arn = module.AUTO_SCALING_GROUPS.target_group_2.arn
-                weight = 50
-              }
-            } 
-            stickiness = {
-              enabled = true
-              duration = 100
-            }
-          }
-        }  
-      }
-    }
-
-}
 
 ###############################################
 ## Application Load Balancer: Listener Rules ##

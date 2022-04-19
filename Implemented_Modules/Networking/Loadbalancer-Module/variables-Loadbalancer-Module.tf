@@ -113,6 +113,55 @@ variable "new_subnets" {
   }))
 }
 
+## Loadbalancer: Target Groups Variables ##
+
+## Get VPC ID by Tag ##
+
+variable "vpc_id" {
+  description = "VPC ID to use for target groups"
+  type = string
+  default = null
+}
+
+
+## Load Balancer Target Groups ##
+
+variable "create_lb_target_groups" {
+  description = "Whether to create target groups for a load balancer listener"
+  type = bool
+  default = false
+}
+
+variable "lb_target_groups" {
+  description = "Settings for target groups that ASGs will be assigned to"
+  type = map(object({
+    name = string
+    protocol = string
+    port = number
+    target_type = string
+    app_lb_algorithm_type = string
+    slow_start = number
+    health_check = object({
+      enabled = bool
+      path = string
+      port = number
+      protocol = string
+      healthy_threshold = number
+      interval = number
+      matcher = string
+      timeout = number
+      unhealthy_threshold = number
+    })
+    stickiness = object({
+      enabled = bool
+      type = string
+      cookie_duration = number
+    })
+    tags = map(string)
+  }))
+  default = null
+}
+
 ## Create New Security Groups Variable ##
 variable "create_new_security_groups" {
   description = "Whether to create new security groups for the load balancer"

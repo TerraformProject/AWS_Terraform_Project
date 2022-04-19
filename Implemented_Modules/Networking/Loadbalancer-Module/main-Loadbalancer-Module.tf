@@ -104,6 +104,48 @@ dynamic "subnet_mapping" {
       route_table_id = each.value.route_table_id_association
     }
 
+#################################
+## Loadbalancer: Target Groups ##
+#################################
+## Get VPC ID ##
+
+resource "aws_lb_target_group" "lb_target_groups" {
+  for_each = var.create_lb_target_groups == true ? var.lb_target_groups : {}
+
+  vpc_id   = var.vpc_id
+
+  name     = each.value.name
+  port     = each.value.port
+  protocol = each.value.protocol
+  target_type = each.value.target_type
+  load_balancing_algorithm_type = each.value.app_lb_algorithm_type
+  slow_start = each.value.slow_start
+  
+  health_check {
+    enabled = each.value.health_check["enabled"]
+    path = each.value.health_check["path"]
+    port = each.value.health_check["port"]
+    protocol = each.value.health_check["protocol"]
+    healthy_threshold = each.value.health_check["healthy_threshold"]
+    interval = each.value.health_check["interval"]
+    matcher = each.value.health_check["matcher"]
+    timeout = each.value.health_check["timeout"]
+    unhealthy_threshold = each.value.health_check["unhealthy_threshold"]
+  }
+  
+  stickiness {
+    enabled = each.value.stickiness["enabled"]
+    type = each.value.stickiness["type"]
+    cookie_duration = each.value.stickiness["cookie_duration"]
+  }
+
+  tags = each.value.tags
+
+}
+
+
+
+
 ####################################################
 ## Application Load Balancer: New Security Groups ##
 ####################################################
