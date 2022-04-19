@@ -41,15 +41,7 @@
     
 [AWS Documentation: Gateway Load Balancer Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html)    
    
-[HashiCorp Terraform: Load Balancer Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb)    
-   
-[HashiCorp Terraform: Subnet Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)    
-   
-[HashiCorp Terraform: Target Group Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group)   
-   
-[HashiCorp Terraform: Listener Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener)   
-   
-[HashiCorp Terraform: Listener Rule Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_rule)       
+[HashiCorp Terraform: Load Balancer Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb)        
 
 **Use the example below to specify whether the load balancer being created will be an application, network, gateway load balancer. As well, create new Subnets, Target Groups, Listeners, Listener Rules, and associate security groups.**
 
@@ -100,6 +92,16 @@ subnet_mapping = {
     ipv6_address = "" # The IPv6 address, within the subnet, to assign to the internet facing load balancer
   }
   #-----------------------------------------#
+```
+### Create New VPC Subnets   
+
+[AWS Documentation: Subnet Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html)    
+
+[HashiCorp Terraform: Subnet Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)    
+
+**Use the example below to create new subnets to be associated with the load balancer.**
+
+```Terraform  
 }
 ## CREATE NEW SUBNETS ##
 create_new_subnets = false # Whether or not to create new subnets for the load balancer
@@ -122,6 +124,21 @@ new_subnets = {
   }
   #-----------------------------------------#
 }
+```
+
+### Create New Target Groups   
+
+[AWS Documentation: Application Load Balancer Target Group Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)    
+
+[AWS Documentation: Network Load Balancer Target Group Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html)    
+
+[AWS Documentation: Gateway Load Balancer Target Group Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/target-groups.html)    
+
+[HashiCorp Terraform: Target Group Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group)    
+
+**Use the example below to create new target groups to be associated with the load balancer.**
+
+```Terraform
 ## CREATE NEW TARGET GROUPS ##
 create_lb_target_groups = false # Whether or not target groups should be created for the load balancer
 vpc_id = "" # The VPC ID to create the target groups in
@@ -190,6 +207,20 @@ lb_target_groups = {
   }
   #-----------------------------------------#
 }
+```
+### Create New Target Group Listeners
+
+[AWS Documentation: Application Load Balancer Target Group Listener Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html)  
+
+[AWS Documentation: Network Load Balancer Target Group Listener Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html)   
+
+[AWS Documentation: Network Load Balancer Target Group Listener Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/gateway-listeners.html)   
+
+[HashiCorp Terraform: Listener Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener)   
+
+**Use the example below to create new target group listeners to be associated with target groups.**
+
+```Terraform
 ## CREATE NEW TARGET GROUP LISTENERS ##
 create_listeners = false # Whether or not target group listeners should be created
 listeners = {
@@ -303,6 +334,18 @@ listeners = {
     }
   #-----------------------------------------#
 }
+```
+### Create New Listener Rules  
+
+[AWS Documentation: Application Load Balancer Listener Rule Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-update-rules.html)   
+
+[AWS Documentation: Network Load Balancer Listener Rule Resource Reference](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/listener-update-rules.html)    
+
+[HashiCorp Terraform: Listener Rule Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_rule)   
+
+**Use the example below to create new listener rules to be associated with the listeners of a load balancer.**
+
+```Terraform
 ## CREATE NEW LISTENER RULES ##
 create_listener_rules = false # Whether or not to create listener rules for the target group listener
 listener_rules = {
