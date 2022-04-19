@@ -361,39 +361,6 @@ transit_gateways = {
 }
 ``` 
 
-## VPC Peering Connection 
-
-Use the follwoing example to create as many VPC peering connections as desired:
-
-[VPC Peering Connection Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_peering_connection)
-
-```terraform
-vpc_peering_connections = {
-
-    Example_Peering_Connetion = {
-            peer_owner_id = string # The AWS account ID of the owner for which the peering connection will connect with
-            peer_vpc_id = string # ID of the VPC for which you will be creating the peering connection with
-            vpc_id = string # The ID of this VPC
-            auto_accept = bool # Auto accept peering connection. **Both VPCs must be in the same account for this to be true
-            peer_region = bool # The region for which the VPC resides in
-            acceptor = {
-                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
-                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
-                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
-            }
-            requester = {
-                allow_remote_vpc_dns_resolution = bool # Allow public to private DNS resolution in the peering connection
-                allow_classic_link_to_remote_vpc = bool # Allows outbound communication from local ClassicLink to the remote VPC
-                allow_vpc_to_remote_classic_link = bool # Allows for outbound communication from the local VPC to the remote ClassicLink connection
-            }
-            tags = { 
-                "key" = "value" # Tags to be assocaited with the VPC peering connection
-            }
-        }
-
-}
-``` 
-
 ### AWS VPC Peering Connection 
 
 **Use the follwoing example to create as many VPC peering connections as desired.**
