@@ -384,3 +384,138 @@ resource "aws_route53_record" "this" {
   allow_overwrite = each.value.allow_overwrite
 }
 
+###################
+## Default NACl ##
+###################
+
+resource "aws_default_network_acl" "default_acl" {
+  for_each = var.create_default_network_acl == true ? var.default_network_acl : {} 
+
+  default_network_acl_id = each.value.default_network_acl_id
+  subnet_ids = each.value.default_acl_subnet_ids
+
+  dynamic "ingress" {
+      for_each = lookup(each.value, "default_network_acl_ingress", null)
+      content {
+        action          = ingress.value.action
+        cidr_block      = ingress.value.cidr_block
+        from_port       = ingress.value.from_port
+        icmp_code       = ingress.value.icmp_code
+        icmp_type       = ingress.value.icmp_type
+        ipv6_cidr_block = ingress.value.ipv6_cidr_block
+        protocol        = ingress.value.protocol
+        rule_no         = ingress.value.rule_no
+        to_port         = ingress.value.to_port
+      }
+    }
+
+  dynamic "egress" {
+    for_each = lookup(each.value, "default_network_acl_egress", null)
+    content {
+      action            = egress.value.action
+        cidr_block      = egress.value.cidr_block
+        from_port       = egress.value.from_port
+        icmp_code       = egress.value.icmp_code
+        icmp_type       = egress.value.icmp_type
+        ipv6_cidr_block = egress.value.ipv6_cidr_block
+        protocol        = egress.value.protocol
+        rule_no         = egress.value.rule_no
+        to_port         = egress.value.to_port
+    }
+  }
+
+  tags = merge(
+    {
+      "Name" = each.value.default_network_acl_name
+    },
+    each.value.tags,
+  )
+}
+
+########################
+## ACL GROUP: EXAMPLE ##
+########################
+
+resource "aws_network_acl" "acl_group" {
+  for_each = var.acl_group 
+
+  vpc_id = each.value.vpc_id
+  subnet_ids = each.value.acl_subnet_ids
+
+ dynamic "ingress" {
+      for_each = lookup(each.value, "acl_ingress_rules", null)
+      content {
+        action          = ingress.value.action
+        cidr_block      = ingress.value.cidr_block
+        from_port       = ingress.value.from_port
+        icmp_code       = ingress.value.icmp_code
+        icmp_type       = ingress.value.icmp_type
+        ipv6_cidr_block = ingress.value.ipv6_cidr_block
+        protocol        = ingress.value.protocol
+        rule_no         = ingress.value.rule_no
+        to_port         = ingress.value.to_port
+      }
+    }
+
+  dynamic "egress" {
+    for_each = lookup(each.value, "acl_egress_rules", null)
+    content {
+      action            = egress.value.action
+        cidr_block      = egress.value.cidr_block
+        from_port       = egress.value.from_port
+        icmp_code       = egress.value.icmp_code
+        icmp_type       = egress.value.icmp_type
+        ipv6_cidr_block = egress.value.ipv6_cidr_block
+        protocol        = egress.value.protocol
+        rule_no         = egress.value.rule_no
+        to_port         = egress.value.to_port
+    }
+  }
+
+  tags = merge(
+    {
+      "Name" = each.value.acl_name
+    },
+    each.value.tags,
+  )
+}
+
+#########################
+## New Security Groups ##
+#########################
+
+resource "aws_security_group" "new_security_groups" {
+for_each = var.create_new_security_groups == true ? var.new_security_groups : {}
+
+  name        = each.value.name
+  description = each.value.description
+  vpc_id      = each.value.vpc_id
+
+  dynamic "ingress" {
+    for_each = each.value.ingress_rules
+    content {
+    description      = ingress.value.description == "" ? null : ingress.value.description
+    from_port        = ingress.value.from_port  
+    to_port          = ingress.value.to_port
+    protocol         = ingress.value.protocol
+    cidr_blocks      = ingress.value.cidr_blocks == [] ? null : ingress.value.cidr_blocks
+    ipv6_cidr_blocks = ingress.value.ipv6_cidr_blocks == [] ? null : ingress.value.ipv6_cidr_blocks
+    self = ingress.value.self
+    }
+  }
+
+  dynamic "egress" {
+    for_each = each.value.egress_rules
+    content {
+    description      = egress.value.description == "" ? null : egress.value.description
+    from_port        = egress.value.from_port  
+    to_port          = egress.value.to_port
+    protocol         = egress.value.protocol
+    cidr_blocks      = egress.value.cidr_blocks == [] ? null : egress.value.cidr_blocks
+    ipv6_cidr_blocks = egress.value.ipv6_cidr_blocks == [] ? null : egress.value.ipv6_cidr_blocks
+    self = egress.value.self
+    }
+  }
+
+  tags = each.value.tags
+}
