@@ -79,6 +79,17 @@ gateway = {
     customer_owned_ipv4_pool = "" # Customer IPv4 pool to associate with the gateway load balancer
     ip_address_type = "" # Type of IP address to use for the gateway load balancer
 }}
+```
+
+### Load Balancer Configurations   
+
+[AWS Documentation: Load Balancer Subnet Mapping Reference](https://docs.aws.amazon.com/prescriptive-guidance/latest/load-balancer-stickiness/subnets-routing.html)
+
+[HashiCorp Terraform: Load Balancer Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb)
+
+**Use the example below to map existing or new subnets to the load balancer.**
+
+```Terraform
 ## SUBNET MAPPING ##
 create_subnet_mapping = false # Whether or not to create a subnet mapping for the load balancer
 subnet_mapping = {
@@ -93,6 +104,7 @@ subnet_mapping = {
   }
   #-----------------------------------------#
 ```
+
 ### Create New VPC Subnets   
 
 [AWS Documentation: Subnet Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html)    
