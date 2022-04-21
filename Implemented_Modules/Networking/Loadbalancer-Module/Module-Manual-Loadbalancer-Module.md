@@ -81,7 +81,7 @@ gateway = {
 }}
 ```
 
-### Load Balancer Configurations   
+### Load Balancer Subnet Mapping   
 
 [AWS Documentation: Load Balancer Subnet Mapping Reference](https://docs.aws.amazon.com/prescriptive-guidance/latest/load-balancer-stickiness/subnets-routing.html)
 
