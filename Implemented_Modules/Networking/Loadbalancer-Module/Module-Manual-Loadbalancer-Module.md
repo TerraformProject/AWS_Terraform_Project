@@ -99,7 +99,7 @@ subnet_mapping = {
     subnet_id = "" # Subnet ID to use in the subnet mapping
     new_subnet_key = "" # Module Key that reference the subnets created below for the subnet mapping
     allocation_id = "" # The allocation ID of the Elastic IP (EIP) address to use for the subnet mapping
-    private_ipv4_address = "" # The prive IPv4 address, within the subnet, to assign to an internal facing load balancer
+    private_ipv4_address = "" # The privat IPv4 address, within the subnet, to assign to an internal facing load balancer
     ipv6_address = "" # The IPv6 address, within the subnet, to assign to the internet facing load balancer
   }
   #-----------------------------------------#
