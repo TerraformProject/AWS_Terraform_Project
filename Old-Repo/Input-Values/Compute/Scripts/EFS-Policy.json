@@ -1,0 +1,18 @@
+{
+    "Version": "2012-10-17",
+    "Id": "ExamplePolicy01",
+    "Statement": [
+        {
+            "Sid": "Wordpress_001_EFS_Policy",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::092968731555:user/nzebar1356"
+            },
+            "Action": [                
+                "elasticfilesystem:ClientMount",
+                "elasticfilesystem:ClientWrite"
+            ],
+            "Resource": "arn:aws:elasticfilesystem:us-east-1:092968731555:file-system/Wordpress_EFS_001"
+        }
+    ]
+}

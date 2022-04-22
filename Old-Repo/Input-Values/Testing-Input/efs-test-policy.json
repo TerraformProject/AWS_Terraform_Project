@@ -1,0 +1,23 @@
+{
+    "Version": "2012-10-17",
+    "Id": "ExamplePolicy01",
+    "Statement": [
+        {
+            "Sid": "ExampleSatement01",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::092968731555:user/nzebar1356"
+            },
+            "Action": [                
+                "elasticfilesystem:ClientMount",
+                "elasticfilesystem:ClientWrite"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "true"
+                }
+            }
+        }
+    ]
+}

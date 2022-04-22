@@ -1,0 +1,55 @@
+[ 
+   {
+      "name": "Wordpress_001",
+      "image": "${image_url}/${image_name_tag}",
+      "cpu": 512,
+      "memory": 1000,
+      "memoryReservation": 750,
+      "portMappings": [
+         {
+            "containerPort": 80,
+            "hostPort": 0,
+            "protocol": "udp"
+         }
+      ],
+      "environment": [
+         {
+            "name": "WORDPRESS_DB_HOST",
+            "value": "${WORDPRESS_DB_HOST}"
+         },
+         {
+            "name": "WORDPRESS_DB_NAME",
+            "value": "${WORDPRESS_DB_NAME}"
+         },
+         {
+            "name": "WORDPRESS_DB_USER",
+            "value": "${WORDPRESS_DB_USER}"
+         },
+         {
+            "name": "WORDPRESS_DB_PASSWORD",
+            "value": "${WORDPRESS_DB_PASSWORD}"
+         },
+         {
+            "name": "WORDPRESS_CONFIG_EXTRA",
+            "value": "define( 'WP_HOME', ${WP_HOME} ); define( 'WP_SITEURL', ${WP_SITEURL} ); define('CONCATENATE_SCRIPTS', false); define('FS_METHOD', 'direct');"
+         }
+      ],
+      "mountPoints": [
+         {
+            "sourceVolume": "wp_plugins",
+            "containerPath": "/var/www/html/wp-content/plugins",
+            "readOnly": true
+         },
+         {
+            "sourceVolume": "wp_cache",
+            "containerPath": "/var/www/html/wp-content/cache",
+            "readOnly": true
+         }
+      ],
+      "disableNetworking": false,
+      "privileged": true,
+      "readonlyRootFilesystem": true
+   }
+]
+
+
