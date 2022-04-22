@@ -1,22 +1,29 @@
+locals {
+  route_tables = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
+                              [ for route_tables, route_table_settings in vpc_settings.vpc_route_tables: route_table_settings]
+   ])
+}
+
+
 #########
 ## VPC ##
 #########
 
 resource "aws_vpc" "vpc" {
-  count = var.create_vpc ? 1 : 0
+  for_each = var.create_vpc_group == true ? var.vpc_group : {}
 
-  cidr_block                       = var.cidr_block
-  enable_dns_hostnames             = var.enable_dns_hostnames
-  enable_dns_support               = var.enable_dns_support
-  assign_generated_ipv6_cidr_block = var.enable_ipv6
+  cidr_block                       = each.value.cidr_block
+  enable_dns_hostnames             = each.value.enable_dns_hostnames
+  enable_dns_support               = each.value.enable_dns_support
+  assign_generated_ipv6_cidr_block = each.value.assign_generated_ipv6_cidr_block
 
   tags = merge(
     {
-      "Name" = format("%s", var.vpc_name)
+      "Name" = format("%s", each.valaue.vpc_name)
     },
-    var.vpc_tags,
   )
 }
+
 
 ###############################
 ## VPC: Secondary CIDR Block ##
@@ -25,7 +32,7 @@ resource "aws_vpc" "vpc" {
 resource "aws_vpc_ipv4_cidr_block_association" "this" {
   count = var.associate_cidr_blocks == true ? length(var.cidr_blocks_associated) : 0
 
-  vpc_id = aws_vpc.vpc[0].id
+  vpc_id = aws_vpc.vpc.id
   cidr_block = var.cidr_blocks_associated[count.index]
 }
 
@@ -33,13 +40,12 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
 ## Route Tables ##
 ##################
 resource "aws_route_table" "route_tables" {
-  for_each = var.route_tables
+  for_each = var.create_vpc_group == true ? var.vpc_group : {}
 
-  vpc_id = each.value.vpc_id
-  propagating_vgws = each.value.propagating_vgws
+  vpc_id = aws_vpc.vpc.id
 
   dynamic "route" {
-    for_each = each.value.associated_routes
+    for_each = {for o in local.route_tables: route_table_name => o}
     content {
       # One of the following destinations must be provided
       cidr_block      = lookup(route.value, "cidr_block", null)
