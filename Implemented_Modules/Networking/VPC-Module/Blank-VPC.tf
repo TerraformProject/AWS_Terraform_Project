@@ -36,31 +36,21 @@ vpc_group = {
         }
         #- VPC SUBNET SETTINGS ------------------------#
         vpc_subnets = {
-                #--------------------------------------#
-                Example_Subnet = {
-                    availability_zone = ""
-                    cidr_block = ""
-                    ipv6_cidr_block = ""
-                    assign_ipv6_address_on_creation = false
-                    map_public_ip_on_launch = ""
-                    route_table_association = ""
-                }
-                #--------------------------------------#
+                        #------------------------------#
+                        Example_Subnet = {
+                            availability_zone = ""
+                            cidr_block = ""
+                            ipv6_cidr_block = ""
+                            assign_ipv6_address_on_creation = false
+                            map_public_ip_on_launch = ""
+                            route_table_association = ""
+                        }
+                        #-----------------------------#
         }
     }
-    #--------------------------------------------------#      
+    #-------------------------------------------------#      
 }
-########################################################
-
-
-
-
-
-
-
-
-
-
+#######################################################
 
 ###################
 ## END OF MODULE ##
