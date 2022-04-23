@@ -1,6 +1,10 @@
 locals {
   route_tables = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
-                              [ for route_tables, route_table_settings in vpc_settings.vpc_route_tables: route_table_settings]
+                            [ for route_tables, route_table_settings in vpc_settings.vpc_route_tables: route_table_settings]
+   ])
+
+   vpc_subnet = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
+                            [ for subnet, subnet_settings in vpc_settings.vpc_subnets: subnet_settings ]
    ])
 }
 
@@ -42,10 +46,10 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
 resource "aws_route_table" "route_tables" {
   for_each = var.create_vpc_group == true ? var.vpc_group : {}
 
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.vpc[each.key].id
 
   dynamic "route" {
-    for_each = {for o in local.route_tables: route_table_name => o}
+    for_each = {for o in local.route_tables: o.route_table_name => o}
     content {
       # One of the following destinations must be provided
       cidr_block      = lookup(route.value, "cidr_block", null)
@@ -77,9 +81,13 @@ resource "aws_route_table" "route_tables" {
 ############
 
 resource "aws_subnet" "subnets" {
-  for_each = var.subnets 
+  for_each = { for o in local.vpc_subnet: o.subnet_name => o } 
 
-  vpc_id = each.value.vpc_id
+  vpc_id = element(flatten([for vpc, vpc_settings in var.vpc_group: 
+                      [ for subnet, subnet_settings in vpc_settings.vpc_subnets: 
+                          [ for subnet_keys, subnet_values in vpc_settings.vpc_subnets.subnet_settings: vpc if subnet_values.subnet_name == each.value.subnet_name  ] 
+                      ] 
+                  ]), 0 )
 
   availability_zone = each.value.availability_zone
   cidr_block = each.value.cidr_block
@@ -100,8 +108,8 @@ resource "aws_subnet" "subnets" {
 #####################################
 
 resource "aws_route_table_association" "route_table_associations" {
-for_each = var.subnets
+for_each = {for o in local.vpc_subnet: o.subnet_name => o}
 
-  subnet_id      = aws_subnet.subnets[each.key].id
-  route_table_id = aws_route_table.route_tables[each.value.route_table_association].id
+  subnet_id      = aws_subnet.subnets[each.value.subnet_name].id
+  route_table_id = aws_route_table.route_tables[each.value.route_table_name].id
 }

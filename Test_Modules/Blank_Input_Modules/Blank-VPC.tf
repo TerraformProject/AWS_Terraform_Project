@@ -21,29 +21,31 @@ vpc_group = {
             vpc_route_tables = {
                     #--------------------------------------#
                     Example_Route_Table = {
-                    route_table_name = ""
-                    associated_routes = {
+                        route_table_name = ""
+                        associated_subnet = [] 
+                        associated_routes = {
                             #------------------------------#
                             Example_Route_1 = {
                                 cidr_block = ""
                                 gateway_id = ""
                             }
                             #------------------------------#
-                    }}
+                    }   }
                     #--------------------------------------#
             }
             #- VPC SUBNET SETTINGS ------------------------#
             vpc_subnets = {
-                            #------------------------------#
-                            Example_Subnet = {
-                                availability_zone = ""
-                                cidr_block = ""
-                                ipv6_cidr_block = ""
-                                assign_ipv6_address_on_creation = false
-                                map_public_ip_on_launch = ""
-                                route_table_association = ""
-                            }
-                            #-----------------------------#
+                    #--------------------------------------#
+                    Example_Subnet = {
+                        subnet_name = ""
+                        availability_zone = ""
+                        cidr_block = ""
+                        ipv6_cidr_block = ""
+                        assign_ipv6_address_on_creation = false
+                        map_public_ip_on_launch = ""
+                        route_table_name = ""
+                    }
+                    #-------------------------------------#
             }
         }
         #-------------------------------------------------#      
