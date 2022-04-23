@@ -13,7 +13,7 @@ variable "vpc_group" {
   type = map(object({
       vpc_name = string
       cidr_block = string
-      secondary_ipv4_cidr_block = list(string)
+      secondary_ipv4_cidr_blocks = list(string)
       assign_generated_ipv6_cidr_block = bool
       enable_dns_support = bool
       enable_dns_hostnames = bool

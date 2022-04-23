@@ -22,8 +22,8 @@ provider "aws" {
 # ## Terraform Apply Folder ##
 # ############################       
 
-module "GET_APPLY_FOLDER" {
-source = "./Implemented_Modules/Apply_Values"
+module "GET_TEST_INPUT_FOLDER" {
+source = "./Test_Modules/Input_Modules"
 }
 
 # #####################
