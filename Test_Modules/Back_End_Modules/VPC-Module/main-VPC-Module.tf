@@ -1,7 +1,25 @@
 locals {
+
+  secondary_ipv4_cidr_blocks = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
+                                [ for secondary_ipv4_cidr_block in vpc_settings.secondary_ipv4_cidr_blocks: {
+                                    secondary_ipv4_cidr_block = vpc_group
+                              } ] ] )
+
+  internet_gateways = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
+                                [ for internet_gateway_name in vpc_settings.internet_gateway_names: {
+                                    internet_gateway_name = vpc_group
+                              } ] ] )
+
+  # route_tables = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
+  #                           [ for route_tables, route_table_settings in vpc_settings.vpc_route_tables: route_table_settings]
+  #  ])
+
   route_tables = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
-                            [ for route_tables, route_table_settings in vpc_settings.vpc_route_tables: route_table_settings]
-   ])
+                            [ for route_tables, route_table_settings in vpc_settings.vpc_route_tables: {
+                                vpc_id = vpc_group
+                                route_table_name = route_table_settings.route_table_name
+                                associated_routes = route_table_settings.associated_routes
+                            } ] ] )
 
    vpc_subnet = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
                             [ for subnet, subnet_settings in vpc_settings.vpc_subnets: subnet_settings ]
@@ -34,22 +52,36 @@ resource "aws_vpc" "vpc" {
 ###############################
 
 resource "aws_vpc_ipv4_cidr_block_association" "this" {
-  count = var.associate_cidr_blocks == true ? length(var.cidr_blocks_associated) : 0
+  count = local.secondary_ipv4_cidr_blocks != {} ? local.secondary_ipv4_cidr_block : {}
 
-  vpc_id = aws_vpc.vpc.id
-  cidr_block = var.cidr_blocks_associated[count.index]
+  vpc_id = aws_vpc.vpc[each.value].id
+  cidr_block = each.key
+}
+
+##########################
+## VPC Internet Gateway ##
+##########################
+
+resource "aws_internet_gateway" "igw" {
+for_each = local.internet_gateways != {} ? local.internet_gateways : {}
+
+  vpc_id = aws_vpc.vpc.vpc[each.value].id
+
+  tags = {
+    Name = each.key
+  }
 }
 
 ##################
 ## Route Tables ##
 ##################
 resource "aws_route_table" "route_tables" {
-  for_each = var.create_vpc_group == true ? var.vpc_group : {}
+  for_each = { for o in local.route_tables: o.route_table_name => o}
 
-  vpc_id = aws_vpc.vpc[each.key].id
+  vpc_id = aws_vpc.vpc[each.value.vpc_id].id
 
   dynamic "route" {
-    for_each = {for o in local.route_tables: o.route_table_name => o}
+    for_each = each.value.associated_routes
     content {
       # One of the following destinations must be provided
       cidr_block      = lookup(route.value, "cidr_block", null)

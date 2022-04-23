@@ -22,7 +22,6 @@ vpc_group = {
                     #--------------------------------------#
                     Example_Route_Table = {
                         route_table_name = ""
-                        associated_subnet = [] 
                         associated_routes = {
                             #------------------------------#
                             Example_Route_1 = {
