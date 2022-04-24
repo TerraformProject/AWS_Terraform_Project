@@ -18,6 +18,9 @@ variable "vpc_group" {
       enable_dns_support = bool
       enable_dns_hostnames = bool
       internet_gateway_names = list(string)
+      egress_only_internet_gateway_names = list(string)
+      nat_gateway_names = list(string)
+      vpc_default_route_table_name = string
       vpc_route_tables = map(object({
           route_table_name = string
           associated_routes = map(map(any))
