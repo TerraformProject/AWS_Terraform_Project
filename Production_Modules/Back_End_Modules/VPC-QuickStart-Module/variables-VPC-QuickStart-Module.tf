@@ -17,7 +17,7 @@ variable "vpc_group" {
       assign_generated_ipv6_cidr_block = bool
       enable_dns_support = bool
       enable_dns_hostnames = bool
-      internet_gateway_names = list(string)
+      internet_gateway_name = string
       egress_only_internet_gateway_names = list(string)
       nat_gateway_names = list(string)
       vpc_default_route_table_name = string

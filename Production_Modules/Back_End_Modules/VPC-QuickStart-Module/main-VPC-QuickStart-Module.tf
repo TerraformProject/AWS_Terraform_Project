@@ -9,8 +9,8 @@ locals {
 
 ## Internet Gateway ##
 
-  internet_gateways = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
-                                [ for internet_gateway_name in vpc_settings.internet_gateway_names: {
+  internet_gateway = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
+                                [ for internet_gateway_name in [vpc_settings.internet_gateway_name]: {
                                     vpc_id = vpc_group
                                     internet_gateway_name = internet_gateway_name
                               } ] ] )
@@ -28,7 +28,7 @@ locals {
   nat_gateway_names = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
                                   [ for nat_gateway_name in vpc_settings.nat_gateway_names: {
                                       nat_gateway_name = element( split(":", nat_gateway_name ) , 0 )
-                                      subnet_id = aws_subnet.subnets[element( split(":", nat_gateway_name ) , 1 )].id
+                                      subnet_id = element( split(":", nat_gateway_name ) , 1 )
                                   } ] ] )
 
 ## Default Route Tabled ##
@@ -124,7 +124,7 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
 ##########################
 
 resource "aws_internet_gateway" "igw" {
-for_each = local.internet_gateways != {} ? { for o in local.internet_gateways: o.internet_gateway_name => o } : {}
+for_each = local.internet_gateway != {} ? { for o in local.internet_gateway: o.internet_gateway_name => o } : {}
 
   vpc_id = aws_vpc.vpc[each.value.vpc_id].id
 
@@ -216,9 +216,9 @@ resource "aws_route_table" "route_tables" {
     for_each = each.value.associated_routes
     content {
       # One of the following destinations must be provided
-      cidr_block      = lookup(route.value, "cidr_block", null)
-      ipv6_cidr_block = lookup(route.value, "ipv6_cidr_block", null)
-      destination_prefix_list_id = lookup(route.value, "destination_prefix_list_id", null)
+      cidr_block      = lookup(route.value, "cidr_block", null) 
+      ipv6_cidr_block = lookup(route.value, "ipv6_cidr_block", null)  
+      destination_prefix_list_id = lookup(route.value, "destination_prefix_list_id", null) 
 
       # One of the following targets must be provided
       egress_only_gateway_id = lookup(route.value, "egress_only_gateway_id", null) != null ? aws_egress_only_internet_gateway.egress_only_igw[route.value.egress_only_gateway_id].id : null

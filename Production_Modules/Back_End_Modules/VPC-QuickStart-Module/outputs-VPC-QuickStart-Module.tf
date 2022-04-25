@@ -120,16 +120,102 @@ output "Route_Table_Default_tags_all" {
 # }
 #----------------------------------------------------#
 
-output "Route_Table_One_id" {
-  value = aws_route_table.route_tables["Route_Table_One"].id
+## Public Route Table 1
+
+output "Public_Route_Table_One_id" {
+  value = aws_route_table.route_tables["Public_Route_Table_One"].id
 }
 
-output "Route_Table_One_arn" {
-  value = aws_route_table.route_tables["Route_Table_One"].arn
+output "Public_Route_Table_One_arn" {
+  value = aws_route_table.route_tables["Public_Route_Table_One"].arn
 }
 
-output "Route_Table_One_tags_all" {
-  value = aws_route_table.route_tables["Route_Table_One"].tags_all
+output "Public_Route_Table_One_tags_all" {
+  value = aws_route_table.route_tables["Public_Route_Table_One"].tags_all
+}
+
+## Public Route Table 2
+
+output "Public_Route_Table_Two_id" {
+  value = aws_route_table.route_tables["Public_Route_Table_Two"].id
+}
+
+output "Public_Route_Table_Two_arn" {
+  value = aws_route_table.route_tables["Public_Route_Table_Two"].arn
+}
+
+output "Public_Route_Table_Two_tags_all" {
+  value = aws_route_table.route_tables["Public_Route_Table_Two"].tags_all
+}
+
+## Private Route Table 1
+
+output "Private_Route_Table_One_id" {
+  value = aws_route_table.route_tables["Private_Route_Table_One"].id
+}
+
+output "Private_Route_Table_One_arn" {
+  value = aws_route_table.route_tables["Private_Route_Table_One"].arn
+}
+
+output "Private_Route_Table_One_tags_all" {
+  value = aws_route_table.route_tables["Private_Route_Table_One"].tags_all
+}
+
+## Private Route Table 2
+
+output "Private_Route_Table_Two_id" {
+  value = aws_route_table.route_tables["Private_Route_Table_Two"].id
+}
+
+output "Private_Route_Table_Two_arn" {
+  value = aws_route_table.route_tables["Private_Route_Table_Two"].arn
+}
+
+output "Private_Route_Table_Two_tags_all" {
+  value = aws_route_table.route_tables["Private_Route_Table_Two"].tags_all
+}
+
+## Database Route Table 1
+
+output "Database_Route_Table_One_id" {
+  value = aws_route_table.route_tables["Database_Route_Table_One"].id
+}
+
+output "Database_Route_Table_One_arn" {
+  value = aws_route_table.route_tables["Database_Route_Table_One"].arn
+}
+
+output "Database_Route_Table_One_tags_all" {
+  value = aws_route_table.route_tables["Database_Route_Table_One"].tags_all
+}
+
+## Database Route Table 2
+
+output "Database_Route_Table_Two_id" {
+  value = aws_route_table.route_tables["Database_Route_Table_Two"].id
+}
+
+output "Database_Route_Table_Two_arn" {
+  value = aws_route_table.route_tables["Database_Route_Table_Two"].arn
+}
+
+output "Database_Route_Table_Two_tags_all" {
+  value = aws_route_table.route_tables["Database_Route_Table_Two"].tags_all
+}
+
+## Database Route Table 3
+
+output "Database_Route_Table_Three_id" {
+  value = aws_route_table.route_tables["Database_Route_Table_Three"].id
+}
+
+output "Database_Route_Table_Three_arn" {
+  value = aws_route_table.route_tables["Database_Route_Table_Three"].arn
+}
+
+output "Database_Route_Table_Three_tags_all" {
+  value = aws_route_table.route_tables["Database_Route_Table_Three"].tags_all
 }
 
 #################
@@ -142,16 +228,102 @@ output "Route_Table_One_tags_all" {
 # }
 #----------------------------------------------------#
 
-output "Subnet_One_id" {
-  value = aws_subnet.subnets["Subnet_One"].id
+## Public Subnet 1
+
+output "Public_Subnet_One_id" {
+  value = aws_subnet.subnets["Public_Subnet_One"].id
 }
 
-output "Subnet_One_arn" {
-  value = aws_subnet.subnets["Subnet_One"].arn
+output "Public_Subnet_One_arn" {
+  value = aws_subnet.subnets["Public_Subnet_One"].arn
 }
 
-output "Subnet_One_tags_all" {
-  value = aws_subnet.subnets["Subnet_One"].tags_all
+output "Public_Subnet_One_tags_all" {
+  value = aws_subnet.subnets["Public_Subnet_One"].tags_all
+}
+
+## Public Subnet 2
+
+output "Public_Subnet_Two_id" {
+  value = aws_subnet.subnets["Public_Subnet_Two"].id
+}
+
+output "Public_Subnet_Two_arn" {
+  value = aws_subnet.subnets["Public_Subnet_Two"].arn
+}
+
+output "Public_Subnet_Two_tags_all" {
+  value = aws_subnet.subnets["Public_Subnet_Two"].tags_all
+}
+
+## Private Subnet 1
+
+output "Private_Subnet_One_id" {
+  value = aws_subnet.subnets["Private_Subnet_One"].id
+}
+
+output "Private_Subnet_One_arn" {
+  value = aws_subnet.subnets["Private_Subnet_One"].arn
+}
+
+output "Private_Subnet_One_tags_all" {
+  value = aws_subnet.subnets["Private_Subnet_One"].tags_all
+}
+
+## Private Subnet 2
+
+output "Private_Subnet_Two_id" {
+  value = aws_subnet.subnets["Private_Subnet_Two"].id
+}
+
+output "Private_Subnet_Two_arn" {
+  value = aws_subnet.subnets["Private_Subnet_Two"].arn
+}
+
+output "Private_Subnet_Two_tags_all" {
+  value = aws_subnet.subnets["Private_Subnet_Two"].tags_all
+}
+
+## Database Subnet 1
+
+output "Database_Subnet_One_id" {
+  value = aws_subnet.subnets["Database_Subnet_One"].id
+}
+
+output "Database_Subnet_One_arn" {
+  value = aws_subnet.subnets["Database_Subnet_One"].arn
+}
+
+output "Database_Subnet_One_tags_all" {
+  value = aws_subnet.subnets["Database_Subnet_One"].tags_all
+}
+
+## Database Subnet 2
+
+output "Database_Subnet_Two_id" {
+  value = aws_subnet.subnets["Database_Subnet_Two"].id
+}
+
+output "Database_Subnet_Two_arn" {
+  value = aws_subnet.subnets["Database_Subnet_Two"].arn
+}
+
+output "Database_Subnet_Two_tags_all" {
+  value = aws_subnet.subnets["Database_Subnet_Two"].tags_all
+}
+
+## Database Subnet 3
+
+output "Database_Subnet_Three_id" {
+  value = aws_subnet.subnets["Database_Subnet_Three"].id
+}
+
+output "Database_Subnet_Three_arn" {
+  value = aws_subnet.subnets["Database_Subnet_Three"].arn
+}
+
+output "Database_Subnet_Three_tags_all" {
+  value = aws_subnet.subnets["Database_Subnet_Three"].tags_all
 }
 
 #####################
