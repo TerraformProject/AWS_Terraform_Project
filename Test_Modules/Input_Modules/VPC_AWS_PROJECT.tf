@@ -7,7 +7,7 @@ source = "../Back_End_Modules/VPC-Module"
 create_vpc_group = true
 vpc_group = {
     #------------------------------------------------------#
-    Example1_VPC = {
+    vpc_aws_terraform = {
             vpc_name = "VPC_ONE"
             #- VPC CIDR BLOCKS ----------------------------#
             cidr_block       = "172.16.0.0/16"
@@ -43,8 +43,8 @@ vpc_group = {
             }
             #- GATEWAY/ENDPOINT SETTINGS ------------------#
             internet_gateway_names = ["IGW_One"]
-            egress_only_internet_gateway_names = ["Egress-IGW1"] 
-            nat_gateway_names = ["NATGW1:Subnet_One"]
+            egress_only_internet_gateway_names = [] 
+            nat_gateway_names = ["NATGW1:Subnet_One", "NATGW2:Subnet_Two"]
             #- VPC SUBNET SETTINGS ------------------------#
             vpc_subnets = {
                 #------------------------------------------#
@@ -60,7 +60,7 @@ vpc_group = {
                 #-----------------------------------------#
                 #-----------------------------------------#
                 Example2_Subnet = {
-                    subnet_name = "Subnet_2"
+                    subnet_name = "Subnet_Two"
                     availability_zone = "us-east-1"
                     cidr_block = "192.168.10.0/24"
                     ipv6_cidr_block = ""
@@ -86,7 +86,7 @@ vpc_group = {
                 #-----------------------------------------#
                 security_group_name = "Default_Security_Group"
                 security_group_rules = [
-                # "Direction|Type|[Type_Value]|Protocol|FromPort|ToPort|RuleName"
+                # "Direction|Type|Type_Value|Protocol|FromPort|ToPort|RuleName"
                 "Ingress|IPv4|0.0.0.0/0|tcp|80|80|InIPv4_HTTP_port_80",
                 "Egress|IPv4|0.0.0.0/0|tcp|80|80|OutIPv4_HTTP_port_80"
                 ]
