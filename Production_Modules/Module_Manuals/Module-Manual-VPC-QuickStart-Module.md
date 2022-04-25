@@ -149,7 +149,7 @@ destination_prefix_list_id : value
 
 # VPC QuickStart Output Value Examples
 
-**Use the example below to assist in secifying output values from this module.**    
+**Use the example below to assist in specifying output values from this module.**    
 
 ```Terraform
 ################
