@@ -13,7 +13,7 @@
 • AWS EC2 AMI      
 • MORE...          
 
-**If there are any questions, feel free to let me know. Any feedback is appreciated**
+**If there are any questions, feel free to reach out! Any feedback is appreciated!**
 
 Best,   
 nzebar
@@ -39,7 +39,7 @@ nzebar
 
 [Use Case Scenario: Backend Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC-QuickStart-Module)
 
-**If there are any questions, feel free to let me know. Any feedback is appreciated**   
+**If there are any questions, feel free to reach out! Any feedback is appreciated!**   
 
 Best,     
 nzebar
