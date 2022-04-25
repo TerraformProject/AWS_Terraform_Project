@@ -34,5 +34,13 @@ variable "vpc_group" {
         map_public_ip_on_launch = string
         route_table_name = string
       }))
+      default_acl = object({
+        acl_name = string
+        acl_rules = list(string)
+      })
+      default_security_group = object({
+        security_group_name = string
+        security_group_rules = list(string)
+      })
   }))
 }

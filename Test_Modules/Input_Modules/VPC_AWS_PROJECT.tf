@@ -73,22 +73,25 @@ vpc_group = {
             #- DEFAULT ACL SETTINGS ----------------------#
             default_acl = {
                 #-----------------------------------------#
-                ipv4 = {
-                    allow_rules = [
-                                "cidr_block:80:80:10"
-                        ]
-                    deny_rules = [
-
-                    ]
-                }
-                #-----------------------------------------#
-                ipv6 = {
-                    allow_rules = ["ipv6_cidr_block:80:80:10"]
-                    deny_rules = []
-                }
+                acl_name = "Default_ACL"
+                acl_rules = [
+                # "Direction|Action|IP_Type|CIDRblock|Protocol|FromPort|ToPort|RuleNo"
+                "Ingress|Deny|IPv4|0.0.0.0/0|-1|0|0|10",
+                "Egress|Deny|IPv4|0.0.0.0/0|-1|0|0|10",
+                ] 
                 #-----------------------------------------#
             }
             #- DEFAULT SECURITY GROUP SETTINGS -----------#
+            default_security_group = {
+                #-----------------------------------------#
+                security_group_name = "Default_Security_Group"
+                security_group_rules = [
+                # "Direction|Type|[Type_Value]|Protocol|FromPort|ToPort|RuleName"
+                "Ingress|IPv4|0.0.0.0/0|tcp|80|80|InIPv4_HTTP_port_80",
+                "Egress|IPv4|0.0.0.0/0|tcp|80|80|OutIPv4_HTTP_port_80"
+                ]
+                #-----------------------------------------#
+            }
         }
     #-----------------------------------------------------#      
 }
