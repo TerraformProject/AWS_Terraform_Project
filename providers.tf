@@ -23,8 +23,12 @@ provider "aws" {
 # ############################       
 
 module "GET_TEST_INPUT_FOLDER" {
-source = "./Production_Modules/Input_Modules"
+source = "./Test_Modules/Input_Modules"
 }
+
+# module "GET_PROD_INPUT_FOLDER" {
+# source = "./Production_Modules/Input_Modules"
+# }
 
 # #####################
 # ## Compute Modules ##

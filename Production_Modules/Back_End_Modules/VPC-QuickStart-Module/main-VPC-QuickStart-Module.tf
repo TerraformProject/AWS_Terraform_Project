@@ -61,6 +61,7 @@ locals {
 
    default_acl = flatten( [ for vpc_group, vpc_settings in var.vpc_group: 
                             [ for rule_values in vpc_settings.default_acl.acl_rules: {
+                                new_acl_name = vpc_settings.default_acl.acl_name
                                 direction = element( split("|", rule_values) , 0 )
                                 action = element( split("|", rule_values) , 1 )
                                 ip_type = element( split("|", rule_values) , 2 )
@@ -281,7 +282,7 @@ for_each = var.vpc_group
   default_network_acl_id = aws_vpc.vpc[each.key].default_network_acl_id
 
   dynamic "ingress" {
-  for_each = {for o in local.default_acl: o.rule_no => o if o.direction == "Ingress"}
+  for_each = {for o in local.default_acl: "${o.new_acl_name}-${o.rule_no}" => o if o.direction == "Ingress"}
   content {
         action     = ingress.value.action
         protocol = ingress.value.protocol
@@ -294,7 +295,7 @@ for_each = var.vpc_group
   }
 
   dynamic "egress"  {
-  for_each = {for o in local.default_acl: o.rule_no => o if o.direction == "Egress"}
+  for_each = {for o in local.default_acl: "${o.new_acl_name}-${o.rule_no}" => o if o.direction == "Egress"}
   content {
         action     = egress.value.action
         protocol = egress.value.protocol
