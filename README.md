@@ -1,6 +1,12 @@
 # AWS_Terraform_Project
 
-## (In-Progress) - AWS Compute Module(s)    
+## (In-Progress) 
+
+### AWS Network Module(s)   
+  
+
+
+### AWS Compute Module(s) 
 
 **The following AWS resources are being scripted in Terraform.**       
 • AWS LOAD BALANCER      
