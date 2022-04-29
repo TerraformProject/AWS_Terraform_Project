@@ -1,12 +1,18 @@
 # AWS_Terraform_Project
 
+**Below is a link to the folder that contains the modules created prior to this current work effort.**     
+
+These are modules that are currently being recycled into the new effort.     
+  
+[Old-Repository Folder](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Old_Repository)   
+
 ## (In-Progress) - AWS Network Module(s)   
 
 ### Test Modules Folder   
 
 **Below is a link to the Test Modules folder which includes the modules being worked on before merging with Production Modules folder.**
 
-[Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules)   
+[Test Module Folder](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules)   
 
 **If there are any questions, feel free to reach out! Any feedback is appreciated!**
 
@@ -39,10 +45,5 @@ nzebar
 Best,     
 nzebar
 
-## Old-Repository Folder   
 
-**Below is a link to the folder that contains the modules created prior to this current work effort.**   
 
-These are modules that are currently being recycled into the new effort to be made presentable to the public.   
-  
-[Old-Repository Folder](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Old_Repository)
