@@ -1,8 +1,6 @@
 # AWS_Terraform_Project
 
-**Below is a link to the folder that contains the modules created prior to this current work effort.**     
-
-These are modules that are currently being recycled into the new effort.     
+**Below is a link to the folder that contains modules created prior to this current work effort.**       
   
 [Old-Repository Folder](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Old_Repository)   
 
