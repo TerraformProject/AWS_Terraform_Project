@@ -1,23 +1,12 @@
 # AWS_Terraform_Project
 
-## (In-Progress) 
+## (In-Progress) - AWS Network Module(s)   
 
-### AWS Network Module(s)   
-  
+### Test Modules Folder   
 
+**Below is a link to the Test Modules folder which includes the modules being worked on before merging with Production Modules folder.**
 
-### AWS Compute Module(s) 
-
-**The following AWS resources are being scripted in Terraform.**       
-• AWS LOAD BALANCER      
-• AWS TARGET GROUPS    
-• AWS AWS TARGET GROUP LISTENERS             
-• AWS LISTENER RULES      
-• AWS ECS CAPACITY PROVIDERS      
-• AWS AUTOSCALING GROUPS      
-• AWS LAUNCH TEMPLATES       
-• AWS EC2 AMI      
-• MORE...          
+[Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules)   
 
 **If there are any questions, feel free to reach out! Any feedback is appreciated!**
 
@@ -26,7 +15,7 @@ nzebar
 
 ## 4/25/2022 - AWS Quick Start Module
 
-**The following AWS resources can be provisioned using the module AWS Quick Start below**
+**The following AWS resources can be provisioned using the module AWS Quick Start below**     
 • AWS VPC   
 • AWS VPC GATEWAYS   
 • AWS VPC DEFAULT ROUTE TABLE       
@@ -49,3 +38,11 @@ nzebar
 
 Best,     
 nzebar
+
+## Old-Repository Folder   
+
+**Below is a link to the folder that contains the modules created prior to this current work effort.**   
+
+These are modules that are currently being recycled into the new effort to be made presentable to the public.   
+  
+[Old-Repository Folder](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Old_Repository)
