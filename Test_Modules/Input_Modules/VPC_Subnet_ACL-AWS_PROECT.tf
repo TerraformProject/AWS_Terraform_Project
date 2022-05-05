@@ -31,16 +31,15 @@ vpc_subnets = {
                 # vpc_acl_tag_value = 
             }
             create_new_acl = true
-            new_acl_name = "Database_Subnet_One_acl"
+            new_acl_name = "Database_Subnet_acl"
             new_acl_rules = [
             # "Direction|Action|IP_Type|CIDRblock|Protocol|FromPort|ToPort|RuleNo"
             "Ingress|Allow|IPv4|0.0.0.0/0|tcp|3306|3306|30",
             "Egress|Allow|IPv4|0.0.0.0/0|tcp|3306|3306|30"
             ]
+            new_acl_tags = {"Database_Subnet_ACL" = "One"}
             #- VPC SUBNET TAGS -------------------------#
-            tags = {
-                "Database_Subnet" = "One",
-                }
+            new_subnet_tags = { "Database_Subnet" = "One" }
             }
     #---------------------------------------------------#
     #---------------------------------------------------#   
@@ -61,19 +60,17 @@ vpc_subnets = {
             use_existing_acl = true
             get_existing_acl = {
                 vpc_id = module.VPC_AWS_PROJECT.vpc_aws_terraform_id
-                vpc_acl_tag_key = "Database_Subnet"
+                vpc_acl_tag_key = "Database_Subnet_ACL"
                 vpc_acl_tag_value = "One"
             }
             create_new_acl = false
-            new_acl_name = "Database_Subnet_Two_acl"
+            new_acl_name = ""
             new_acl_rules = [
             # "Direction|Action|IP_Type|CIDRblock|Protocol|FromPort|ToPort|RuleNo"
-           # "Ingress|Allow|IPv4|0.0.0.0/0|udp|80|80|30"
             ]
+            new_acl_tags = {}
             #- VPC SUBNET TAGS -------------------------#
-            tags = {
-                "Database_Subnet" = "Two",
-                }
+            new_subnet_tags = {"Database_Subnet" = "Two"}
             }
     #---------------------------------------------------#
     Database_Subnet_3 = {
@@ -93,19 +90,17 @@ vpc_subnets = {
             use_existing_acl = true
             get_existing_acl = {
                 vpc_id = module.VPC_AWS_PROJECT.vpc_aws_terraform_id
-                vpc_acl_tag_key = "Database_Subnet"
+                vpc_acl_tag_key = "Database_Subnet_ACL"
                 vpc_acl_tag_value = "One"
             }
             create_new_acl = false
-            new_acl_name = "Database_Subnet_Three"
+            new_acl_name = ""
             new_acl_rules = [
             # "Direction|Action|IP_Type|CIDRblock|Protocol|FromPort|ToPort|RuleNo"
-            # "Ingress|Allow|IPv4|0.0.0.0/0|udp|80|80|30"
             ]
+            new_acl_tags = {}
             #- VPC SUBNET TAGS -------------------------#
-            tags = {
-                "Database_Subnet" = "Three",
-                }
+            new_subnet_tags = { "Database_Subnet" = "Three"}
             }
     #---------------------------------------------------#
 }

@@ -8,6 +8,8 @@ locals {
                           tag_value = subnet_settings.get_existing_acl.vpc_acl_tag_value
                         } if subnet_settings.use_existing_acl == true && subnet_settings.create_new_acl == false ] )
 
+  # receive_acl_id = elemdata.aws_network_acls.get_acl_id[each.value.subnet_id].ids
+
   # existing_acl = flatten([ for subnets, subnet_settings in var.vpc_subnets: [
   #                           for existing_acl_setting in subnet_settings.get_existing_acl: {
   #                           tag_value = subnet_settings.get_existing_acl.vpc_acl_tag_value
@@ -17,6 +19,7 @@ locals {
   new_acl = flatten([ for subnets, subnet_settings in var.vpc_subnets: {
                         subnet_id = aws_subnet.subnets[subnets].id 
                         new_acl_name = subnet_settings.new_acl_name
+                        new_acl_tags = subnet_settings.new_acl_tags
                     } if subnet_settings.create_new_acl == true && subnet_settings.use_existing_acl == false ] )
   
   new_acl_rules = flatten([ for subnets, subnet_settings in var.vpc_subnets: 
@@ -54,7 +57,7 @@ resource "aws_subnet" "subnets" {
     {
       "Name" = each.value.subnet_name
     },
-    each.value.tags,
+    each.value.new_subnet_tags,
   )
 }
 
@@ -78,10 +81,15 @@ for_each = { for o in local.get_acl_id: o.subnet_id => o }
 
   vpc_id = each.value.vpc_id
 
-  filter {
-    name   = join("", ["tag:", each.value.tag_key])
-    values = [each.value.tag_value]
+  tags = {
+    (each.value.tag_key) = (each.value.tag_value)
   }
+
+  depends_on = [
+  aws_subnet.subnets,
+  aws_network_acl.vpc_network_acl
+]  
+
 }
 
 ######################################
@@ -91,17 +99,30 @@ for_each = { for o in local.get_acl_id: o.subnet_id => o }
 resource "aws_network_acl_association" "existing_acl_subnet_association" {
 for_each = { for o in local.get_acl_id: o.subnet_id => o }
 
-  network_acl_id = element(data.aws_network_acls.get_acl_id[each.value.subnet_id].ids, 0 )
+  network_acl_id = element(data.aws_network_acls.get_acl_id[each.value.subnet_id].ids, 0)
   subnet_id      = aws_subnet.subnets[each.value.subnet_name].id 
 
-depends_on = [
-  data.aws_network_acls.get_acl_id,
-  aws_subnet.subnets
-]  
+  depends_on = [
+    data.aws_network_acls.get_acl_id,
+    aws_subnet.subnets
+  ]  
 }
 
+#################################
+## ATTACHING NEW ACL TO SUBNET ##
+#################################
 
+resource "aws_network_acl_association" "new_acl_subnet_association" {
+for_each = { for o in local.new_acl: o.new_acl_name => o }
 
+  network_acl_id = aws_network_acl.vpc_network_acl[each.value.new_acl_name].id 
+  subnet_id      = each.value.subnet_id
+
+  depends_on = [
+    aws_network_acl.vpc_network_acl,
+    aws_subnet.subnets
+  ]  
+}
 
 #########################
 ## VPC New Network ACL ##
@@ -111,8 +132,6 @@ resource "aws_network_acl" "vpc_network_acl" {
 for_each = { for o in local.new_acl: o.new_acl_name => o }
 
   vpc_id = var.vpc_id
-
-  subnet_ids = [each.value.subnet_id]
 
   dynamic "ingress" {
   for_each = { for o in local.new_acl_rules: "${o.new_acl_name}-${o.rule_no}" => o if o.direction == "Ingress" }
@@ -144,6 +163,7 @@ for_each = { for o in local.new_acl: o.new_acl_name => o }
     {
       "Name" = each.value.new_acl_name
     },
+    each.value.new_acl_tags
   )
 }
 

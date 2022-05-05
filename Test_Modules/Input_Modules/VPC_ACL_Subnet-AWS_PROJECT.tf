@@ -13,11 +13,13 @@ acl_group = {
     Public_Subnet_ACL = {
         ## ACL SETTINGS ##
         acl_name = "Public_Subnets_ACL"
-        acl_subnet_names = [
-            "Public_Subnet_One",
-            "Public_Subnet_Two"
+        subnet_ids = [
+            module.VPC_AWS_PROJECT.Public_Subnet_One_id
         ]
-        acl_subnet_tags = {}
+        subnet_tags = {
+            "Public_Subnets" = "Two",
+            "Test_Subnet" = "Test"
+        }
         ## INGRESS RULE DECLARATIONS ##
         acl_ingress_rules = {
             #----------------------------------#
@@ -81,11 +83,12 @@ acl_group = {
     Private_Subnet_ACL = {
         ## ACL SETTINGS ##
         acl_name = "Private_Subnets_ACL"
-        acl_subnet_names = [
-            "Private_Subnet_One",
-            "Private_Subnet_Two"
+        subnet_ids = [
+            module.VPC_AWS_PROJECT.Private_Subnet_One_id
         ]
-        acl_subnet_tags = {}
+        subnet_tags = {
+            "Private_Subnets" = "Two"
+        }
         ## INGRESS RULE DECLARATIONS ##
         acl_ingress_rules = {
             #----------------------------------#

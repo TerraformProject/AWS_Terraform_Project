@@ -49,6 +49,7 @@ locals {
                                 default_route_table_name = vpc_settings.vpc_default_route_table_name
                                 route_table_name = route_table_settings.route_table_name
                                 associated_routes = route_table_settings.associated_routes
+                                route_table_tags = route_table_settings.route_table_tags
                             } if vpc_settings.vpc_default_route_table_name != route_table_settings.route_table_name ] ] )
 
 ## VPC Subnet ##
@@ -232,6 +233,7 @@ resource "aws_route_table" "route_tables" {
     {
       "Name" = each.value.route_table_name
     },
+    each.value.route_table_tags,
   )
 }
 
@@ -258,6 +260,7 @@ resource "aws_subnet" "subnets" {
     {
       "Name" = each.value.subnet_name
     },
+    each.value.subnet_tags
   )
 }
 

@@ -32,7 +32,8 @@ variable "vpc_subnets" {
         create_new_acl = bool
         new_acl_name = string
         new_acl_rules = list(string)
-        tags = map(string)
+        new_acl_tags =map(string)
+        new_subnet_tags = map(string)
 
     }))
     default = null

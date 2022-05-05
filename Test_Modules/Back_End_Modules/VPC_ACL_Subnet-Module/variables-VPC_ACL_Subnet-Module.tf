@@ -18,8 +18,8 @@ variable "vpc_id" {
 variable "acl_group" {
     type = map(object({
         acl_name = string
-        acl_subnet_names = list(string)
-        acl_subnet_tags = map(string)
+        subnet_ids = list(string)
+        subnet_tags = map(string)
         acl_ingress_rules = map(object({
             action = string
             cidr_block = string

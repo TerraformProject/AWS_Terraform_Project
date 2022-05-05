@@ -1,15 +1,15 @@
-module "Blank_SUBNETS_MODULE" {
+module "Blank_SUBNET_ACL_MODULE" {
 source = ""
 
 #################
 ## VPC SUBNETS ##
 #################
-create_new_vpc_subnets = true
+create_new_vpc_subnets = false
 
 vpc_id = ""
 
 vpc_subnets = {
-    #####################################################   
+    #---------------------------------------------------#   
     Example_Subnet = {
             #- VPC SUBNET SETTINGS ---------------------#
             subnet_name = ""
@@ -26,21 +26,20 @@ vpc_subnets = {
             #- VPC SUBNET ACL --------------------------#
             use_existing_acl = false
             get_existing_acl = {
-                # vpc_id = 
-                # vpc_acl_tag_key =
-                # vpc_acl_tag_value = 
+                vpc_id = ""
+                vpc_acl_tag_key = ""
+                vpc_acl_tag_value = "" 
             }
-            create_new_acl = true
+            create_new_acl = false
             new_acl_name = ""
             new_acl_rules = [
             # "Direction|Action|IP_Type|CIDRblock|Protocol|FromPort|ToPort|RuleNo"
             ]
+            new_acl_tags = { "" = "" }
             #- VPC SUBNET TAGS -------------------------#
-            tags = {
-                "" = "",
-                }
+            new_subnet_tags = { "" = "" }
             }
-    #####################################################
+    #---------------------------------------------------#
 }
 
 ###################

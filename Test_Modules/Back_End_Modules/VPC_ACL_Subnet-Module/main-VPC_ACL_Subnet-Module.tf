@@ -1,34 +1,14 @@
-locals {
-  
-    # get_subnet_ids_name = flatten( { for acl, acl_settings in var.acl_group: acl_settings.acl_subnet_names => acl_settings }  ) 
 
-#     get_subnet_ids_tag = flatten([ for acl, acl_settings in var.vpc_group: 
-#                                     [ for subnet_tags in acl_settings.acl_subnet_tags: data.aws_subnet.get_subnet_id_tags[subnet_tags].ids ] 
-#                                 ])
+####################
+## Get Subnet IDs ##
+####################
 
- }
+data "aws_subnets" "get_subnet_ids" {
+for_each = var.acl_group  
 
-####################################
-## Get Subnet IDs by Subnet Names ##
-####################################
-data "aws_subnets" "get_subnet_id_name" {
-for_each = var.acl_group
-#for_each = { for o in local.get_subnet_ids_name: o.subnet_names => o }
-
-  filter {
-    name   = "tag:Name"
-    values = each.value.acl_subnet_names
-  }
+  tags = each.value.subnet_tags
 }
 
-###################################
-## Get Subnet IDs by Subnet Tags ##
-###################################
-data "aws_subnets" "get_subnet_id_tags" {
-for_each = var.acl_group
-
-  tags = each.value.acl_subnet_tags
-}
 
 #################
 ## Network ACl ##
@@ -38,7 +18,8 @@ resource "aws_network_acl" "acl_group" {
 for_each = var.acl_group 
 
   vpc_id = var.vpc_id
-  subnet_ids = concat(data.aws_subnets.get_subnet_id_name[each.key].ids, data.aws_subnets.get_subnet_id_tags[each.key].ids)
+
+  subnet_ids = concat(each.value.subnet_ids, data.aws_subnets.get_subnet_ids[each.key].ids )
 
  dynamic "ingress" {
       for_each = lookup(each.value, "acl_ingress_rules", null)
@@ -76,4 +57,8 @@ for_each = var.acl_group
     },
     each.value.tags,
   )
+
+  depends_on = [
+    var.vpc_id
+  ]
 }

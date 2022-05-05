@@ -23,6 +23,7 @@ variable "vpc_group" {
       vpc_default_route_table_name = string
       vpc_route_tables = map(object({
           route_table_name = string
+          route_table_tags = map(string)
           associated_routes = map(map(any))
       }))
       vpc_subnets = map(object({
@@ -33,6 +34,7 @@ variable "vpc_group" {
         assign_ipv6_address_on_creation = bool
         map_public_ip_on_launch = string
         route_table_name = string
+        subnet_tags = map(string)
       }))
       default_acl = object({
         acl_name = string

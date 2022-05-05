@@ -26,6 +26,7 @@ vpc_group = {
                 #------------------------------------------#
                 Main_Route_Table = {
                 route_table_name = "Route_Table_Default"
+                route_table_tags = { "Public_Route_table" = "One"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -38,6 +39,7 @@ vpc_group = {
                 #------------------------------------------#
                 Public_Route_Table_1 = {
                 route_table_name = "Public_Route_Table_One"
+                route_table_tags = { "Public_Route_table" = "One"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -50,6 +52,7 @@ vpc_group = {
                 #------------------------------------------#
                 Public_Route_Table_2 = {
                 route_table_name = "Public_Route_Table_Two"
+                route_table_tags = { "Public_Route_table" = "Two"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -62,6 +65,7 @@ vpc_group = {
                 #------------------------------------------#
                 Private_Route_Table_1 = {
                 route_table_name = "Private_Route_Table_One"
+                route_table_tags = { "Private_Route_table" = "One"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -74,6 +78,7 @@ vpc_group = {
                 #------------------------------------------#
                 Private_Route_Table_2 = {
                 route_table_name = "Private_Route_Table_Two"
+                route_table_tags = { "Private_Route_table" = "Two"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -86,6 +91,7 @@ vpc_group = {
                 #------------------------------------------#
                 Database_Route_Table_1 = {
                 route_table_name = "Database_Route_Table_One"
+                route_table_tags = { "Database_Route_table" = "One"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -98,6 +104,7 @@ vpc_group = {
                 #------------------------------------------#
                 Database_Route_Table_2 = {
                 route_table_name = "Database_Route_Table_Two"
+                route_table_tags = { "Database_Route_table" = "Two"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -110,6 +117,7 @@ vpc_group = {
                 #------------------------------------------#
                 Database_Route_Table_3 = {
                 route_table_name = "Database_Route_Table_Three"
+                route_table_tags = { "Database_Route_table" = "Three"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
@@ -131,6 +139,7 @@ vpc_group = {
                     assign_ipv6_address_on_creation = false
                     map_public_ip_on_launch = false
                     route_table_name = "Public_Route_Table_One"
+                    subnet_tags = { "Public_Subnets" = "One" }
                 }
                 #-----------------------------------------#
                 #------------------------------------------#
@@ -142,6 +151,7 @@ vpc_group = {
                     assign_ipv6_address_on_creation = false
                     map_public_ip_on_launch = false
                     route_table_name = "Public_Route_Table_Two"
+                    subnet_tags = { "Public_Subnets" = "Two" }
                 }
                 #-----------------------------------------#
                 #------------------------------------------#
@@ -153,6 +163,7 @@ vpc_group = {
                     assign_ipv6_address_on_creation = false
                     map_public_ip_on_launch = false
                     route_table_name = "Private_Route_Table_One"
+                    subnet_tags = { "Private_Subnets" = "One" }
                 }
                 #-----------------------------------------#
                 #------------------------------------------#
@@ -164,41 +175,9 @@ vpc_group = {
                     assign_ipv6_address_on_creation = false
                     map_public_ip_on_launch = false
                     route_table_name = "Private_Route_Table_Two"
+                    subnet_tags = { "Private_Subnets" = "Two" }
                 }
                 #-----------------------------------------#
-                # #------------------------------------------#
-                # Database_Subnet_1 = {
-                #     subnet_name = "Database_Subnet_One"
-                #     availability_zone = "us-east-1a"
-                #     cidr_block = "192.168.25.0/24"
-                #     ipv6_cidr_block = ""
-                #     assign_ipv6_address_on_creation = false
-                #     map_public_ip_on_launch = false
-                #     route_table_name = "Database_Route_Table_One"
-                # }
-                # #-----------------------------------------#
-                # #------------------------------------------#
-                # Database_Subnet_2 = {
-                #     subnet_name = "Database_Subnet_Two"
-                #     availability_zone = "us-east-1b"
-                #     cidr_block = "192.168.30.0/24"
-                #     ipv6_cidr_block = ""
-                #     assign_ipv6_address_on_creation = false
-                #     map_public_ip_on_launch = false
-                #     route_table_name = "Database_Route_Table_Two"
-                # }
-                # #-----------------------------------------#
-                # #------------------------------------------#
-                # Database_Subnet_3 = {
-                #     subnet_name = "Database_Subnet_Three"
-                #     availability_zone = "us-east-1c"
-                #     cidr_block = "192.168.35.0/24"
-                #     ipv6_cidr_block = ""
-                #     assign_ipv6_address_on_creation = false
-                #     map_public_ip_on_launch = false
-                #     route_table_name = "Database_Route_Table_Three"
-                # }
-                # #-----------------------------------------#
             }
             #- DEFAULT ACL SETTINGS ----------------------#
             default_acl = {
