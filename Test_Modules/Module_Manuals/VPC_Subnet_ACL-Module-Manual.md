@@ -1,6 +1,12 @@
-module "Blank_SUBNET_ACL_MODULE" {
-source = ""
+# VPC Subnets Module
 
+**Use the example below to create as many VPC Subnets and ACL Association for the desired VPC.**
+
+[AWS Documentation: VPC Subnet Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-subnets.html?msclkid=c28e2ce3cfd211ecb4e7681892f8a7b5)
+
+[HashiCorp Terraform Documentation: VPC Subnet Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
+
+```Terraform
 #################
 ## VPC SUBNETS ##
 #################
@@ -28,17 +34,17 @@ vpc_subnets = {
             use_existing_acl = false # Whether or not to apply an exsiting ACL to the subnet
             get_existing_acl = { 
                 vpc_id = "" # The VPC ID where the ACL is located to apply to the subnet
-                vpc_acl_tag_key = ""
-                vpc_acl_tag_value = "" 
+                vpc_acl_tag_key = "" # The Key value of the tag associated with the subnet
+                vpc_acl_tag_value = "" The value of the tag associate with the subnet
             }
-            create_new_acl = false
-            new_acl_name = ""
-            new_acl_rules = [
+            create_new_acl = false # Whether or not to create a new ACL
+            new_acl_name = "" # The name of the ACL to create
+            new_acl_rules = [ 
             # "Direction|Action|IP_Type|CIDRblock|Protocol|FromPort|ToPort|RuleNo"
             ]
-            new_acl_tags = { "" = "" }
+            new_acl_tags = { "" = "" } # Tags to associate with the new ACL
             #- VPC SUBNET TAGS -------------------------#
-            new_subnet_tags = { "" = "" }
+            new_subnet_tags = { "" = "" } # Tags to associate with the new subnet
             }
     #---------------------------------------------------#
 }
@@ -47,3 +53,4 @@ vpc_subnets = {
 ## END OF MODULE ##
 ###################  
 }
+```

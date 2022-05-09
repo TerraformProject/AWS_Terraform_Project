@@ -1,72 +1,74 @@
-# AWS Network ACLs
+# Network ACL Module
 
-### Default Network ACL 
+**Use the example below to create as many Network ACLs and Subnet Associations for the desired VPC.**
 
-**Use the example below to create a default network ACL for the associated VPC.**
+[AWS Documentation: Network ACL Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html?msclkid=d861274dcfcf11ecbf645c5f738e5b50)
 
-[AWS Documentation: Default Network ACL Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html#custom-network-acl)
+[HashiCorp Terraform Documentation: Network ACL Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl?msclkid=24123822cfcf11eca42fea7bed795d7e)  
 
-[HashiCorp Terraform Documentation: Default Network ACL Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl)
 
-```terraform
-##################
-## ACL: Default ##
-##################
-create_default_network_acl = bool # Whether or not to create a default network ACL for the associated VPC
-default_network_acl = {
+```Terraform
+#################
+## Network ACL ##
+#################
+create_new_acls = false # Whether or not create new ACLs
 
-    Default_Network_ACL = {
-        ## DEFAULT ACL SETTINGS ##
-        default_network_acl_name = string # Name of default ACL to be merged with tags below
-        default_network_acl_id = string # ID of default_network_acl attribute exported from the VPC resource 
-        default_acl_subnet_ids = list(string) # One or more subnets to associate with the default network ACL
+vpc_id = "" # The VPC ID to assign the ACLs to
+
+acl_group = {
+    #------------------------------------------#
+# ABLE TO CREATE MORE THAN ONE #
+    Example_ACL_Subnet = { <- If creating more than one ACL, index key must be unique
+        ## ACL SETTINGS ##
+        acl_name = "" # Name of the acl to merge with ACL tags
+        subnet_ids = [] # List of Subent IDs to associate with the ACL
+        subnet_tags = {} # List of Subnet Tags to associate with the ACL
         ## INGRESS RULE DECLARATIONS ##
-        default_network_acl_ingress = { # Mapping of objects for the ingress rules to associate with default network ACL
-            ####################################
-                ingress_rule_1 = { # Each ingress rule key must be unique. Terraform does not process duplicate keys in this case
-                    action = string # Whether to "Allow" || "Deny" access to the ports and protocol below
-                    cidr_block = string # Location from where the traffic is coming from
-                    from_port = number # Starting port
-                    icmp_code       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
-                    icmp_type       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
-                    ipv6_cidr_block = string # Specify Null for Terraform to ignore. Otherwise, the IPv6 CIDR Block to use
-                    protocol = string || -1 # Use -1 to specify all protocol. To/From port must == 0 if protocol = -1. Otherwise, "tcp" || "udp" 
-                    rule_no = number # The rule number to give the rule. Lower rule numbers give precedence over higher rule numbers
-                    to_port = number # Ending port
-                }
-            ####################################
+        acl_ingress_rules = { 
+        # Able to create more than one #
+            #----------------------------------#
+            example_ingress_rule = { <- If creating more than one ACL, index key must be unique
+                action = string # Whether to "Allow" || "Deny" access to the ports and protocol below
+                cidr_block = string # Location from where the traffic is coming from
+                ipv6_cidr_block = null # Specify Null for Terraform to ignore. Otherwise, the IPv6 CIDR Block to use
+                protocol = "" # Use -1 to specify all protocol. To/From port must == 0 if protocol = -1. Otherwise, "tcp" || "udp" 
+                from_port = 0 # Starting port
+                to_port = 0 # Ending Port
+                icmp_code = null # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
+                icmp_type = null # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
+                rule_no = 0 # The rule number to give the rule. Lower rule numbers give precedence over higher rule numbers
+            }
+            #----------------------------------#
         }
-        ## INGRESS RULE DECLARATIONS ##
-        default_network_acl_egress = { # Mapping of objects for the egress rules to associate with default network ACL
-            ####################################
-                egress_rule_1 = { # Each ingress rule key must be unique. Terraform does not process duplicate keys in this case
-                    action = string # Whether to "Allow" || "Deny" access to the ports and protocol below
-                    cidr_block = string # Location from where the traffic is coming from
-                    from_port = number # Starting port
-                    icmp_code       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
-                    icmp_type       = number # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
-                    ipv6_cidr_block = string # Specify Null for Terraform to ignore. Otherwise, the IPv6 CIDR Block to use
-                    protocol = string || -1 # Use -1 to specify all protocol. To/From port must == 0 if protocol = -1. Otherwise, "tcp" || "udp" 
-                    rule_no = number # The rule number to give the rule. Lower rule numbers give precedence over higher rule numbers
-                    to_port = number # Ending port
-                }
-            ####################################
+        ## EGRESS RULE DECLARATIONS ##
+        acl_egress_rules = {
+            #----------------------------------#
+            example_egress_rule = {
+                action = string # Whether to "Allow" || "Deny" access to the ports and protocol below
+                cidr_block = string # Location from where the traffic is coming from
+                ipv6_cidr_block = null # Specify Null for Terraform to ignore. Otherwise, the IPv6 CIDR Block to use
+                protocol = "" # Use -1 to specify all protocol. To/From port must == 0 if protocol = -1. Otherwise, "tcp" || "udp" 
+                from_port = 0 # Starting port
+                to_port = 0 # Ending Port
+                icmp_code = null # Specify Null for Terraform to ignore. Otherwise, the ICMP Code to use
+                icmp_type = null # Specify Null for Terraform to ignore. Otherwise, the ICMP Type to use
+                rule_no = 0 # The rule number to give the rule. Lower rule numbers give precedence over higher rule numbers
+            }
+            #----------------------------------#
         }
-        ## DEFAULT ACL TAGS ##
+        ## ACL TAGS ##
         tags = {
-            "key" = "value" # Tags to associate with the default ACL
-        }
-    }
+            "" = "" # The tags to associate with the ACL
+        }   }
+    #------------------------------------------#
+}
+
+###################
+## END OF MODULE ##
+###################
 }
 ```
-
-### Network ACl 
-
-**Use the example below to create as many Network ACLs for the desired VPCs.**
-
-[AWS Documentation: Default Network ACL Resource Reference](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html#custom-network-acl)
-
-[HashiCorp Terraform Documentation: Default Network ACL Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl)      
+    
 
 ```terrafrom
 ########################
