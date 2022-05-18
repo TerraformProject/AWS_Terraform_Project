@@ -1,6 +1,6 @@
 # AWS_Terraform_Project
 
-![Architecture Design for this Project](Project_Images/Architecture Design for the Project (1).png?raw=true "Architecture Design")
+![Architecture Design for this Project](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Project_Images/Architecture%20Design%20for%20the%20Project%20(1).png)
 
 **Below is a link to the folder that contains modules created prior to this current work effort.**       
   
