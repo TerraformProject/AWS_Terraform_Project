@@ -18,7 +18,6 @@ acl_group = {
         ]
         subnet_tags = {
             "Public_Subnets" = "Two",
-            "Test_Subnet" = "Test"
         }
         ## INGRESS RULE DECLARATIONS ##
         acl_ingress_rules = {

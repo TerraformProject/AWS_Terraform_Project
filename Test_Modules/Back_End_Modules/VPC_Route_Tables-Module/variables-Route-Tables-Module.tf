@@ -42,14 +42,34 @@ variable "default_route_table_tags" {
 ## Declared Route Table Variable ##
 ###################################
 
+variable "create_route_tables" {
+  description = "Whether or not to create route tables for the VPC"
+  type = bool
+  default = false
+}
+
+variable "vpc_id" {
+  description = "The VPC ID where these route tables will be created in"
+  type = string
+  default = ""
+}
+
 variable "route_tables" {
     description = "mapping of objects for the route tables to be created and the routes to be associated"
     type = map(object({
         route_table_name = string
-        vpc_id = string
         propagating_vgws = list(string)
-        associated_routes = map(map(string))
-        tags = map(string)
+        associated_routes = map(object({
+            destination = map(string)
+            target = object({
+                type = string
+                new_target = bool
+                target_values = any
+            })
+        }))
+        # subnet_ids = list(string)
+        # subnet_tags = map(string)
+        route_table_tags = map(string)
     }))
     default = null
 }
