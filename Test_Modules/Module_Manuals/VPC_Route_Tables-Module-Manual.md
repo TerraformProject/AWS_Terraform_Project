@@ -4,7 +4,7 @@
 
 #### IMPORTANT NOTES      
 **Route Tables**        
-     • The value for the "vpc_id" attribute is where the route tables below will be placed in
+     • The value for the "vpc_id" attribute is where the route tables below will be placed in.      
      • Able to specify more than one route table. The route table key must be unique.    
 
 ```Terraform
@@ -42,8 +42,7 @@ vpc_id = "" # The VPC ID the route tables below will be located in
 #### IMPORTANT NOTES    
 **Associated Routes**    
      • Able to specify more than one route. The route key must be unique.      
-     • The destination key and value must be specfied by one of the following.    
-           cidr_block | ipv6_cidr_block | destination_prefix_list_id
+     • The destination key and value must be specfied by one of the following: cidr_block | ipv6_cidr_block | destination_prefix_list_id
    
 ### Internet Gateway    
 
