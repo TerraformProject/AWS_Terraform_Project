@@ -2,18 +2,29 @@
    
 ## Route Table Template    
 
-```Terraform
+#### IMPORTANT NOTES      
+**Route Tables**        
+     • The value for the "vpc_id" attribute is where the route tables below will be placed in
+     • Able to specify more than one route table. The route table key must be unique.    
 
-#---------------------------------------------------#        
-    Route_Table_Template = {
+```Terraform
+######################
+## VPC ROUTE TABLES ##
+######################
+create_route_tables = false # Whether or not to create or disable the rought tables below
+
+vpc_id = "" # The VPC ID the route tables below will be located in
+
+    #---------------------------------------------------#        
+    Route_Table_0 = {
         ## VPC ROUTE TABLE SETTIINGS ##
         route_table_name = "" # Name of the Route Table to be merged with the tags
         ## ASSOCIATED ROUTES ##
         propagating_vgws = [] # A list of virtual gateways for propagation
         associated_routes = {
-            ## NOTE: Able to specify more than one route. The route key must be unique.
-            ## NOTE: The destination key and value must be specfied by on of the following.
-                    cidr_block | ipv6_cidr_block | destination_prefix_list_id
+            
+            ## Use the Associated Routes Templates section below specify routes for the route table.
+
         }
         ## ROUTE TABLE TAGS ##
         route_table_tags = {
@@ -22,9 +33,17 @@
     }
     #---------------------------------------------------#     
 
+###################
+## END OF MODULE ##
+###################
 ```
+## Associated Route Templates   
 
-## Route Table Routes    
+#### IMPORTANT NOTES    
+**Associated Routes**    
+     • Able to specify more than one route. The route key must be unique.      
+     • The destination key and value must be specfied by one of the following.    
+           cidr_block | ipv6_cidr_block | destination_prefix_list_id
    
 ### Internet Gateway    
 

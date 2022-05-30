@@ -6,7 +6,7 @@ source = ""
 ######################
 create_route_tables = false
 
-vpc_id = false
+vpc_id = ""
 
 route_tables = {       
     #---------------------------------------------------#        
