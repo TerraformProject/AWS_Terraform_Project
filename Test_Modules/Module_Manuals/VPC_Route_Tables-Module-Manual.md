@@ -30,7 +30,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_Internet_Gateway =  {
+    Existing_Internet_Gateway_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -43,7 +43,7 @@
     }
     #---------------------------------------#
     #---------------------------------------#
-    [0]_New_Internet_Gateway =  {
+    New_Internet_Gateway_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -62,7 +62,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_Egress_Only_Gateway =  {
+    Existing_Egress_Only_Gateway_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -75,7 +75,7 @@
     }
     #---------------------------------------#
     #---------------------------------------#
-    [0]_New_Egress_Only_Gateway =  {
+    New_Egress_Only_Gateway_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -92,7 +92,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_NAT_Gateway =  {
+    Existing_NAT_Gateway_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -105,7 +105,7 @@
     }
     #---------------------------------------#
     #---------------------------------------#
-    [0]_New_NAT_Gateway  =  {
+    New_NAT_Gateway_0  =  {
             destination = {
                 destination_key = ""
             }
@@ -124,7 +124,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_VPC_Endpoint =  {
+    Existing_VPC_Endpoint_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -137,7 +137,7 @@
     }
     #---------------------------------------#
     #---------------------------------------#
-    [0]_New_VPC_Endpoint =  {
+    New_VPC_Endpoint_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -166,7 +166,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_Network_Interface =  {
+    Existing_Network_Interface_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -179,7 +179,7 @@
     }
     #---------------------------------------#
     #---------------------------------------#
-    [0]_New_Network_Interface =  {
+    New_Network_Interface_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -215,7 +215,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_Transit_Gateway =  {
+    Existing_Transit_Gateway_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -228,7 +228,7 @@
     }
     #---------------------------------------#
     #---------------------------------------#
-    [0]_New_Transit_Gateway_Attachment =  {
+    New_Transit_Gateway_Attachment_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -244,7 +244,7 @@
                     subnet_ids = "" # 
                     appliance_mode_support = "" # Whether or not appliance mode support is enabled
                     dns_support = "" # Whether DNS support is enabled
-                    ipv6_support = ""Whether IPv6 support is enabled
+                    ipv6_support = "" # Whether IPv6 support is enabled
             }  }   
     }
     #---------------------------------------#
@@ -254,7 +254,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_Local_Gateway =  {
+    Existing_Local_Gateway_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -272,7 +272,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_VPC_Peering_Connection =  {
+    Existing_VPC_Peering_Connection_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -285,7 +285,7 @@
     }
     #---------------------------------------#
     #---------------------------------------#
-    [0]_New_VPC_Peering_Connection =  {
+    New_VPC_Peering_Connection_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -310,7 +310,7 @@
 
 ```Terraform
     #---------------------------------------#
-    [0]_Existing_Global_Core_Network =  {
+    Existing_Global_Core_Network_0 =  {
             destination = {
                 destination_key = ""
             }
@@ -318,7 +318,7 @@
                 type = "core_network" # Specify "core_network" to associate the route to a global core network
                 new_target = false # Whether or not a new target resource should be created and associated with the route
                 target_values = {
-                    core_network_arn = "" The ARN of the existing core network to associate with the route
+                    core_network_arn = "" # The ARN of the existing core network to associate with the route
             }  }   
     }
     #---------------------------------------#
