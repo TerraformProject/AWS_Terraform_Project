@@ -62,8 +62,8 @@ vpc_group = {
                             # ABLE TO CREATE MORE THAN ONE #
                             #------------------------------#
                             Route_1 = { <- If creating more than one route, this module key must be unique
+                                Destination_Attribute : Destination_Value  
                                 Target_Attribute : Target_Value  
-                                Destingation_Attribute : Destination_Value  
                             }
                             #------------------------------#
                 }   }
@@ -73,12 +73,12 @@ vpc_group = {
 **Use the below reference to specify the routes in the route tables to be created above.**    
 
 ```Terraform
-                       # Target #   
+                    # Destination #   
                 cidr_block : value
            ipv6_cidr_block : value
 destination_prefix_list_id : value
 
-                      # Destination #
+                      # Target #
                 gateway_id : value
     egress_only_gateway_id : value
             nat_gateway_id : value

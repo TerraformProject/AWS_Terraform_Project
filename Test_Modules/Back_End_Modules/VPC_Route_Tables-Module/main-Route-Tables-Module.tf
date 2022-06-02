@@ -1,5 +1,14 @@
 locals {
   
+## Get Subnet IDs ##
+
+    get_subnet_ids_with_ids = flatten([ for route_tables, tables in var.route_tables: [
+                                for subnet_id in tables.subnet_ids: {
+                                  route_table_index_key = route_tables
+                                  subnet_id = subnet_id 
+                                }  ] ])
+
+
 ## Egress Only Gateway ## 
 
     new_target_egress_gateway = flatten([ for route_tables, tables in var.route_tables: [
@@ -160,11 +169,19 @@ resource "aws_route_table" "route_tables" {
     each.value.route_table_tags
   )
 
-depends_on = [
-  data.aws_ec2_local_gateway_route_table.get_local_route_table
-]
-
 }
+
+######################################
+## Route Tabls: Subnet Associations ##
+######################################
+
+resource "aws_route_table_association" "route_table_subnet_associations_ids" {
+for_each = { for o in local.get_subnet_ids_with_ids: "${o.route_table_index_key}-${o.subnet_id}" => o }
+
+  subnet_id      = each.value.subnet_id
+  route_table_id = aws_route_table.route_tables[each.value.route_table_index_key].id 
+}
+
 
 ##############################################
 ## New Target: Egress-Only Internet Gateway ##

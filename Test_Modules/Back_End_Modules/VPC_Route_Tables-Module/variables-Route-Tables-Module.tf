@@ -58,6 +58,7 @@ variable "route_tables" {
     description = "mapping of objects for the route tables to be created and the routes to be associated"
     type = map(object({
         route_table_name = string
+        subnet_ids = list(string)
         propagating_vgws = list(string)
         associated_routes = map(object({
             destination = map(string)

@@ -13,6 +13,8 @@ route_tables = {
     Blank_Route_Table = {
         ## VPC ROUTE TABLE SETTIINGS ##
         route_table_name = ""
+        ## ASSOCIATED SUBNETS ##
+        subnet_ids = []
         ## ASSOCIATED ROUTES ##
         propagating_vgws = []
         associated_routes = {

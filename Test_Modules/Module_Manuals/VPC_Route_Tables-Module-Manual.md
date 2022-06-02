@@ -19,6 +19,8 @@ vpc_id = "" # The VPC ID the route tables below will be located in
     Route_Table_0 = {
         ## VPC ROUTE TABLE SETTIINGS ##
         route_table_name = "" # Name of the Route Table to be merged with the tags
+        ## ASSOCIATED SUBNETS ##
+        subnet_ids = [] # The subnet IDs to associate with this route table
         ## ASSOCIATED ROUTES ##
         propagating_vgws = [] # A list of virtual gateways for propagation
         associated_routes = {
