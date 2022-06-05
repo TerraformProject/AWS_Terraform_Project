@@ -5,8 +5,8 @@ source = ""
 ## LOAD BALANCER ##
 ########################################################
   ## Load Balancer Settings ##
-  create_load_balancer = false
-  load_balancer_name = ""
+  create_load_balancer = true
+  load_balancer_name = "LB_001"
   use_name_prefix = false
   load_balancer_environment = ""
   load_balancer_type = ""

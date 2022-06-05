@@ -8,6 +8,23 @@
 # }
 #-----------------------------------------------#
 
+output "Private_Route_Table_1_id" {
+  value = aws_route_table.route_tables["Private_Route_Table_1"].id
+}
+
+output "Private_Route_Table_2_id" {
+  value = aws_route_table.route_tables["Private_Route_Table_2"].id
+}
+
+output "Database_Route_Table_1_id" {
+  value = aws_route_table.route_tables["Database_Route_Table_1"].id
+}
+
+output "Database_Route_Table_2_id" {
+  value = aws_route_table.route_tables["Database_Route_Table_2"].id
+}
+
+
 ##########################################
 ## New Target: Internet Gateway Outputs ##
 ##########################################
