@@ -182,13 +182,12 @@ for_each = { for o in local.get_subnet_ids_with_ids: "${o.route_table_index_key}
   route_table_id = aws_route_table.route_tables[each.value.route_table_index_key].id 
 }
 
+##################################
+## New Target: Internet Gateway ##
+##################################
 
-##############################################
-## New Target: Egress-Only Internet Gateway ##
-##############################################
-
-resource "aws_egress_only_internet_gateway" "new_target_egress_only_gateway" {
-for_each = toset(compact(local.new_target_egress_gateway))
+resource "aws_internet_gateway" "new_target_internet_gateway" {
+for_each = toset(compact(local.new_target_internet_gateway))
   vpc_id = var.vpc_id
 
   tags = {
@@ -196,12 +195,12 @@ for_each = toset(compact(local.new_target_egress_gateway))
   }
 }
 
-##################################
-## New Target: Internet Gateway ##
-##################################
+##############################################
+## New Target: Egress-Only Internet Gateway ##
+##############################################
 
-resource "aws_internet_gateway" "new_target_internet_gateway" {
-for_each = toset(compact(local.new_target_internet_gateway))
+resource "aws_egress_only_internet_gateway" "new_target_egress_only_gateway" {
+for_each = toset(compact(local.new_target_egress_gateway))
   vpc_id = var.vpc_id
 
   tags = {

@@ -30,7 +30,7 @@ variable "vpc_group" {
         subnet_name = string
         availability_zone = string
         cidr_block = string
-        ipv6_cidr_block = string
+        ipv6_newbits_netnumb = string
         assign_ipv6_address_on_creation = bool
         map_public_ip_on_launch = string
         route_table_name = string

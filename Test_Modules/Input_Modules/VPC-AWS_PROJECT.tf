@@ -7,122 +7,44 @@ source = "../Back_End_Modules/VPC-Module"
 create_vpc_group = true
 vpc_group = {
     #------------------------------------------------------#
-    vpc_aws_terraform = {
-            vpc_name = "VPC_MAIN"
+    VPC_001 = {
+            vpc_name = "VPC_001"
             #- VPC CIDR BLOCKS ----------------------------#
-            cidr_block       = "192.168.0.0/16"
-            secondary_ipv4_cidr_blocks = []
-            assign_generated_ipv6_cidr_block = false
+            cidr_block       = "172.16.0.0/16"
+            secondary_ipv4_cidr_blocks = ["172.32.0.0/16", "172.48.0.0/16"]
+            assign_generated_ipv6_cidr_block = true
             #- DNS SETTINGS -------------------------------#
             enable_dns_support = true
             enable_dns_hostnames = true
             #- GATEWAY/ENDPOINT SETTINGS ------------------#
-            internet_gateway_name = "IGW_One"
+            internet_gateway_name = "IGW_VPC_001"
             egress_only_internet_gateway_names = [] 
-            nat_gateway_names = ["NATGW1:Public_Subnet_One", "NATGW2:Public_Subnet_Two"]
+            nat_gateway_names = []
             #- VPC ROUTE TABLE SETTINGS -------------------#
-            vpc_default_route_table_name = "Route_Table_Default"
+            vpc_default_route_table_name = ""
             vpc_route_tables = {
                 #------------------------------------------#
-                Main_Route_Table = {
-                route_table_name = "Route_Table_Default"
-                route_table_tags = { "Public_Route_table" = "One"}
-                associated_routes = {
-                            #------------------------------#
-                            Route_1 = {
-                                cidr_block = "0.0.0.0/0"
-                                gateway_id = "IGW_One"
-                            }
-                            #------------------------------#
-                }   }
-                #------------------------------------------#
-                #------------------------------------------#
                 Public_Route_Table_1 = {
-                route_table_name = "Public_Route_Table_One"
-                route_table_tags = { "Public_Route_table" = "One"}
+                route_table_name = "Pub_RT_001_VPC_001"
+                route_table_tags = { "VPC_001_Route_Tables" = "Pub_RT_001"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
                                 cidr_block = "0.0.0.0/0"
-                                gateway_id = "IGW_One"
+                                gateway_id = "IGW_VPC_001"
                             }
                             #------------------------------#
                 }   }
                 #------------------------------------------#
                 #------------------------------------------#
                 Public_Route_Table_2 = {
-                route_table_name = "Public_Route_Table_Two"
-                route_table_tags = { "Public_Route_table" = "Two"}
+                route_table_name = "Pub_RT_002_VPC_001"
+                route_table_tags = { "VPC_001_Route_Tables" = "Pub_RT_002"}
                 associated_routes = {
                             #------------------------------#
                             Route_1 = {
                                 cidr_block = "0.0.0.0/0"
-                                gateway_id = "IGW_One"
-                            }
-                            #------------------------------#
-                }   }
-                #------------------------------------------#
-                #------------------------------------------#
-                Private_Route_Table_1 = {
-                route_table_name = "Private_Route_Table_One"
-                route_table_tags = { "Private_Route_table" = "One"}
-                associated_routes = {
-                            #------------------------------#
-                            Route_1 = {
-                                cidr_block = "0.0.0.0/0"
-                                nat_gateway_id = "NATGW1"
-                            }
-                            #------------------------------#
-                }   }
-                #------------------------------------------#
-                #------------------------------------------#
-                Private_Route_Table_2 = {
-                route_table_name = "Private_Route_Table_Two"
-                route_table_tags = { "Private_Route_table" = "Two"}
-                associated_routes = {
-                            #------------------------------#
-                            Route_1 = {
-                                cidr_block = "0.0.0.0/0"
-                                nat_gateway_id = "NATGW2"
-                            }
-                            #------------------------------#
-                }   }
-                #------------------------------------------#
-                #------------------------------------------#
-                Database_Route_Table_1 = {
-                route_table_name = "Database_Route_Table_One"
-                route_table_tags = { "Database_Route_table" = "One"}
-                associated_routes = {
-                            #------------------------------#
-                            Route_1 = {
-                                cidr_block = "0.0.0.0/0"
-                                nat_gateway_id = "NATGW1"
-                            }
-                            #------------------------------#
-                }   }
-                #------------------------------------------#
-                #------------------------------------------#
-                Database_Route_Table_2 = {
-                route_table_name = "Database_Route_Table_Two"
-                route_table_tags = { "Database_Route_table" = "Two"}
-                associated_routes = {
-                            #------------------------------#
-                            Route_1 = {
-                                cidr_block = "0.0.0.0/0"
-                                nat_gateway_id = "NATGW2"
-                            }
-                            #------------------------------#
-                }   }
-                #------------------------------------------#
-                #------------------------------------------#
-                Database_Route_Table_3 = {
-                route_table_name = "Database_Route_Table_Three"
-                route_table_tags = { "Database_Route_table" = "Three"}
-                associated_routes = {
-                            #------------------------------#
-                            Route_1 = {
-                                cidr_block = "0.0.0.0/0"
-                                nat_gateway_id = "NATGW2"
+                                gateway_id = "IGW_VPC_001"
                             }
                             #------------------------------#
                 }   }
@@ -132,50 +54,26 @@ vpc_group = {
             vpc_subnets = {
                 #------------------------------------------#
                 Public_Subnet_1 = {
-                    subnet_name = "Public_Subnet_One"
+                    subnet_name = "PubSub_001_VPC_001"
                     availability_zone = "us-east-1a"
-                    cidr_block = "192.168.5.0/24"
-                    ipv6_cidr_block = ""
-                    assign_ipv6_address_on_creation = false
+                    cidr_block = "172.16.5.0/24"
+                    ipv6_newbits_netnumb = "8|1"
+                    assign_ipv6_address_on_creation = true
                     map_public_ip_on_launch = false
-                    route_table_name = "Public_Route_Table_One"
-                    subnet_tags = { "Public_Subnets" = "One" }
+                    route_table_name = "Pub_RT_001_VPC_001"
+                    subnet_tags = { "VPC_001_Public_Subnets" = "PubSub_001" }
                 }
                 #-----------------------------------------#
                 #------------------------------------------#
                 Public_Subnet_2 = {
-                    subnet_name = "Public_Subnet_Two"
+                    subnet_name = "PubSub_002_VPC_001"
                     availability_zone = "us-east-1b"
-                    cidr_block = "192.168.10.0/24"
-                    ipv6_cidr_block = ""
-                    assign_ipv6_address_on_creation = false
+                    cidr_block = "172.16.10.0/24"
+                    ipv6_newbits_netnumb = "8|2"
+                    assign_ipv6_address_on_creation = true
                     map_public_ip_on_launch = false
-                    route_table_name = "Public_Route_Table_Two"
-                    subnet_tags = { "Public_Subnets" = "Two" }
-                }
-                #-----------------------------------------#
-                #------------------------------------------#
-                Private_Subnet_1 = {
-                    subnet_name = "Private_Subnet_One"
-                    availability_zone = "us-east-1a"
-                    cidr_block = "192.168.15.0/24"
-                    ipv6_cidr_block = ""
-                    assign_ipv6_address_on_creation = false
-                    map_public_ip_on_launch = false
-                    route_table_name = "Private_Route_Table_One"
-                    subnet_tags = { "Private_Subnets" = "One" }
-                }
-                #-----------------------------------------#
-                #------------------------------------------#
-                Private_Subnet_2 = {
-                    subnet_name = "Private_Subnet_Two"
-                    availability_zone = "us-east-1b"
-                    cidr_block = "192.168.20.0/24"
-                    ipv6_cidr_block = ""
-                    assign_ipv6_address_on_creation = false
-                    map_public_ip_on_launch = false
-                    route_table_name = "Private_Route_Table_Two"
-                    subnet_tags = { "Private_Subnets" = "Two" }
+                    route_table_name = "Pub_RT_002_VPC_001"
+                    subnet_tags = { "VPC_001_Public_Subnets" = "PubSub_002" }
                 }
                 #-----------------------------------------#
             }

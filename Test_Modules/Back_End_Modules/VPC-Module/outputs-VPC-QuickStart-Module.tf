@@ -8,16 +8,16 @@
 # }
 #----------------------------------------------------#
 
-output "vpc_aws_terraform_id" {
-  value = aws_vpc.vpc["vpc_aws_terraform"].id
+output "vpc_001_id" {
+  value = aws_vpc.vpc["VPC_001"].id
 }
 
-output "vpc_aws_terraform_arn" {
-  value = aws_vpc.vpc["vpc_aws_terraform"].arn
+output "vpc_001_arn" {
+  value = aws_vpc.vpc["VPC_001"].arn
 }
 
-output "vpc_aws_terraform_tags" {
-  value = aws_vpc.vpc["vpc_aws_terraform"].tags_all
+output "vpc_001_tags" {
+  value = aws_vpc.vpc["VPC_001"].tags_all
 }
 
 ###############################
@@ -41,15 +41,15 @@ output "vpc_aws_terraform_tags" {
 #----------------------------------------------------#
 
 output "IGW_One_export_id" {
-  value = aws_internet_gateway.igw["IGW_One"].id
+  value = aws_internet_gateway.igw["IGW_VPC_001"].id
 }
 
 output "IGW_One_export_arn" {
-  value = aws_internet_gateway.igw["IGW_One"].arn
+  value = aws_internet_gateway.igw["IGW_VPC_001"].arn
 }
 
 output "IGW_One_export_tags_all" {
-  value = aws_internet_gateway.igw["IGW_One"].tags_all
+  value = aws_internet_gateway.igw["IGW_VPC_001"].tags_all
 }
 
 ######################################
@@ -72,22 +72,6 @@ output "IGW_One_export_tags_all" {
 # }
 #----------------------------------------------------#
 
-output "NATGW1_export_id" {
-  value = aws_nat_gateway.nat_gateway["NATGW1"].id
-}
-
-output "NATGW1_export_tags_all" {
-  value = aws_nat_gateway.nat_gateway["NATGW1"].tags_all
-}
-
-output "NATGW2_export_id" {
-  value = aws_nat_gateway.nat_gateway["NATGW2"].id
-}
-
-output "NATGW2_export_tags_all" {
-  value = aws_nat_gateway.nat_gateway["NATGW2"].tags_all
-}
-
 #############################
 ## VPC Default Route Table ##
 #############################
@@ -97,18 +81,6 @@ output "NATGW2_export_tags_all" {
 #   value = aws_default_route_table.default_route_table["default_route_table_name"].export_attribute
 # }
 #----------------------------------------------------#
-
-output "Route_Table_Default_id" {
-  value = aws_default_route_table.default_route_table["Route_Table_Default"].id
-}
-
-output "Route_Table_Default_arn" {
-  value = aws_default_route_table.default_route_table["Route_Table_Default"].arn
-}
-
-output "Route_Table_Default_tags_all" {
-  value = aws_default_route_table.default_route_table["Route_Table_Default"].tags_all
-}
 
 ######################
 ## VPC Route Tables ##
@@ -122,100 +94,30 @@ output "Route_Table_Default_tags_all" {
 
 ## Public Route Table 1
 
-output "Public_Route_Table_One_id" {
-  value = aws_route_table.route_tables["Public_Route_Table_One"].id
+output "Pub_RT_001_VPC_001_id" {
+  value = aws_route_table.route_tables["Pub_RT_001_VPC_001"].id
 }
 
-output "Public_Route_Table_One_arn" {
-  value = aws_route_table.route_tables["Public_Route_Table_One"].arn
+output "Pub_RT_001_VPC_001_arn" {
+  value = aws_route_table.route_tables["Pub_RT_001_VPC_001"].arn
 }
 
-output "Public_Route_Table_One_tags_all" {
-  value = aws_route_table.route_tables["Public_Route_Table_One"].tags_all
+output "Pub_RT_001_VPC_001_tags_all" {
+  value = aws_route_table.route_tables["Pub_RT_001_VPC_001"].tags_all
 }
 
 ## Public Route Table 2
 
-output "Public_Route_Table_Two_id" {
-  value = aws_route_table.route_tables["Public_Route_Table_Two"].id
+output "Pub_RT_002_VPC_001_id" {
+  value = aws_route_table.route_tables["Pub_RT_002_VPC_001"].id
 }
 
-output "Public_Route_Table_Two_arn" {
-  value = aws_route_table.route_tables["Public_Route_Table_Two"].arn
+output "Pub_RT_002_VPC_001_arn" {
+  value = aws_route_table.route_tables["Pub_RT_002_VPC_001"].arn
 }
 
-output "Public_Route_Table_Two_tags_all" {
-  value = aws_route_table.route_tables["Public_Route_Table_Two"].tags_all
-}
-
-## Private Route Table 1
-
-output "Private_Route_Table_One_id" {
-  value = aws_route_table.route_tables["Private_Route_Table_One"].id
-}
-
-output "Private_Route_Table_One_arn" {
-  value = aws_route_table.route_tables["Private_Route_Table_One"].arn
-}
-
-output "Private_Route_Table_One_tags_all" {
-  value = aws_route_table.route_tables["Private_Route_Table_One"].tags_all
-}
-
-## Private Route Table 2
-
-output "Private_Route_Table_Two_id" {
-  value = aws_route_table.route_tables["Private_Route_Table_Two"].id
-}
-
-output "Private_Route_Table_Two_arn" {
-  value = aws_route_table.route_tables["Private_Route_Table_Two"].arn
-}
-
-output "Private_Route_Table_Two_tags_all" {
-  value = aws_route_table.route_tables["Private_Route_Table_Two"].tags_all
-}
-
-## Database Route Table 1
-
-output "Database_Route_Table_One_id" {
-  value = aws_route_table.route_tables["Database_Route_Table_One"].id
-}
-
-output "Database_Route_Table_One_arn" {
-  value = aws_route_table.route_tables["Database_Route_Table_One"].arn
-}
-
-output "Database_Route_Table_One_tags_all" {
-  value = aws_route_table.route_tables["Database_Route_Table_One"].tags_all
-}
-
-## Database Route Table 2
-
-output "Database_Route_Table_Two_id" {
-  value = aws_route_table.route_tables["Database_Route_Table_Two"].id
-}
-
-output "Database_Route_Table_Two_arn" {
-  value = aws_route_table.route_tables["Database_Route_Table_Two"].arn
-}
-
-output "Database_Route_Table_Two_tags_all" {
-  value = aws_route_table.route_tables["Database_Route_Table_Two"].tags_all
-}
-
-## Database Route Table 3
-
-output "Database_Route_Table_Three_id" {
-  value = aws_route_table.route_tables["Database_Route_Table_Three"].id
-}
-
-output "Database_Route_Table_Three_arn" {
-  value = aws_route_table.route_tables["Database_Route_Table_Three"].arn
-}
-
-output "Database_Route_Table_Three_tags_all" {
-  value = aws_route_table.route_tables["Database_Route_Table_Three"].tags_all
+output "Pub_RT_002_VPC_001_tags_all" {
+  value = aws_route_table.route_tables["Pub_RT_002_VPC_001"].tags_all
 }
 
 #################
@@ -230,122 +132,52 @@ output "Database_Route_Table_Three_tags_all" {
 
 ## Public Subnet 1
 
-output "Public_Subnet_One_id" {
-  value = aws_subnet.subnets["Public_Subnet_One"].id
+output "PubSub_001_VPC_001_id" {
+  value = aws_subnet.subnets["PubSub_001_VPC_001"].id
 }
 
-output "Public_Subnet_One_arn" {
-  value = aws_subnet.subnets["Public_Subnet_One"].arn
+output "PubSub_001_VPC_001_arn" {
+  value = aws_subnet.subnets["PubSub_001_VPC_001"].arn
 }
 
-output "Public_Subnet_One_tags_all" {
-  value = aws_subnet.subnets["Public_Subnet_One"].tags_all
+output "PubSub_001_VPC_001_tags_all" {
+  value = aws_subnet.subnets["PubSub_001_VPC_001"].tags_all
 }
 
 ## Public Subnet 2
 
-output "Public_Subnet_Two_id" {
-  value = aws_subnet.subnets["Public_Subnet_Two"].id
+output "PubSub_002_VPC_001_id" {
+  value = aws_subnet.subnets["PubSub_002_VPC_001"].id
 }
 
-output "Public_Subnet_Two_arn" {
-  value = aws_subnet.subnets["Public_Subnet_Two"].arn
+output "PubSub_002_VPC_001_arn" {
+  value = aws_subnet.subnets["PubSub_002_VPC_001"].arn
 }
 
-output "Public_Subnet_Two_tags_all" {
-  value = aws_subnet.subnets["Public_Subnet_Two"].tags_all
+output "PubSub_002_VPC_001_tags_all" {
+  value = aws_subnet.subnets["PubSub_002_VPC_001"].tags_all
 }
-
-## Private Subnet 1
-
-output "Private_Subnet_One_id" {
-  value = aws_subnet.subnets["Private_Subnet_One"].id
-}
-
-output "Private_Subnet_One_arn" {
-  value = aws_subnet.subnets["Private_Subnet_One"].arn
-}
-
-output "Private_Subnet_One_tags_all" {
-  value = aws_subnet.subnets["Private_Subnet_One"].tags_all
-}
-
-## Private Subnet 2
-
-output "Private_Subnet_Two_id" {
-  value = aws_subnet.subnets["Private_Subnet_Two"].id
-}
-
-output "Private_Subnet_Two_arn" {
-  value = aws_subnet.subnets["Private_Subnet_Two"].arn
-}
-
-output "Private_Subnet_Two_tags_all" {
-  value = aws_subnet.subnets["Private_Subnet_Two"].tags_all
-}
-
-# ## Database Subnet 1
-
-# output "Database_Subnet_One_id" {
-#   value = aws_subnet.subnets["Database_Subnet_One"].id
-# }
-
-# output "Database_Subnet_One_arn" {
-#   value = aws_subnet.subnets["Database_Subnet_One"].arn
-# }
-
-# output "Database_Subnet_One_tags_all" {
-#   value = aws_subnet.subnets["Database_Subnet_One"].tags_all
-# }
-
-# ## Database Subnet 2
-
-# output "Database_Subnet_Two_id" {
-#   value = aws_subnet.subnets["Database_Subnet_Two"].id
-# }
-
-# output "Database_Subnet_Two_arn" {
-#   value = aws_subnet.subnets["Database_Subnet_Two"].arn
-# }
-
-# output "Database_Subnet_Two_tags_all" {
-#   value = aws_subnet.subnets["Database_Subnet_Two"].tags_all
-# }
-
-# ## Database Subnet 3
-
-# output "Database_Subnet_Three_id" {
-#   value = aws_subnet.subnets["Database_Subnet_Three"].id
-# }
-
-# output "Database_Subnet_Three_arn" {
-#   value = aws_subnet.subnets["Database_Subnet_Three"].arn
-# }
-
-# output "Database_Subnet_Three_tags_all" {
-#   value = aws_subnet.subnets["Database_Subnet_Three"].tags_all
-# }
 
 #####################
 ## VPC Default ACL ##
 #####################
 
 #- Sample -------------------------------------------#
-# output "default_acl_name_export_attribute" {
-#   value = aws_default_network_acl.default_acl["module_key"].export_attribute
+# output "vpc_module_key_default_acl_export_attribute" {
+#   value = aws_default_network_acl.default_acl["VPC_Module_Key"].export_attribute
 # }
 #----------------------------------------------------#
 
-output "Default_ACL_id" {
-  value = aws_default_network_acl.default_acl["vpc_aws_terraform"].id
+output "VPC_001_Default_ACL_id" {
+  value = aws_default_network_acl.default_acl["VPC_001"].id
 }
 
-output "Default_ACL_arn" {
-  value = aws_default_network_acl.default_acl["vpc_aws_terraform"].arn
+output "VPC_001_Default_ACL_arn" {
+  value = aws_default_network_acl.default_acl["VPC_001"].arn
 }
 
-output "Default_ACL_tags_all" {
-  value = aws_default_network_acl.default_acl["vpc_aws_terraform"].tags_all
+output "VPC_001_Default_ACL_tags_all" {
+  value = aws_default_network_acl.default_acl["VPC_001"].tags_all
 }
 
 ################################
@@ -353,19 +185,19 @@ output "Default_ACL_tags_all" {
 ################################
 
 #- Sample -------------------------------------------#
-# output "default_security_group_name_export_attribute" {
-#   value = aws_default_security_group.default_security_group["module_key"].export_attribute
+# output "vpc_module_key_default_security_group_name_export_attribute" {
+#   value = aws_default_security_group.default_security_group["VPC_Module_Key"].export_attribute
 # }
 #----------------------------------------------------#
 
-output "Default_Security_Group_id" {
-  value = aws_default_security_group.default_security_group["vpc_aws_terraform"].id
+output "VPC_001_Default_Security_Group_id" {
+  value = aws_default_security_group.default_security_group["VPC_001"].id
 }
 
-output "Default_Security_Group_arn" {
-  value = aws_default_security_group.default_security_group["vpc_aws_terraform"].arn
+output "VPC_001_Default_Security_Group_arn" {
+  value = aws_default_security_group.default_security_group["VPC_001"].arn
 }
 
-output "Default_Security_Group_tags_all" {
-  value = aws_default_security_group.default_security_group["vpc_aws_terraform"].tags_all
+output "VPC_001_Default_Security_Group_tags_all" {
+  value = aws_default_security_group.default_security_group["VPC_001"].tags_all
 }

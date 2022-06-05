@@ -22,7 +22,7 @@ acl_group = {
         ## ACL SETTINGS ##
         acl_name = "" # Name of the acl to merge with ACL tags
         subnet_ids = [] # List of Subent IDs to associate with the ACL
-        subnet_tags = {} # List of Subnet Tags to associate with the ACL
+        subnet_tags = {} # List of Subnet Tags to pull subnet IDs and associate with this ACL
         ## INGRESS RULE DECLARATIONS ##
         acl_ingress_rules = { 
         # Able to create more than one #

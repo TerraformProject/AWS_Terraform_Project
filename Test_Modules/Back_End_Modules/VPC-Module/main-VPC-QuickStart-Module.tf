@@ -4,7 +4,8 @@ locals {
 
   secondary_ipv4_cidr_blocks = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
                                 [ for secondary_ipv4_cidr_block in vpc_settings.secondary_ipv4_cidr_blocks: {
-                                    secondary_ipv4_cidr_block = vpc_group
+                                    secondary_ipv4_cidr_block = secondary_ipv4_cidr_block
+                                    vpc_index_key = vpc_group
                               } ] ] )
 
 ## Internet Gateway ##
@@ -55,7 +56,17 @@ locals {
 ## VPC Subnet ##
 
    vpc_subnet = flatten([ for vpc_group, vpc_settings in var.vpc_group: 
-                            [ for subnet, subnet_settings in vpc_settings.vpc_subnets: subnet_settings ]
+                            [ for subnet, subnet_settings in vpc_settings.vpc_subnets: {
+                              vpc_index_key = vpc_group
+                              subnet_name = subnet_settings.subnet_name
+                              availability_zone = subnet_settings.availability_zone
+                              cidr_block = subnet_settings.cidr_block
+                              ipv6_newbits_netnumb = subnet_settings.ipv6_newbits_netnumb
+                              assign_ipv6_address_on_creation = subnet_settings.assign_ipv6_address_on_creation
+                              map_public_ip_on_launch = subnet_settings.map_public_ip_on_launch
+                              route_table_name = subnet_settings.route_table_name
+                              subnet_tags = subnet_settings.subnet_tags
+                            } ]
    ])
 
 ## Default ACL ##
@@ -115,10 +126,21 @@ resource "aws_vpc" "vpc" {
 ###############################
 
 resource "aws_vpc_ipv4_cidr_block_association" "this" {
+  #for_each =  { for o in local.secondary_ipv4_cidr_blocks: o.secondary_ipv4_cidr_block => o } 
   for_each = local.secondary_ipv4_cidr_blocks != {} ? { for o in local.secondary_ipv4_cidr_blocks: o.secondary_ipv4_cidr_block => o } : {}
 
-  vpc_id = aws_vpc.vpc[each.value].id
-  cidr_block = each.key
+  vpc_id = aws_vpc.vpc[each.value.vpc_index_key].id
+  cidr_block = each.value.secondary_ipv4_cidr_block
+}
+
+##############################
+## VPC: Get IPv6 CIDR Block ##
+##############################
+
+data "aws_vpc" "get_ipv6_cidr_block" {
+for_each = var.create_vpc_group == true ? var.vpc_group : {}
+
+  id = aws_vpc.vpc[each.key].id
 }
 
 ##########################
@@ -252,7 +274,7 @@ resource "aws_subnet" "subnets" {
 
   availability_zone = each.value.availability_zone
   cidr_block = each.value.cidr_block
-  ipv6_cidr_block = each.value.ipv6_cidr_block == "" ? null : each.value.ipv6_cidr_block
+  ipv6_cidr_block = each.value.ipv6_newbits_netnumb == "" ? null : cidrsubnet( data.aws_vpc.get_ipv6_cidr_block[each.value.vpc_index_key].ipv6_cidr_block , element( split("|", each.value.ipv6_newbits_netnumb) ,0), element( split("|", each.value.ipv6_newbits_netnumb) , 1) )
   assign_ipv6_address_on_creation = each.value.assign_ipv6_address_on_creation
   map_public_ip_on_launch = each.value.map_public_ip_on_launch
 
