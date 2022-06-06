@@ -17,8 +17,8 @@ nzebar
 
 **Important Note:** Although the modules created below were all used to create the diagram above, all modules are independent and can serve their functionality seperately.     
       
-• AWS VPC Module     
-#### Documents    
+#### AWS VPC Module     
+**Documents**    
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC-Module.tf)    
@@ -27,8 +27,8 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC-Module)      
      
-## AWS VPC Route Tables Module     
-#### Documents    
+#### AWS VPC Route Tables Module     
+**Documents**        
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC_Route_Tables-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC_Route_Tables-Module.tf)    
@@ -37,8 +37,8 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC_Route_Tables-Module)    
 
-## AWS VPC Subnet ACL Module     
-#### Documents    
+#### AWS VPC Subnet ACL Module     
+**Documents**        
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC_Subnet_ACL-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC_Subnet_ACL-Module.tf)    
@@ -47,8 +47,8 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC_Subnet_ACL-Module)    
 
-## AWS VPC ACL Subnet Module     
-#### Documents              
+#### AWS VPC ACL Subnet Module     
+**Documents**                  
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC_ACL_Subnet-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC_ACL_Subnet-Module.tf)    
@@ -57,8 +57,8 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC_ACL_Subnet-Module)    
 
-## AWS Load Balancer Module     
-#### Documents            
+#### AWS Load Balancer Module     
+**Documents**                
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/Load_Balancer-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-Load_Balancer-Module.tf)    
