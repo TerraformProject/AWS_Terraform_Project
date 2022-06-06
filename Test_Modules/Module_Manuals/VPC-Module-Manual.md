@@ -1,4 +1,4 @@
-# AWS VPC QuickStart module
+# AWS VPC module
 
 ## VPC SETTINGS 
 
