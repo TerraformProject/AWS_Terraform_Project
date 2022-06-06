@@ -1,7 +1,9 @@
 # AWS_Terraform_Project   
 
-## (In-Progress) - AWS Compute Modules      
-      
+## (In-Progress) - AWS Compute Modules     
+
+#----------------------------------------------------------------------------------------------------#                   
+        
 ## 6/5/2022 - AWS Network Module(s)   
 
 **Comment:** Hello Everyone! Below consists of the first deliverable creating using the modules specified below. Now that the foundation for the network is in place, the next deliverable will consist of AWS compute resources. Such as AMI(s), Launch Templates, Auto Scaling Groups, etc...   
@@ -17,8 +19,7 @@ nzebar
 
 **Important Note:** Although the modules created below were all used to create the diagram above, all modules are independent and can serve their functionality seperately.     
       
-#### AWS VPC Module     
-**Documents**    
+#### AWS VPC Module         
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC-Module.tf)    
@@ -27,8 +28,7 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC-Module)      
      
-#### AWS VPC Route Tables Module     
-**Documents**        
+#### AWS VPC Route Tables Module             
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC_Route_Tables-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC_Route_Tables-Module.tf)    
@@ -37,8 +37,7 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC_Route_Tables-Module)    
 
-#### AWS VPC Subnet ACL Module     
-**Documents**        
+#### AWS VPC Subnet ACL Module             
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC_Subnet_ACL-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC_Subnet_ACL-Module.tf)    
@@ -47,8 +46,7 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC_Subnet_ACL-Module)    
 
-#### AWS VPC ACL Subnet Module     
-**Documents**                  
+#### AWS VPC ACL Subnet Module                       
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/VPC_ACL_Subnet-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-VPC_ACL_Subnet-Module.tf)    
@@ -57,8 +55,7 @@ nzebar
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/VPC_ACL_Subnet-Module)    
 
-#### AWS Load Balancer Module     
-**Documents**                
+#### AWS Load Balancer Module                     
 [Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/Load_Balancer-Module-Manual.md)      
      
 [Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-Load_Balancer-Module.tf)    
@@ -66,8 +63,9 @@ nzebar
 [Use Case Scenario: Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Input_Modules/Load_Balancer-AWS_PROJECT.tf)    
     
 [Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/Load_Balancer-Module)
-
-
+   
+#----------------------------------------------------------------------------------------------------#       
+           
 ## 4/25/2022 - AWS VPC Quick Start Module
 
 **The following AWS resources can be provisioned using the module AWS Quick Start below**     
@@ -92,8 +90,10 @@ nzebar
 **If there are any questions, feel free to reach out! Any feedback is appreciated!**   
 
 Best,     
-nzebar      
+nzebar       
 
+#----------------------------------------------------------------------------------------------------#       
+      
 ![Architecture Design for this Project](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Project_Images/Architecture%20Design%20for%20the%20Project%20(1).png)      
       
 **Below is a link to the folder that contains modules created prior to this current work effort.**       
