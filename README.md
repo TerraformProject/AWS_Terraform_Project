@@ -1,10 +1,8 @@
-# AWS_Terraform_Project   
-
-## (In-Progress) - AWS Compute Modules     
+### (In-Progress) - AWS Compute Modules     
 
 #----------------------------------------------------------------------------------------------------#                   
         
-## 6/5/2022 - AWS Network Module(s)   
+### 6/5/2022 - AWS Network Module(s)   
 
 **Comment:** Hello Everyone! Below consists of the first deliverable creating using the modules specified below. Now that the foundation for the network is in place, the next deliverable will consist of AWS compute resources. Such as AMI(s), Launch Templates, Auto Scaling Groups, etc...   
     
@@ -66,7 +64,7 @@ nzebar
    
 #----------------------------------------------------------------------------------------------------#       
            
-## 4/25/2022 - AWS VPC Quick Start Module
+### 4/25/2022 - AWS VPC Quick Start Module
 
 **The following AWS resources can be provisioned using the module AWS Quick Start below**     
 • AWS VPC   
@@ -94,6 +92,8 @@ nzebar
 
 #----------------------------------------------------------------------------------------------------#       
       
+# AWS_Terraform_Project   
+     
 ![Architecture Design for this Project](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Project_Images/Architecture%20Design%20for%20the%20Project%20(1).png)      
       
 **Below is a link to the folder that contains modules created prior to this current work effort.**       
