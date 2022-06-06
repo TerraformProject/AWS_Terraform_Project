@@ -1,15 +1,15 @@
-module "Blank_LOADBALANCER" {
-source = ""
+module "LOADBALANCER_AWS_PROJECT" {
+source = "../Back_End_Modules/Load_Balancer-Module"
     
 ###################
 ## LOAD BALANCER ##
 ########################################################
   ## Load Balancer Settings ##
   create_load_balancer = true
-  load_balancer_name = "LB_001"
+  load_balancer_name = "LB-001-VPC-001"
   use_name_prefix = false
-  load_balancer_environment = ""
-  load_balancer_type = ""
+  load_balancer_environment = "Testing"
+  load_balancer_type = "application"
   internal_load_balancer = false
   enable_deletion_protection = false
   ## Access Log Settings ##
@@ -21,7 +21,7 @@ source = ""
       enable = false
     }}
   ## Load Balancer Tags ##
-  load_balancer_tags = { "" = "" }
+  load_balancer_tags = { "Load_Balancers_VPC_001" = "LB001VPC001" }
 ########################################################
 
 
@@ -33,15 +33,18 @@ source = ""
 ## APPLICATION LOAD BALANCER CONFIG ##
 application = {
   application = {
-    existing_subnets = []
+    existing_subnets = [
+      module.VPC_AWS_PROJECT.PubSub_001_VPC_001_id,
+      module.VPC_AWS_PROJECT.PubSub_002_VPC_001_id,
+    ]
     new_subnet_keys = []
     existing_security_groups = []
-    new_security_group_keys = []
-    ip_address_type = ""
+    new_security_group_keys = ["app_lb_security_group"]
+    ip_address_type = "dualstack"
     customer_owned_ipv4_pool = ""
-    enable_http2 = false
+    enable_http2 = true
     drop_invalid_header_fields = false
-    idle_timeout = 0
+    idle_timeout = 30
 }}
 ## NETWORK LOAD BALANCER CONFIG ##
 network = {
@@ -94,69 +97,69 @@ new_subnets = {
   #-----------------------------------------#
 }
 ## CREATE NEW TARGET GROUPS ##
-create_lb_target_groups = false
-vpc_id = ""
+create_lb_target_groups = true
+vpc_id = module.VPC_AWS_PROJECT.vpc_001_id
 lb_target_groups = {
   #-----------------------------------------#
   target_group_1 = {
     ## Target Group Settings ##
-    name = ""
-    protocol = ""
-    port = 0
-    target_type = ""
-    app_lb_algorithm_type = ""
-    slow_start = 0
+    name = "Trgt-Grp-001-PubSub-001-VPC-001"
+    protocol = "HTTP"
+    port = 80
+    target_type = "instance"
+    app_lb_algorithm_type = "round_robin"
+    slow_start = 60
     ## Health Check Settings ##
     health_check = {
-      enabled = false
-      path = ""
-      port = 0
-      protocol = ""
-      healthy_threshold = 0
-      interval = 0
-      matcher = "0"
-      timeout = 0
-      unhealthy_threshold = 0
+      enabled = true
+      path = "/index"
+      port = 80
+      protocol = "HTTP"
+      healthy_threshold = 3
+      interval = 30
+      matcher = "200-299"
+      timeout = 10
+      unhealthy_threshold = 3
     }
     ## Stickiness Settings ##
     stickiness = {
-      enabled = false
+      enabled = true
       type = "lb_cookie"
-      cookie_duration = 0 
+      cookie_duration = 6000
     }
     ## Target Group Tags ##
-    tags = { "" = "" }
+    tags = { "Load_Balancer_Target_Groups_VPC_001" = "Trgt-Grp-001-PubSub-001-VPC-001" }
   }
   #-----------------------------------------#
-  #-----------------------------------------#
+ #-----------------------------------------#
   target_group_2 = {
     ## Target Group Settings ##
-    name = ""
-    protocol = ""
-    port = 0
-    target_type = ""
-    app_lb_algorithm_type = ""
-    slow_start = 0
+    name = "Trgt-Grp-001-PubSub-002-VPC-001"
+    protocol = "HTTP"
+    port = 80
+    target_type = "instance"
+    app_lb_algorithm_type = "round_robin"
+    slow_start = 60
     ## Health Check Settings ##
     health_check = {
-      enabled = false
-      path = ""
-      port = 0
-      protocol = ""
-      healthy_threshold = 0
-      interval = 0
-      matcher = "0"
-      timeout = 0
-      unhealthy_threshold = 0
+      enabled = true
+      path = "/index"
+      port = 80
+      protocol = "HTTP"
+      healthy_threshold = 3
+      interval = 30
+      matcher = "200-299"
+      timeout = 10
+      unhealthy_threshold = 3
     }
     ## Stickiness Settings ##
     stickiness = {
-      enabled = false
+      enabled = true
       type = "lb_cookie"
-      cookie_duration = 0 
+      cookie_duration = 6000
     }
     ## Target Group Tags ##
-    tags = { "" = "" }
+    tags = { "Load_Balancer_Target_Groups_VPC_001" = "Trgt-Grp-001-PubSub-002-VPC-001" }
   }
   #-----------------------------------------#
 }
@@ -166,8 +169,8 @@ listeners = {
   #-----------------------------------------#
   listener_1 = {
       ## Listener Settings ##
-      port = 0
-      protocol = ""
+      port = 80
+      protocol = "HTTP"
       ## Listener SSL Certificates ##
       use_ssl_certificate = false
           ssl_certificates = {
@@ -186,28 +189,28 @@ listeners = {
             #-------------------------------#
         }
       ## Listener Default Actions ##
-        default_actions = {
+      default_actions = {
             #-------------------------------#
             action_1 = {
-              type = ""
+              type = "forward"
               values = {
               target_groups = {
                   #-------------------------#
                   target_group_1 = {
-                    arn = ""
-                    weight = 0
+                    target_group_index_key = "target_group_1"
+                    weight = 50
                   }
                   #-------------------------#
                   #-------------------------#
                   target_group_2 = {
-                    arn = ""
-                    weight = 0
+                    target_group_index_key = "target_group_2"
+                    weight = 50
                   }
                   #-------------------------#
                 } 
               stickiness = {
-                enabled = false
-                duration = 0
+                enabled = true
+                duration = 6000
               }
             }}  
             #-------------------------------#
@@ -231,13 +234,13 @@ listener_rules = {
             target_groups = {
                 #---------------------------#
                 target_group_1 = {
-                  arn = ""
+                  target_group_index_key = ""
                   weight = 0
                 }
                 #---------------------------#
                 #---------------------------#
                 target_group_2 = {
-                  arn = ""
+                  target_group_index_key = ""
                   weight = 0
                 }
                 #---------------------------#
@@ -264,24 +267,33 @@ listener_rules = {
 ###################################
 ## LOAD BALANCER SECURITY GROUPS ##
 ########################################################
-create_new_security_groups = false
+create_new_security_groups = true
 new_security_groups = {
   #-----------------------------------------#
   app_lb_security_group = {
     ## Security Group Settings ##
-    name        = ""
-    description = "" 
-    vpc_id      = "" 
+    name        = "SecGrp_001_LB_001_VPC_001"
+    description = "Security for the 001 Application Load Balancer in VPC 001" 
+    vpc_id      = module.VPC_AWS_PROJECT.vpc_001_id
     ## Ingress Rule Declarations ##
     ingress_rules = { 
           #---------------------------------#
           rule_1 = {
             description      = "" 
-            from_port        = 0 
-            to_port          = 0 
-            protocol         = "" 
-            cidr_blocks      = [] 
-            ipv6_cidr_blocks = []   
+            from_port        = 80 
+            to_port          = 80 
+            protocol         = "udp" 
+            cidr_blocks      = ["0.0.0.0/0"] 
+            ipv6_cidr_blocks = ["::/0"]   
+            self = false  
+          }
+          rule_2 = {
+            description      = "" 
+            from_port        = 443 
+            to_port          = 443 
+            protocol         = "tcp" 
+            cidr_blocks      = ["0.0.0.0/0"] 
+            ipv6_cidr_blocks = ["::/0"]   
             self = false  
           }
           #---------------------------------#
@@ -293,16 +305,16 @@ new_security_groups = {
             description      = "" 
             from_port        = 0 
             to_port          = 0 
-            protocol         = "" 
-            cidr_blocks      = [] 
-            ipv6_cidr_blocks = []   
+            protocol         = "-1" 
+            cidr_blocks      = ["0.0.0.0/0"] 
+            ipv6_cidr_blocks = ["::/0"]   
             self = false 
             }
           #---------------------------------#
     }
     ## Security Group Tags ##
     tags = {
-        "" = "" # Tags to associate with security group
+        "AppLB_Security_Groups_VPC_001" = "SecGrp_001_LB_001_VPC_001" # Tags to associate with security group
       }}
   #-----------------------------------------#
 }

@@ -171,7 +171,7 @@ lb_target_groups = {
       path = "" # Target destination for the health check request
       port = 0 # Port to use when perform health checks on targets
       protocol = "" # Protocol to use for the health check
-      healthy_threshold = 0 # Number of consecutive health successess before cons
+      healthy_threshold = 0 # Number of consecutive health successess before instance is considered healthy
       interval = 0 # Amount of time (in seconds), between health checks
       matcher = "0" # Response codes to use when checking for healthy responses from targets
       timeout = 0 # Amount og time (in seconds), during which no response from a target means a failed health check
@@ -268,18 +268,18 @@ listeners = {
               type = "" # Type of default action for the listener
               values = {
               target_group_arn = "" # Target group ARN to forward traffic to.
-              target_groups = {
+              target_group_index_key = {
               # Able to create more than one target group association
                   #-------------------------#
                   target_group_1 = {
-                    arn = "" # ARN of the target group to associate this action to
+                    target_group_index_key = "" # ARN of the target group to associate this action to
                     weight = 0 # Ratio of traffic this target group will receive when compared to other target groups
                   }
                   #-------------------------#
                   #-------------------------#
                   target_group_2 = {
                     target_group_1 = {
-                    arn = "" # ARN of the target group to associate this action to
+                    target_group_index_key = "" # ARN of the target group to associate this action to
                     weight = 0 # Ratio of traffic this target group will receive when compared to other target groups
                   }
                   #-------------------------#

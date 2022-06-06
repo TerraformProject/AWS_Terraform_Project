@@ -217,13 +217,13 @@ for_each = var.create_load_balancer == true && var.create_listeners ? var.listen
     content {
       type = default_action.value.type
 
-      target_group_arn = default_action.value.type == "forward" ? lookup(default_action.value.values, "target_group_arn", null ) : null
+      target_group_arn = default_action.value.type == "forward" && lookup(default_action.value.values, "target_groups", null ) == null ? aws_lb_target_group.lb_target_groups[lookup(default_action.value.values, "target_group_index_key", null )].arn : null 
       
       forward {
           dynamic "target_group" {
-            for_each = default_action.value.type == "forward" ? lookup(default_action.value.values, "target_groups", {} ) : {}
+            for_each = default_action.value.type == "forward" ? lookup(default_action.value.values, "target_groups", {} ) : {} 
             content {
-              arn = target_group.value.arn
+              arn = aws_lb_target_group.lb_target_groups[target_group.value.target_group_index_key].arn
               weight = target_group.value.weight
             }
           }
@@ -317,13 +317,13 @@ for_each = var.create_load_balancer == true && var.create_listeners && var.creat
     content {
       type = action.value.type
 
-      target_group_arn = action.value.type == "forward" ? lookup(action.value.values, "target_group_arn", null ) : null
+      target_group_arn = action.value.type == "forward" && lookup(default_action.value.values, "target_groups", null ) == null ? aws_lb_target_group.lb_target_groups[lookup(default_action.value.values, "target_group_index_key", null )].arn : null
       
       forward {
           dynamic "target_group" {
             for_each = action.value.type == "forward" ? lookup(action.value.values, "target_groups", {} ) : {}
             content {
-              arn = target_group.value.arn
+              arn = aws_lb_target_group.lb_target_groups[target_group.value.target_group_index_key].arn
               weight = target_group.value.weight
             }
           }
