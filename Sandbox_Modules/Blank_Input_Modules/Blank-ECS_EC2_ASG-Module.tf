@@ -1,5 +1,5 @@
-module "AUTO_SCALING_GROUPS" {
-  source = ""
+module "ECS_EC2_ASG_AWS_PROJECT" {
+  source = "../Back_End_Modules/ECS_EC2_ASG-Module"
 
 ##################
 ## ECS: Cluster ##

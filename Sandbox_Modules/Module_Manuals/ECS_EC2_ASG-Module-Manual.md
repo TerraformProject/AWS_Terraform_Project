@@ -11,7 +11,6 @@ This module allow you to create:
     2 - Capacity Providers.
     3 - Target Groups
     4 - Auto Scaling Groups
-
 ```
 
 ## ECS Cluster
@@ -20,8 +19,7 @@ Use the example below as a reference to create an ECS Cluster:
 
 [ECS Cluster Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster)
 
-```terraform
-
+``` terraform
 create_new_ecs_cluster = false # Whether to create an ECS Cluster
 new_ecs_cluster_settings = {
   settings = {
@@ -48,7 +46,6 @@ new_ecs_cluster_settings = {
       }
   }
 }
-
 ```
 
 ## ECS Capacity Providers
@@ -57,8 +54,7 @@ Use the example to create more than one capacity provider for the ECS Cluster:
 
 [Capacity Provider Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_capacity_provider)
 
-```terraform
-
+``` terraform
 create_capacity_providers = false # Whether to create ECS capacity providers for the ECS Cluster
 capacity_providers = {
 
@@ -74,17 +70,15 @@ capacity_providers = {
     target_capacity = 1 # Target utilization for the capacity provider
   }
 }
-
 ```
 
-## Load Balancer Target_Groups
+## Load Balancer Target\_Groups
 
 Use this example to create more than one Target Group
 
 [Target Group Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group)
 
-```terraform
-
+``` terraform
 create_lb_target_groups = false # Whether to create the Target Groups
 
 vpc_id = "" # VPC ID of which the target groups will be located in
@@ -121,19 +115,17 @@ lb_target_groups = {
     }
   }
 }
-
 ```
 
 ## Auto Scaling Groups
 
-Use the example below to create more than one Auto Scaling Group: 
+Use the example below to create more than one Auto Scaling Group:
 
 [Auto Scaling Group Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group)
 
 [Life Cycle Hook Resource Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_lifecycle_hook)
 
-```terraform
-
+``` terraform
 create_auto_scaling_groups = false # Whether to create auto scaling groups
 auto_scaling_groups = {
 
@@ -161,7 +153,7 @@ auto_scaling_groups = {
       use_launch_template = false # Whether to use a launch template for the Auto Scaling Group
       launch_template_id = "" # The ID of the launch template to use with the Auto Scaling Group
       version = "" # The Launch Template version to use with the Auto Scaling Group
-        
+
       create_launch_template_overrides = false # Whether to create launch template overrides
       launch_template_overrides = { 
 
@@ -173,7 +165,7 @@ auto_scaling_groups = {
           launch_template_id = "" # Launch template ID for the launch temoplate override
         }
       }
-        
+
       create_instance_distributions = false # Whether to create instance distributions for the launch template
       instance_distributions = {
         settings = {
@@ -185,7 +177,7 @@ auto_scaling_groups = {
           spot_max_price = "" # Max price per unit hour that the user is willing to pay for the spot instances
         }
       }
-      
+
     ## Scaling ##
       max_size = 0 # Maximum size of the Auto Scaling Group
       min_size = 0 # Minumum size of the Auto Scaling Group
@@ -194,7 +186,7 @@ auto_scaling_groups = {
       protect_from_scale_in = false # Whether protection from Auto Scaling group scaling in enabled
       max_instance_lifetime = 0 # Maximum time in seconds an instance on the Auto scaling Group runs before it is destroyed
       default_cooldown = 0 # Amount of time in between scaling for the Auto Scaling Group
-    
+
     ## Health Check ##
       health_check_grace_period = 0 # Amount of time in seconds, before checking health
       health_check_type = "" # How health checking is done. Valid values: "EC2" || "ELB"
@@ -273,5 +265,4 @@ auto_scaling_groups = {
       },
     ]
     }
-
 ```

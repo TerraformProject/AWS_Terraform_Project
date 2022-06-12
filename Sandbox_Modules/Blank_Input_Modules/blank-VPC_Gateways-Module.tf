@@ -1,5 +1,5 @@
-module "Blank_VPC_GATEWAYS" {
-source = ""
+module "VPC_GATEWAYS_AWS_PROJECT" {
+source = "../Back_End_Modules/VPC_Gateways-Module"
 
 #######################
 ## INTERNET GATEWAYS ##

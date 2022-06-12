@@ -1,4 +1,5 @@
-module "Blank_SECURITY_GROUP" {
+module "SECURITY_GROUP_AWS_PROJECT" {
+source = "../Back_End_Modules/Security_Group-Module"
 
 #####################
 ## SECURITY GROUPS ##
