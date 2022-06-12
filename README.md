@@ -1,4 +1,4 @@
-### (In-Progress) - AWS Compute + Network Modules
+### (In-Progress) - AWS Compute 
 
 **Modules currently being worked**    
 
