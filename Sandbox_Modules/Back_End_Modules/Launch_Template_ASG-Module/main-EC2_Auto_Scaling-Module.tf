@@ -499,6 +499,7 @@ resource "aws_autoscaling_policy" "lt_auto_scaling_group_policy" {
   autoscaling_group_name = ""
   adjustment_type = "" # ChangeInCapacity | ExactCapacity | PercentChangeInCapacity
   policy_type = "" # SimpleScaling | StepScaling | TargetTrackingScaling | PredictiveScaling
+  estimated_instance_warmup = 0
   #- Only Applies to "SimpleScaling" and "StepScaling" -#
   min_adjustment_magnitude = 0
   #- Only Applies to "SimpleScaling" -#
@@ -514,7 +515,7 @@ resource "aws_autoscaling_policy" "lt_auto_scaling_group_policy" {
   #- Only Applies to "TargetTrackingScaling" -#
   target_tracking_configuration {
     predifined_metric_specification { # Conflicts with customize_metric_specification
-        predidined_metric_type = ""
+        predifined_metric_type = ""
         resource_label = ""
     } 
     customized_metric_specification { # Conflicts with predifined_metric_specification
@@ -530,12 +531,12 @@ resource "aws_autoscaling_policy" "lt_auto_scaling_group_policy" {
     target_value = 0
     disable_scale_in = false
   }
-  estimated_instance_warmup = 0
   predictive_scaling_configuration {
     max_capacity_breach_behavior = "" # HonorMaxCapacity | IncreaseMaxCapacity 
     max_capacity_buffer = 0
     mode = "" # ForecastAndScale | ForecastOnly
-    scheduling_buffer_time = 0
+    scheduling_buffer_time = ""
+    target_value = 0
     metric_specification {
         customized_capacity_metric_specification { # Only valid when customized_load_metric_specification is used
             metric_data_queries = flatten([ for o, k in var.lt_asg_policies: [
@@ -665,9 +666,9 @@ EOF
   
 }
 
-########################################################
-## Launch Template: Auto Scaling Group Lifecycle Hook ##
-########################################################
+######################################################
+## Launch Template: Auto Scaling Group Notification ##
+######################################################
 resource "aws_autoscaling_notification" "lt_asg_notification" {
   group_names = []
   notifications = []

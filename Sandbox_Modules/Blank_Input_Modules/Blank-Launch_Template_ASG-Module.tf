@@ -243,7 +243,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     #- ASG Placement -----------------------------------------#
     ###########################################################
     ASG_Placement = {
-    enabled_config_index_keys = ["placement_000", "placement_001", "Placement_002"] # Each enabled config index key creates a new ASG. Ex: ASG_Name-Placement_Index_Key
+    enabled_config_index_keys = ["placement_000", "placement_001", "Placement_002", "Placement_003"] # Each enabled config index key creates a new ASG. Ex: ASG_Name-Placement_Index_Key
     configurations = {
         #-----------------------------------------------------#
         placement_000 = {
@@ -275,6 +275,20 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
         placement_002 = {
                 #- Placement -#
                 vpc_zone_identifier = ["us-east-1c"]
+                target_group_arns = []
+                min_elb_capacity = 0
+                wait_for_elb_capacity = 0
+                placement_group = ""
+                #- Cassic Placement-#
+                availability_zone = []
+                load_balancers = []
+                #- Scaling Attachment -#
+                asg_scaling_config_index_key = "scaling_000"
+                
+        }
+        placement_003 = {
+                #- Placement -#
+                vpc_zone_identifier = ["us-east-1a", "us-east-1b", "us-east-1c"]
                 target_group_arns = []
                 min_elb_capacity = 0
                 wait_for_elb_capacity = 0
@@ -371,8 +385,124 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     policies = {
         #-----------------------------------------------------#
         policy_000 = {
-
-        }
+                policy_name = ""
+                asg_scaling_config_index_keys = ["scaling_000"]
+                policy_type = ""# SimpleScaling | StepScaling | TargetTrackingScaling | PredictiveScaling
+                policy_adjustment = "" # ChangeInCapacity | ExactCapacity | PercentChangeInCapacity
+                estimated_instance_warmup = 0
+                policy_values = {
+                # Please reference policy values to specify policy values #
+                    #- SimpleScaling -#
+                    scaling_adjustment = 0 # adjustment_type detirmines how this is is interpreted: number | percent
+                    min_adjustment_magnitude = 0
+                    cooldown = 0
+                    #- StepScaling -#
+                    min_adjustment_magnitude = 0
+                    metric_aggregation_type = "" # Minimum | Maximum | Average
+                    step_adjustment = {
+                        scaling_adjustment = 0
+                        metric_interval_lower_inbound = 0
+                        metric_interval_upper_bound = 0
+                    }
+                    #- TargetTrackingScaling -#
+                    target_value = 0
+                    disable_scale_in = false
+                    target_tracking_type = "" # predifined | custom
+                    target_tracking_values = {
+                        #- Predifined -#
+                        predifined_metric_type = ""
+                        resource_label = ""
+                        #- Custome -#
+                        metric_name = ""
+                        metric_dimension = { name = "", value = "" }
+                        statistic = ""
+                        unit = 0
+                        namespace = ""
+                    }
+                    #- PredictiveScaling -#
+                    mode = ""
+                    max_capacity_breach_behavior = ""
+                    max_capacity_buffer = 0
+                    scheduling_buffer_time = ""
+                    metric_spec_type = "" # predifined | custom | predifined/custom
+                    metric_spec_values = {
+                        #----------------------------------------#
+                        load_metrics = {
+                            #- Predifined -#
+                            predefined_metric_type = "" # ASGTotalCPUUtilization | ASGTotalNetworkIn | ASGTotalNetworkOut
+                            resource_label = ""
+                            #- Custom -#
+                            metric_data_queries = {
+                                    #----------------------------#
+                                    query_000 = {
+                                        id = ""
+                                        label = ""
+                                        return_data = false
+                                        expression = ""
+                                        metric_stat = {
+                                            metric_name = ""
+                                            namespace = ""
+                                            stat = ""
+                                            unit = 0
+                                            dimensions = [
+                                                { name = "", value = ""},
+                                                { name = "", value = ""}
+                                            ]
+                                    } }
+                                    #----------------------------#
+                        } }
+                        #----------------------------------------#
+                        capacity_metrics = {
+                            #- Predifined -#
+                            predefined_metric_type = "" # ASGTotalCPUUtilization | ASGTotalNetworkIn | ASGTotalNetworkOut
+                            resource_label = ""
+                            #- Custom -#
+                            metric_data_queries = {
+                                    #----------------------------#
+                                    query_000 = {
+                                        id = ""
+                                        label = ""
+                                        return_data = false
+                                        expression = ""
+                                        metric_stat = {
+                                            metric_name = ""
+                                            namespace = ""
+                                            stat = ""
+                                            unit = 0
+                                            dimensions = [
+                                                { name = "", value = ""},
+                                                { name = "", value = ""}
+                                            ]
+                                    } }
+                                    #----------------------------#
+                        } }
+                        #----------------------------------------#
+                        scaling_metrics = {
+                            #- Predifined -#
+                            predefined_metric_type = "" # ASGTotalCPUUtilization | ASGTotalNetworkIn | ASGTotalNetworkOut
+                            resource_label = ""
+                            #- Custom -#
+                            metric_data_queries = {
+                                    #----------------------------#
+                                    query_000 = {
+                                        id = ""
+                                        label = ""
+                                        return_data = false
+                                        expression = ""
+                                        metric_stat = {
+                                            metric_name = ""
+                                            namespace = ""
+                                            stat = ""
+                                            unit = 0
+                                            dimensions = [
+                                                { name = "", value = ""},
+                                                { name = "", value = ""}
+                                            ]
+                                    } }
+                                    #----------------------------#
+                        } }
+                        #----------------------------------------#
+        } } }
         #-----------------------------------------------------#
     } }
     ###########################################################
@@ -383,7 +513,52 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     schedules = {
         #-----------------------------------------------------#
         scehdule_000 = {
-
+                scheduled_action_name = ""
+                asg_scaling_config_index_keys = ["scaling_000"]
+                start_time = "" # Format: YYYY-MM-DDThh:mm:ssZ
+                end_time = "" # Format: YYYY-MM-DDThh:mm:ssZ
+                recurrence = "" # Time when recurring future actions will start. Unix cron syntax format only
+                time_zone = "" # Tzone for cron express. C-names from IANA Tzones only
+                min_size = 0
+                max_size = 0
+                desired_capacity = 0
+        }
+        #-----------------------------------------------------#
+    } }
+    ###########################################################
+    #- ASG Lifecycle Hooks -----------------------------------#
+    ###########################################################
+    ASG_Lifecycle_Hooks = {
+    enabled_lifecycle_hook_index_keys = []
+    lifecycle_hooks = {
+        #-----------------------------------------------------#
+        lifecycle_hook_000 = {
+                lifecycle_hook_name = ""
+                asg_scaling_config_index_keys = ["scaling_000"]
+                default_result         = ""
+                heartbeat_timeout      = 0
+                lifecycle_transition   = ""
+                notification_target_arn = ""
+                role_arn                = ""
+                notification_metadata = <<EOF
+{
+  "foo": "bar"
+}
+EOF
+        }
+        #-----------------------------------------------------#
+    } }
+    ###########################################################
+    #- ASG Notifications -------------------------------------#
+    ###########################################################
+    ASG_Notifications = {
+    enabled_notification_index_keys = []
+    notifications = {
+        #-----------------------------------------------------#
+        notify_000 = {
+                asg_scaling_config_index_keys = ["scaling_000"]
+                notifications = []
+                sns_topic_name = ""
         }
         #-----------------------------------------------------#
     } }
