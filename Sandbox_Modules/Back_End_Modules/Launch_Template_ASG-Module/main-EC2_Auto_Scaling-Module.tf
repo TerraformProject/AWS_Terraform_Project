@@ -1,4 +1,8 @@
 locals {
+
+## Creating all in one object for resources below to reference #
+
+instance_boot = flatten([  ])
   
 ## Gathering Get/Create Security Groups ##
 
@@ -55,11 +59,11 @@ resource "aws_launch_template" "new_ec2_launch_template" {
   ##########################################
   #- Launch Template State ----------------#
   ##########################################
-  name = ""
-  name_prefix = ""
-  description = ""
-  default_version = ""
-  update_default_version = false
+  name = var.launch_template_name
+  name_prefix = var.launch_template_name_prefix
+  description = var.description
+  default_version = var.default_version
+  update_default_version = var.update_default_version
   ##########################################
   #- Instance State -----------------------#
   ##########################################
@@ -350,7 +354,7 @@ resource "aws_autoscaling_group" "lt_auto_scaling_group" {
   placement_group = ""
   load_balancers = [] # Classic Load Balancers Only
   target_group_arns = []
-  min_elb_capacity = false
+  min_elb_capacity = 0
   wait_for_elb_capacity = 0
 
   #- Scaling -#
@@ -442,7 +446,7 @@ resource "aws_autoscaling_group" "lt_auto_scaling_group" {
                     min = 0
                     max = 0
                   }
-                  #- RAM -#
+                  #- Memory -#
                   memory_gib_per_vcpu {
                     min = 0
                     max = 0
@@ -461,7 +465,7 @@ resource "aws_autoscaling_group" "lt_auto_scaling_group" {
                     min = 0
                     max = 0
                   }
-                  #- ENI -#
+                  #- Network -#
                   network_interface_count {
                     min = 0
                     max = 0
