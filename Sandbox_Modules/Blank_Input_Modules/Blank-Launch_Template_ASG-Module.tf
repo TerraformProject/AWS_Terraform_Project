@@ -4,14 +4,11 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     ###########################################################
     #- Launch Template ---------------------------------------#
     ###########################################################
-
     launch_template_name = ""
     launch_template_name_prefix = ""
     description = ""
     default_version = ""
     update_default_version = false
-
-    
     ###########################################################
     #- Instance Boot -----------------------------------------#
     ###########################################################
@@ -20,9 +17,34 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     configurations = {
         #-----------------------------------------------------#    
         config_000 = {
-                get_ami = "" # ami_id | copy_ami | copy_ami_instance
-                get_ami_values = {  /* Please reference the module manual for values to specify */ }
-                user_data_file = "" # Local path to Shell script | cloud-init script
+                #- AMI -#
+                get_ami_type = "" # ami_id | copy_ami | copy_ami_instance
+                get_ami_values = {  
+                    /* Please reference the module manual for values to specify */
+                    #Send to Module Manual. Consolidate the module!#
+                    #- ami_id -#
+                    ami_id = ""
+                    #- copy_ami -#
+                    new_ami_name              = ""
+                    description       = ""
+                    source_ami_id     = ""
+                    source_ami_region = ""
+                    destination_outpost_arn = ""
+                    encrypted = false
+                    kms_key_id = ""
+                    copy_ami_tags = {}
+                    #- copy_ami_instance -#
+                    new_ami_name               = ""
+                    source_instance_id = ""
+                    snapshot_without_reboot = false
+                    copy_ami_instance_tags = {}
+
+                 }
+                user_data = {
+                    file = "" # Local path to Shell script | cloud-init script
+                    env_vars = {
+                        "env_key" = "env_value"
+                } }
                 metadata_options = {
                     http_endpoint = "" # enabled | disabled 
                     http_tokens = "" # optional | required
@@ -31,19 +53,28 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                     instance_metadata_tags = "" # enabled | disabled
                 }
                 #- Access -#
-                iam_instance_profile_arn = ""
+                iam_instance_profile = {
+                    #- Existing -#
+                    arn = ""
+                    #- New -#
+                    instance_profile_name = ""
+                    path = ""
+                    policy_file = "" # Local path to JSON file with valid IAM  syntax
+                }
                 ssh_key_pair = {
-                    #--------------------------------#
-                    create_keypair_000 = { name = "", public_key_file = "" }
-                    #--------------------------------#
+                    #- Existing -#
+                    existing_key_pair_name = ""
+                    #- New Key Pair -#
+                    new_key_pair_name = ""
+                    public_key_file = "" # Local path to public key file
                 }
                 #- Monitoring -#
                 enable_detailed_instance_monitoring = false
-        }
+        } }
         #-----------------------------------------------------#
-    } }
+    } 
     ###########################################################
-    #- Instance Boot -----------------------------------------#
+    #- Instance Types ----------------------------------------#
     ###########################################################
     Instance_Types = {
     enabled_config_index_key = "config_000"
@@ -122,7 +153,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     ###########################################################
     #- Storage Per Instance ----------------------------------#
     ###########################################################
-    Instance_storage = {
+    Instance_Storage = {
     enabled_config_index_key = "config_000"
     configurations = {
         #-----------------------------------------------------#
