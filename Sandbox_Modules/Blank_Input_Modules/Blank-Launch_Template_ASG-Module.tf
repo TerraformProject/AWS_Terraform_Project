@@ -99,7 +99,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
         config_000 = {
                 core_count = 0
                 threads_per_core = 0 
-                cpu_credits = ""  
+                cpu_credits = "" # standard | unlimited
                 elastic_inference_accelerator_type = ""
                 cpu_types = {
                     cpu_manufacturers = []
@@ -175,7 +175,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                                 delete_on_termination = false
                                 encrypted = false # if snapshot_id != "" then conflict
                                 kms_key_id = ""
-                                create_kms_keys_index_keys = ""
+                                create_kms_keys_key_name = ""
                                 volume_type = ""
                                 iops = 0
                                 throughput = 0
@@ -193,7 +193,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                             cstmr_mstr_key_spec = ""
                             is_enabled = false
                             key_rotation_enabled = false
-                            policy_file = ""
+                            policy_file = "" # Local path to JSON file with valid IAM  syntax
                             bypass_policy_lockout_safety_check = false
                         }
                         #-------------------------------------#
@@ -213,9 +213,10 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                 network_interfaces = {
                         #-------------------------------------#
                         eni_000 = {
+                            delete_on_termination = false
                             #- Existing ENI -#
                             get_eni_by_id = ""
-                            get_eni_by_tag = {"key" = "value"}
+                            get_eni_by_tag = {}
                             #- Create ENI -#
                             name = ""
                             description = ""
@@ -225,20 +226,22 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                             associate_carrier_ip_address = false
                             associate_public_ip_address = false
                             ipv4 = {
-                                ipv4_address_type = "" # [count] | [list]
+                                ipv4_address_type = "" # "[count]" | "[list]"
                                 ipv4_address_value = []
-                                ipv4_prefix_type = "" # [count] | [list]
+                                ipv4_prefix_type = "" # "[count]" | "[list]"
                                 ipv4_prefix_value = []
                             }
                             ipv6 = {
-                                ipv6_address_type = "" # [count] | [list]
+                                ipv6_address_type = "" # "[count]" | "[list]"
                                 ipv6_address_value = []
-                                ipv6_prefix_type = "" # [count] | [list]
+                                ipv6_prefix_type = "" # "[count]" | "[list]"
                                 ipv6_prefix_value = []
                             }
+                            #- Placement -#
                             subnet_id = ""
+                            #- Traffic -#
                             security_group_index_keys = []
-                            delete_on_termination = false
+                            
                             }
                         #-------------------------------------#
                 }

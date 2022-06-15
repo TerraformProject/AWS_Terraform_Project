@@ -129,6 +129,40 @@ launch_template = {
                     if Instance_Boot_Values.enabled_config_index_key == config && config_values.ssh_key_pair.public_key_file != ""
                     ] ] )
 
+#- GET VALUES WHEN KMS KEY IS CREATED AND WHEN create_kms_keys_index_keys == the index key of the created KMS key -#
+
+kms_key = flatten([ for Instance_Storage_Keys, Instance_Storage_Values in var.Instance_Storage: 
+                      [ for config, config_values in Instance_Storage_Values.configurations: 
+                          [ for kms_key_keys, kms_key_values in config_values.create_kms_keys: {
+                                kms_key_name = kms_key_values.kms_key_name
+                                key_usage = kms_key_values.key_usage
+                                cstmr_mstr_key_spec = kms_key_values.cstmr_mstr_key_spec
+                                is_enabled = kms_key_values.is_enabled
+                                key_rotation_enabled = kms_key_values.key_rotation_enabled
+                                policy_file = kms_key_values.policy_file != "" ? file(kms_key_values.policy_file) : ""
+                                bypass_policy_lockout_safety_check = kms_key_values.bypass_policy_lockout_safety_check
+                          }
+                        ]
+                    if Instance_Storage_Values.enabled_config_index_key == config 
+                    ] ] )
+
+#- GET NETWORK INTERFACE ID WHEN TAG IS SPECIFED -#
+
+eni_tag = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in var.Instance_Networking: 
+                      [ for config, config_values in Instance_Networking_Values.configurations: 
+                          [ for eni_keys, eni_values in config_values.network_interfaces:  {
+                          eni_tag = eni_values.get_eni_by_tag
+                          eni_tag_key = element(keys( eni_values.get_eni_by_tag ), 0)
+                    } ]
+                    if Instance_Networking_Values.enabled_config_index_key == config && eni_values.get_eni_by_tag != {}
+                    ] ] )
+
+
+
+
+
+
+
 
 ## Gathering Get/Create Security Groups ##
 
@@ -153,27 +187,7 @@ launch_template = {
                                       if element(split("_", secgrp), 0 ) == "create"
                                         ] )
 
-  ## Gathering Get/Create KMS Keys ##
 
-  lt_get_kms_key = flatten([ for kms_key, kms_key_vals in var.get_create_kms_keys: {
-                                kms_key_key = kms_key
-                                kms_key_value = kms_key_vals
-                            } if element(split("_", kms_key), 0 ) == "get" ])
-
-  join_merge_lt_kms_key = merge(join(", ", local.lt_get_kms_key))
-
-  lt_create_kms_key = flatten([ for kms_key, kms_key_vals in get_create_kms_keys:  {
-                                  kms_key_key = kms_key
-                                  kms_key_name = kms_key_vals.kms_key_name
-                                  key_usage = kms_key_vals.key_usage
-                                  cstmr_mstr_key_spec = kms_key_vals.cstmr_mstr_key_spec
-                                  is_enabled = kms_key_vals.is_enabled
-                                  key_rotation_enabled = kms_key_vals.key_rotation_enabled
-                                  policy_file = kms_key_vals.policy_file
-                                  bypass_policy_lockout_safety_check = kms_key_vals.bypass_policy_lockout_safety_check
-                              } 
-                              if element(split("_", kms_key), 0 ) == "create"
-                              ] )
 
 }
 
@@ -238,6 +252,36 @@ for_each = { for o in local.key_pair: o.new_key_pair_name => o }
   public_key = file(each.value.public_key_file)
 }
 
+#####################
+## Create KMS Keys ##
+#####################
+resource "aws_kms_key" "lt_create_kms_key" {
+for_each = { for o in local.kms_key: o.kms_key_name => o }
+
+  kms_key_name = each.value.kms_key_name
+  key_usage = each.value.key_usage
+  cstmr_mstr_key_spec = each.value.cstmr_mstr_key_spec
+  is_enabled = each.value.is_enabled
+  key_rotation_enabled = each.value.key_rotation_enabled
+  policy_file = file(each.value.policy_file)
+  bypass_policy_lockout_safety_check = each.value.bypass_policy_lockout_safety_check
+
+  tags = {
+    Name = each.value.kms_key_name
+  }
+}
+
+#####################################
+## Get Network Interface ID by Tag ##
+#####################################
+data "aws_network_interfaces" "get_eni_id_tag" {
+for_each = { for o in local.eni_tag: o.eni_tag_key => o }
+
+  tags = each.value.eni_tag
+}
+
+######################################################################################################################################################
+
 ##########################################
 #- Launch Template State ----------------#
 ##########################################
@@ -279,7 +323,7 @@ for_each = local.launch_template
   ####################
   #- Instance Types -#
   ####################
-  instance_type = ""
+  instance_type = each.value.Instance_Types.instance_type
 
   ## Other Instance Type specs are located within the Instance Requirements section below ##
 
@@ -287,17 +331,17 @@ for_each = local.launch_template
   #- CPU Per Instance -#
   ######################
   cpu_options {
-    core_count = 0
-    threads_per_core = 0
+    core_count = each.value.Instance_CPU.cpu_count
+    threads_per_core = each.value.Instance_CPU.cpu_credits
   }
   credit_specification {
-    cpu_credits = "" # standard | unlimited
+    cpu_credits = each.value.Instance_CPU.cpu_credits # standard | unlimited
   }
   elastic_inference_accelerator {
-    type = ""
+    type = each.value.Instance_CPU.elastic_inference_accelerator_type
   }
   enclave_options {
-    enabled = false
+    enabled = each.value.Instance_CPU.enable_nitro_enclaves
   }
 
   ## Other Instance CPU specs are located within the Instance Requirements section below ##
@@ -312,7 +356,7 @@ for_each = local.launch_template
   #- GPU Per Instance -#
   ######################
   elastic_gpu_specifications {
-      type = ""
+      type = each.value.Instance_GPU.gpu_type
   }
   ########################################
   #- Instance Accelerators Per Instance -#
@@ -320,9 +364,78 @@ for_each = local.launch_template
 
   ## Instance Accelerator specs are located within the Instance Requirements section below ##
 
-  #####################
-  #- Instance Sotage -#
-  #####################
+  ######################
+  #- Instance Storage -#
+  ######################
+  ebs_optimized = each.value.Instance_Storage.ebs_optimized
+  dynamic "block_device_mappings" {
+  for_each = each.value.Instance_Storage.ebs_blocks
+  content {
+    device_name = block_device_mappings.value.device_name
+    no_device = block_device_mappings.value.no_device
+    virtual_name = block_device_mappings.value.virtual_name
+    ebs {
+        delete_on_termination = block_device_mappings.value.ebs.delete_on_termination
+        encrypted = block_device_mappings.value.ebs.encrypted # if snapshot_id != "" then conflict
+        kms_key_id = block_device_mappings.value.ebs.create_kms_keys_index_keys != "" ? aws_kms_key.lt_create_kms_key[block_device_mappings.value.ebs.kms_key_name].id : block_device_mappings.value.ebs.kms_key_id
+        volume_type = block_device_mappings.value.ebs.volume_type
+        iops = block_device_mappings.value.ebs.iops
+        throughput = block_device_mappings.value.ebs.throughput
+        volume_size = block_device_mappings.value.ebs.volume_size
+        snapshot_id = block_device_mappings.value.ebs.snapshot_id
+      }
+    }
+  }
+  
+## Other Instance Storage specs are located within the Instance Requirements section below ##
+
+  #########################
+  #- Instance Networking -#
+  #########################
+  dynamic "network_interfaces" {
+  for_each = each.value.Instance_Networking.network_interfaces
+  content {
+    #- Existing ENI -#
+    network_interface_id = network_interfaces.value.get_eni_by_tag != {} ? element(data.aws_network_interfaces.get_eni_id_tag[element( keys(network_interface.value.get_eni_by_tag) , 0 )].ids, 0 ) : network_interfaces.value.get_eni_by_id != "" ? network_interfaces.value.get_eni_by_id : null
+    #- Create ENI -#
+    associate_carrier_ip_address = network_interfaces.value.associate_carrier_ip_address
+    associate_public_ip_address = network_interfaces.value.associate_public_ip_address
+    delete_on_termination = network_interfaces.value.delete_on_termination
+    description = network_interfaces.value.description
+    device_index = network_interfaces.value.device_index
+    network_card_index = network_interfaces.value.network_card_index
+    interface_type = network_interfaces.value.interface_type
+    ipv4_address_count = network_interfaces.value.ipv4.ipv4_address_type == "[count]" ? element(network_interfaces.value.ipv4.ipv4_address_value, 0 ) : null
+    ipv4_addresses = network_interfaces.value.ipv4.ipv4_address_type == "[list]" ? network_interfaces.value.ipv4.ipv4_address_value : null
+    private_ip_address = network_interfaces.value.ipv4.ipv4_address_type == "[list]" ? element(network_interfaces.value.ipv4.ipv4_address_value, 0 ) : null
+    ipv4_prefix_count = network_interfaces.value.ipv4.ipv4_prefix_type == "[count]" ? element(network_interfaces.value.ipv4.ipv4_prefix_value, 0 ) : null
+    ipv4_prefixes = network_interfaces.value.ipv4.ipv4_prefix_type == "[list]" ? network_interfaces.value.ipv4.ipv4_prefix_value : null
+    ipv6_address_count = network_interfaces.value.ipv6.ipv6_address_type == "[count]" ? element(network_interfaces.value.ipv6.ipv6_address_value, 0 ) : null
+    ipv6_addresses = network_interfaces.value.ipv6.ipv6_address_type == "[list]" ? network_interfaces.value.ipv6.ipv6_address_value : null
+    ipv6_prefix_count = network_interfaces.value.ipv6.ipv6_prefix_type == "[count]" ? element(network_interfaces.value.ipv6.ipv6_prefix_value, 0 ) : null
+    ipv6_prefixes = network_interfaces.value.ipv6.ipv6_prefix_type == "[list]" ? network_interfaces.value.ipv6.ipv6_prefix_value : null
+    #- Placement -#
+    subnet_id = network_interfaces.value.subnet_id
+    #- Traffic -#
+    security_groups = [] #IDs
+    #-Tags -#
+    tags = {
+      Name = network_interfaces.value.name
+    }
+  } 
+  }
+
+  security_group_names = []
+  vpc_security_group_ids = []
+  private_dns_name_options {
+    enable_resource_name_dns_aaaa_record = false
+    enable_resource_name_dns_a_record = false
+    hostname_type = "" # ip-name | resource-name
+  }
+
+
+
+
 
 
 
@@ -358,22 +471,7 @@ for_each = local.launch_template
   ##########################################
   #- Block State --------------------------#
   ##########################################
-  block_device_mappings {
-    device_name = ""
-    no_device = ""
-    virtual_name = "ephemeralN"
-    ebs {
-      delete_on_termination = false
-      encrypted = false # if snapshot_id != "" then conflict
-      kms_key_id = ""
-      volume_type = ""
-      iops = 0
-      throughput = 0
-      volume_size = 0
-      snapshot_id = "" 
-    }
-  }
-  ebs_optimized = true
+
   ##########################################
   #- GPU State ----------------------------#
   ##########################################
@@ -382,34 +480,7 @@ for_each = local.launch_template
   #- Networking State ---------------------#
   ##########################################
   
-  network_interfaces {
-    associate_carrier_ip_address = false
-    associate_public_ip_address = false
-    delete_on_termination = false
-    description = ""
-    device_index = 0
-    interface_type = "" # efa
-    ipv4_prefix_count = 0 # If > 0 && ipv4_prefixes != [] then conflict
-    ipv4_prefixes = [] # if != [] && ipv4_prefix_count > 0 then conflict
-    ipv6_addresses = [] # if != [] && ipv6_address_count > 0 then conflict
-    ipv6_address_count = 0 # If > 0 && ipv6_addresses != [] then conflict
-    ipv6_prefix_count = 0 # If > 0 && ipv6_prefixes != [] then conflict
-    ipv6_prefixes = [] # # if != [] && ipv6_prefix_count > 0 then conflict
-    network_interface_id = ""
-    network_card_index = 0
-    private_ip_address = "" # Primary IPv4
-    ipv4_address_count = 0 # If > 0 && ipv4_addresses != [] then conflict
-    ipv4_addresses = [] # # if != [] && ipv4_address_count > 0 then conflict
-    security_groups = [] #IDs
-    subnet_id = ""
-  }
-  security_group_names = []
-  vpc_security_group_ids = []
-  private_dns_name_options {
-    enable_resource_name_dns_aaaa_record = false
-    enable_resource_name_dns_a_record = false
-    hostname_type = "" # ip-name | resource-name
-  }
+ 
   ##########################################
   #- Security State -----------------------#
   ##########################################
@@ -560,25 +631,7 @@ for_each = { for o in local.lt_create_sec_grp: o.secgrp_key => o }
   )
 }
 
-###############################
-## Launch Template: KMS Keys ##
-###############################
-resource "aws_kms_key" "lt_create_kms_key" {
-for_each = { for o in local.lt_create_kms_key: o.kms_key => o }
 
-  description = ""
-  key_usage = "" # ENCRYPT_DECRYPT | SIGN_VERIFY
-  customer_master_key_spec = ""
-  policy = ""
-  bypass_policy_lockout_safety_check = false 
-  is_enabled = true
-  enable_key_rotation = false
-  multi_region = false
-
-  tags = {
-    Name = ""
-  }
-}
 
 ##########################################
 ## Launch Template: Auto Scaling Groups ##
