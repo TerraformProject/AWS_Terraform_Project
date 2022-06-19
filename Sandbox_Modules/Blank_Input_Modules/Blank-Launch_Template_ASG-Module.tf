@@ -1,6 +1,15 @@
 module "LAUNCH_TEMPLATE_ASG_AWS_PROJECT" {
 source = "../Back_End_Modules/Launch_Template_ASG-Module"
  
+###########################
+## Version History Notes ##
+###############################################################
+# v1.0.0 - Created the first iteration of the launch template.
+
+
+
+###############################################################
+
     ###########################################################
     #- Launch Template ---------------------------------------#
     ###########################################################
@@ -40,6 +49,9 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                     copy_ami_instance_tags = {}
 
                  }
+                #- Licensing -#
+                license_configuration_arn = ""
+                #- User Data -#
                 user_data = {
                     file = "" # Local path to Shell script | cloud-init script
                     env_vars = {
@@ -82,7 +94,8 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
         #-----------------------------------------------------#
         config_000 = {
                 instance_type = ""
-                instance_types = {
+                instance_type_requirements = {
+                    #- Set as required if specified -#
                     instance_generations = []
                     excluded_instance_types = []
                     bare_metal_instances = "" # included | excluded | required
@@ -101,7 +114,8 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                 threads_per_core = 0 
                 cpu_credits = "" # standard | unlimited
                 elastic_inference_accelerator_type = ""
-                cpu_types = {
+                instance_cpu_requirements = {
+                    #- Set as required if specified -#
                     cpu_manufacturers = []
                     vcpu_count = { min = 0, max = 0 }
                     burstable_performance = "" # included | excluded | required
@@ -119,8 +133,13 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     configurations = {
         #-----------------------------------------------------#
         config_000 = {
-                memory_mib = { min = 0, max = 0 }
-                memory_gib_per_vcpu = { min = 0, max = 0 }
+                kernel_id = ""
+                ram_disk_id = ""
+                instance_memory_requirements = {
+                    #- Set as required if specified -#
+                    memory_mib = { min = 0, max = 0 }
+                    memory_gib_per_vcpu = { min = 0, max = 0 }
+                }
         }
         #-----------------------------------------------------#
     } }
@@ -142,12 +161,14 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     configurations = {
         #-----------------------------------------------------#
         config_000 = {
+            instance_accelerator_requrirements = {
+                #- Set as required if specified -#
                 accelerator_manufacturers = []
                 accelerator_names = []
                 accelerator_types = []
                 accelerator_count = { min = 0, max = 0 }
                 accelerator_total_memory_mib = { min = 0, max = 0 }
-            } 
+            } } 
         #-----------------------------------------------------#
     } }
     ###########################################################
@@ -158,13 +179,8 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     configurations = {
         #-----------------------------------------------------#
         config_000 = {
-                #- Local -#
-                local_storage = "" # included | excluded | required
-                local_storage_types = []
-                total_local_storage_gb = { min = 0, max = 0 }
                 #- EBS -#
                 ebs_optimized = false
-                baseline_ebs_bandwidth_mbps = { min = 0, max = 0 }
                 ebs_blocks = {
                         #-------------------------------------#
                         ebs_000 = {
@@ -183,6 +199,13 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                                 snapshot_id = "" 
                         } }
                         #-------------------------------------#
+                }
+                instance_storage_requirements = {
+                        #- Set as required if specified -#
+                        local_storage = "" # included | excluded | required
+                        local_storage_types = []
+                        total_local_storage_gb = { min = 0, max = 0 }
+                        baseline_ebs_bandwidth_mbps = { min = 0, max = 0 }
                 }
                 #- KMS Encryption -#
                 create_kms_keys = {
@@ -209,7 +232,6 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
         #-----------------------------------------------------#
         config_000 = {
                 #- ENI -#
-                network_interface_count = { min = 0, max = 0 }
                 network_interfaces = {
                         #-------------------------------------#
                         eni_000 = {
@@ -245,10 +267,16 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                             }
                         #-------------------------------------#
                 }
+                instance_networking_requirements = {
+                    #- Set as required if specified -#
+                    network_interface_count = { min = 0, max = 0 }
+                }
                 #- Security Groups -#
                 vpc_id = ""
                 all_eni_security_group_index_keys = []
                 get_create_security_groups = {
+                # If getting security group id, index key must start with "get_"
+                # If creating a new security group, index key must start with "create_"
                         #-------------------------------------#
                         get_secgrp_000 = {"key" = "value"}
                         #-------------------------------------#
@@ -268,11 +296,34 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
         #-----------------------------------------------------#
     } }
     ###########################################################
+    #- Instance Offline --------------------------------------#
+    ###########################################################
+    Instance_Offline = {
+    enabled_config_index_key = "config_000"
+    configurations = {
+        #-----------------------------------------------------#
+        config_000 = {
+                auto_recovery_enabled = false
+                disable_api_termination = false
+                instance_initiated_shutdown_behavior = "" # stop | terminate
+                instance_offline_requirement = {
+                    hibernation_option_enabled = false
+                }
+        }
+        #-----------------------------------------------------#
+    } }
+    ###########################################################
+
+########################################################################################################################################################
+########################################################################################################################################################
+
+    ###########################################################
     #- Auto Scaling Group ------------------------------------#
     ###########################################################
-    name = ""
-    name_prefix = ""
-    service_linked_role_arn = ""
+    asg_name = ""
+    asg_name_prefix = ""
+    asg_description = ""
+    asg_service_linked_role_arn = ""
     ###########################################################
     #- ASG Placement -----------------------------------------#
     ###########################################################
@@ -286,7 +337,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                 min_elb_capacity = 0
                 wait_for_elb_capacity = 0
                 placement_group = ""
-                #- Cassic -#
+                #- Classic Placement -#
                 availability_zone = []
                 load_balancers = []
                 #- Scaling Attachment -#
@@ -299,7 +350,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                 min_elb_capacity = 0
                 wait_for_elb_capacity = 0
                 placement_group = ""
-                #- Cassic Placement-#
+                #- Classic Placement -#
                 availability_zone = []
                 load_balancers = []
                 #- Scaling Attachment -#
@@ -313,7 +364,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                 min_elb_capacity = 0
                 wait_for_elb_capacity = 0
                 placement_group = ""
-                #- Cassic Placement-#
+                #- Classic Placement -#
                 availability_zone = []
                 load_balancers = []
                 #- Scaling Attachment -#
@@ -340,7 +391,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     #- ASG Scaling -------------------------------------------#
     ###########################################################
     ASG_Scaling = {
-    enabled_config_index_key = ["config_000"]
+    enabled_config_index_keys = ["config_000"]
     configurations = {
         #-----------------------------------------------------#
         scaling_000 = {
@@ -354,14 +405,27 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                 metrics_granularity = ""
                 default_cooldown = 0
                 wait_for_capacity_timeout = ""
-                #- On-Demand + Spot Distribution -#
+                #- On-Demand Instance Distribution -#
                 instances_distribution = {
                     on_demand_allocation_strategy = "prioritized"
                     on_demand_base_capacity = 0
                     on_demand_percentage_above_base_capacity = 100
+                    on_demand_max_price_percentage_over_lowest_price = 0
+                    #- Capacity Reservations -#
+                    capacity_reservations = {
+                            #---------------------------------#
+                            capacity_000 = {
+
+                            }
+                            #---------------------------------#
+                }
+                }
+                #- Spot Distribution -#
+                Spot_Distribution = {
                     spot_allocation_strategy = "" 
                     spot_instance_pools = 0
                     spot_max_price = ""
+                    spot_max_price_percentage_over_lowest_price = 0
                 }
                 #- Warm Pool Instances -#
                 warm_pool = {
@@ -373,7 +437,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                 #- Launch Template Overrides -#
                 launch_template_overrides = {
                 # launch_template | instance_type | instance_requirements
-                # Removing Instance requirements as needed is allowed
+                # Please reference module manual to specify launch template override
                         #-------------------------------------#
                         override_000 = {
                             weighted_capacity = 0
@@ -596,23 +660,7 @@ EOF
         }
         #-----------------------------------------------------#
     } }
-    ###########################################################
-    #- Instance Offline --------------------------------------#
-    ###########################################################
-    Instance_Offline = {
-    enabled_config_index_key = "config_000"
-    configurations = {
-        #-----------------------------------------------------#
-        config_000 = {
-                require_hibernate_support = false
-                auto_recovery_enabled = false
-                hibernation_option_enabled = false
-                disable_api_termination = false
-                termination_protection_enabled = false
-                instance_initiated_shutdown_behavior = "" # stop | terminate
-        }
-        #-----------------------------------------------------#
-    } }
+   
     ###########################################################
     #- Tags --------------------------------------------------#
     ###########################################################

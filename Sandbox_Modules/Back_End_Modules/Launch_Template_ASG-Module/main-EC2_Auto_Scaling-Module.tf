@@ -82,6 +82,7 @@ launch_template = {
       element(local.instance_storage, 0 ),
       element(local.instance_networking, 0 )
   )
+
 }
 
 #- GET VALUES WHEN copy_ami IS SPECIFIED -#
@@ -157,24 +158,21 @@ eni_tag = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in 
                     if Instance_Networking_Values.enabled_config_index_key == config && eni_values.get_eni_by_tag != {}
                     ] ] )
 
+## GATHERING GET/CREATE SECURITY GROUPS ##
 
-
-
-
-
-
-
-## Gathering Get/Create Security Groups ##
-
-  lt_get_sec_grp = flatten([ for secgrp, secgrp_vals in var.get_create_security_groups: {
+  lt_get_sec_grp = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in var.Instance_Networking:
+                            [ for config, config_values in Instance_Networking_Values.configurations: 
+                              [ for secgrp, secgrp_vals in config_values.get_create_security_groups: {
                               secgrp_key = secgrp
                               secgrp_value = secgrp_vals
-                            } if element(split("_", secgrp), 0 ) == "get" ])
+                          } ] ] if Instance_Networking_Values.enabled_config_index_key == config && element(split("_", secgrp), 0 ) == "get" ]   )
 
   join_merge_lt_sec_grp = merge(join(", ", local.lt_get_sec_grp))
 
-  lt_create_sec_grp = flatten([ for secgrp, secgrp_vals in var.get_create_security_groups: 
-                                      [ for rule_values in secgrp_vals : {
+  lt_create_sec_grp = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in var.Instance_Networking:
+                                [ for config, config_values in Instance_Networking_Values.configurations: 
+                                  [ for secgrp, secgrp_vals in config_values.get_create_security_groups:
+                                    [ for rule_values in secgrp_vals: {
                                           secgrp_key = secgrp
                                           direction = element( split("|", rule_values) , 0 )
                                           type = element( split("|", rule_values) , 1 )
@@ -183,17 +181,53 @@ eni_tag = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in 
                                           from_port = element( split("|", rule_values) , 4 )
                                           to_port = element( split("|", rule_values) , 5 )
                                           rule_name = element( split("|", rule_values) , 6 )
-                                      } ] 
+                                      } ] ] ]
                                       if element(split("_", secgrp), 0 ) == "create"
-                                        ] )
+                              ] )
 
+## GET ASG Placement Values ##
+asg_enabled_placement_keys = flatten( [ for asg_placement, asg_placement_values in var.ASG_Placement: asg_placement_values.enabled_config_index_keys ] )
 
+asg_enabled_scaling_keys = flatten( [for asg_scaling, asg_scaling_values in var.ASG_Scaling: asg_scaling_values.enabled_config_index_keys ] )
+
+asg_enabled_policy_keys = flatten( [for asg_policies, asg_policy_values in var.ASG_Policies: asg_policy_values.enabled_config_index_keys ] )
+
+asg_enabled_schedule_keys = flatten( [for asg_schedule, asg_schedule_values in var.ASG_Schedules: asg_schedule_values.enabled_config_index_keys ] )
+
+asg_enabled_lifecycle_hook_keys = flatten( [for asg_lifecycle_hook, asg_lifecycle_hook in var.ASG_lifecycle_hook: asg_lifecycle_hook_values.enabled_config_index_keys ] )
+
+auto_scaling_group = flatten( [ for asg_placement_keys, asg_placement_values in var.ASG_Placement: [
+                            for asg_placement, placement_values in asg_placement_values.configurations: {
+                            #- Placement -#
+                             placement_keys = asg_placement_keys
+                             #- Placement -#
+                             placement = placement_values
+                             #- ASG Scaling -#
+                             scaling = flatten( [ for asg_scaling_key, asg_scaling_values in var.ASG_Scaling: [
+                                                    for asg_scaling, scaling_values in asg_scaling_values.configurations: scaling_values  
+                                              ] if placement.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_scaling_keys, asg_scaling ) == true ] )
+                            #- Scaling Policies -#
+                             scaling_policies = flatten( [ for asg_policies_key, asg_policies_values in var.ASG_Policies: [
+                                                    for asg_policies, policies_values in asg_policies_values.configurations: policies_values  
+                                              ] if policies_values.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_policy_keys, asg_policies ) == true ] )
+                            #- Schedule -#
+                             schedule = flatten( [ for asg_schedule_key, asg_schedule_values in var.ASG_Schedules: [
+                                                    for asg_schedule, schedule_values in asg_schedule_values.configurations: schedule_values  
+                                              ] if schedule_values.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_schedule_keys, asg_schedule ) == true ] )
+                            #- Lifecycle Hook -#
+                             lifecycle_hook = flatten( [ for asg_lifecycle_hook_key, asg_lifecycle_hook_values in var.ASG_Lifecycle_Hooks: [
+                                                    for asg_lifecycle_hook, lifecycle_hook_values in asg_lifecycle_hook_values.configurations: lifecycle_hook_values  
+                                              ] if lifecycle_hook_values.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_lifecycle_hook_keys, asg_lifecycle_hook ) == true ] )
+                            }
+                          ]
+                          if contains(local.asg_enabled_placement_keys, asg_placement) == true  
+                        ] )
+
+asg_object = { for o in local.auto_scaling_group: "${var.asg_name}-${o.placement_keys}" => o }
 
 }
 
-#############################
-## New EC2 Launch Template ##
-#############################
+######################################################################################################################################################
 
 #############
 ## Get AMI ##
@@ -280,6 +314,82 @@ for_each = { for o in local.eni_tag: o.eni_tag_key => o }
   tags = each.value.eni_tag
 }
 
+##################################
+## Get Security Group ID by Tag ##
+##################################
+
+data "aws_security_group" "lt_get_security_group" {
+for_each = { for o in local.join_merge_lt_sec_grp: o.secgrp_key => o }
+
+  tags = each.value.secgrp_value
+}
+
+###########################
+## Create Security Group ##
+###########################
+
+resource "aws_security_group" "lt_create_security_group" {
+for_each = { for o in local.lt_create_sec_grp: o.secgrp_key => o }
+
+  vpc_id = var.vpc_id
+
+  dynamic "ingress" {
+  for_each = { for o in local.lt_create_sec_grp: o.rule_name => o if o.direction == "Ingress"}
+  content {
+      cidr_blocks = ingress.value.type == "IPv4" ? [ingress.value.type_value] : []
+      ipv6_cidr_blocks = ingress.value.type == "IPv6" ? [ingress.value.type_value] : []
+      security_groups = ingress.value.type == "Security_Groups" ? [ingress.value.type_value] : []
+      prefix_list_ids = ingress.value.type == "Prefix_List_IDs" ? [ingress.value.type_value] : []
+      protocol  = ingress.value.protocol
+      from_port = ingress.value.from_port
+      to_port   = ingress.value.to_port
+    }
+  }
+
+  dynamic "egress" {
+    for_each = { for o in local.default_security_group: o.rule_name => o if o.direction == "Egress"}
+    content {
+        cidr_blocks = egress.value.type == "IPv4" ? [egress.value.type_value] : []
+        ipv6_cidr_blocks = egress.value.type == "IPv6" ? [egress.value.type_value] : []
+        security_groups = egress.value.type == "Security_Groups" ? [egress.value.type_value] : []
+        prefix_list_ids = egress.value.type == "Prefix_List_IDs" ? [egress.value.type_value] : []
+        protocol  = egress.value.protocol
+        from_port = egress.value.from_port
+        to_port   = egress.value.to_port
+      }
+    }
+
+  tags = merge(
+    {
+      "Name" = each.value.default_security_group.security_group_name
+    },
+  )
+}
+
+###########################
+## Capacity Reservations ##
+###########################
+
+resource "aws_ec2_capacity_reservation" "capacity_reservations" {
+
+  #- Instance -#
+  instance_match_criteria = "" # open | targeted
+  instance_type     = "t2.micro"
+  instance_platform = "Linux/UNIX"
+  instance_count    = 1
+  #- Storage -#
+  ebs_optimized = false
+  ephemeral_storage = ""
+  #- Placement -#
+  availability_zone = "eu-west-1a"
+  outpost_arn = ""
+  #- End Date -#
+  end_date = "" # YYYY-MM-DDTHH:MM:SSZ
+  #- tags -#
+  tags = {}
+  
+}
+
 ######################################################################################################################################################
 
 ##########################################
@@ -300,6 +410,14 @@ for_each = local.launch_template
   ###################
   #- AMI -#
   image_id = each.value.Instance_Boot.get_ami_type == "ami_id" ? each.value.Instance_Boot.get_ami_values.ami_id : each.value.Instance_Boot.get_ami_type == "copy_ami" ? aws_ami_copy.copy_ami[each.value.Instance_Boot.get_ami_values.new_ami_name].id : each.value.Instance_Boot.get_ami_type == "copy_ami_instance" ? aws_ami_from_instance.copy_from_instance_ami[each.value.Instance_Boot.get_ami_values.new_ami_name].id : null
+
+  #- Licensing -#
+  dynamic "license_specification" {
+  for_each = each.value.Instance_Boot.license_configuration_arn == "" ? {} : local.launch_template
+    license_configuration_arn = license_specification.value.license_configuration_arn
+  }
+
+  #- User Data -#
   user_data = each.value.Instance_Boot.user_data.file == "" ? "" : templatefile(each.value.Instance_Boot.user_data.file, each.value.Instance_Boot.user_data.env_vars )
   metadata_options {
     http_endpoint = each.value.Instance_Boot.metadata_options.http_endpoint # enabled | disabled 
@@ -349,6 +467,8 @@ for_each = local.launch_template
   #########################
   #- Memory Per Instance -#
   #########################
+  kernel_id = each.value.Instance_Memory.kernel_id
+  ram_disk_id = each.value.Instance_Memory.ram_disk_id
 
    ## Instance Memory specs are located within the Instance Requirements section below ##
 
@@ -417,7 +537,7 @@ for_each = local.launch_template
     #- Placement -#
     subnet_id = network_interfaces.value.subnet_id
     #- Traffic -#
-    security_groups = [] #IDs
+    security_groups = flatten( [ [ for o in network_interfaces.value.security_group_index_keys: data.aws_security_group.lt_get_security_group[o].id if element(split("_", o ), 0 ) == "get" ] , [ for o in network_interfaces.value.security_group_index_keys: aws_security_group.lt_create_security_group[o].id if element(split("_", o ), 0 ) == "create" ] ] )
     #-Tags -#
     tags = {
       Name = network_interfaces.value.name
@@ -425,65 +545,113 @@ for_each = local.launch_template
   } 
   }
 
-  security_group_names = []
-  vpc_security_group_ids = []
+  vpc_security_group_ids = flatten( [ [ for o in each.value: data.aws_security_group.lt_get_security_group[o].id if element(split("_", o ), 0 ) == "get" ] , [ for o in network_interfaces.value.security_group_index_keys: aws_security_group.lt_create_security_group[o].id if element(split("_", o ), 0 ) == "create" ] ] )
   private_dns_name_options {
-    enable_resource_name_dns_aaaa_record = false
-    enable_resource_name_dns_a_record = false
-    hostname_type = "" # ip-name | resource-name
+    enable_resource_name_dns_aaaa_record = each.value.Instance_Networking.private_dns_name_options.enable_resource_name_dns_aaaa_record
+    enable_resource_name_dns_a_record = each.value.Instance_Networking.private_dns_name_options.enable_resource_name_dns_a_record
+    hostname_type = each.value.Instance_Networking.private_dns_name_options.hostname_type
   }
 
-
-
-
-
-
-
-
-  disable_api_termination = false
-  
-  
-  instance_initiated_shutdown_behavior = "" # stop | terminate
-  
   ##########################################
-  #- Instance_Maintenance -----------------#
+  #- Instance Requirements ----------------#
   ##########################################
-  
-  
+  instance_requirements = {
+
+  ###################
+  #- Instance Boot -#
+  ###################
+
+  ## No Instance Boot requirements are to be specified ##
+
+  ####################
+  #- Instance Types -#
+  ####################
+  instance_generations = each.value.Instance_Types.instance_type_requirements.instance_generations
+  excluded_instance_types = each.value.Instance_Types.instance_type_requirements.excluded_instance_types
+  bare_metal = each.value.Instance_Types.instance_type_requirements.bare_metal_instances
+
+  ######################
+  #- CPU Per Instance -#
+  ######################
+  cpu_manufacturers = each.value.Instance_CPU.cpu_type_requirements.cpu_manufacturers
+  vcpu_count = {
+        min = each.value.Instance_CPU.instance_cpu_requirements.vcpu_count.min
+        max = each.value.Instance_CPU.instance_cpu_requirements.vcpu_count.max
+  }
+  burstable_performance = each.value.Instance_CPU.cpu_type_requirements.burstable_performance
+
+  #########################
+  #- Memory Per Instance -#
+  #########################
+  memory_mib = {
+        min = each.value.Instance_Memory.instance_memory_requirements.memory_mib.min
+        max = each.value.Instance_Memory.instance_memory_requirements.memory_mib.max
+  }
+  memory_gib_per_vcpu = {
+        min = each.value.Instance_Memory.instance_memory_requirements.memory_gib_per_vcpu.min
+        max = each.value.Instance_Memory.instance_memory_requirements.memory_gib_per_vcpu.max
+  }
+
+  ######################
+  #- GPU Per Instance -#
+  ######################
+
+  ## No Instance GPU requirements are to be specified ##
+
+  ########################################
+  #- Instance Accelerators Per Instance -#
+  ########################################
+  accelerator_manufacturers = each.value.Instance_Accelerators.instance_accelerator_requrirements.accelerator_manufacturers
+  accelerator_names = each.value.Instance_Accelerators.instance_accelerator_requrirements.accelerator_names
+  accelerator_types = each.value.Instance_Accelerators.instance_accelerator_requrirements.accelerator_types
+  accelerator_count = { 
+        min = accelerator_typeeach.value.Instance_Accelerators.instance_accelerator_requrirements.accelerator_count.min
+        max = accelerator_typeeach.value.Instance_Accelerators.instance_accelerator_requrirements.accelerator_count.max
+  }
+  accelerator_total_memory_mib = {
+          min = accelerator_typeeach.value.Instance_Accelerators.instance_accelerator_requrirements.accelerator_total_memory_mib.min
+          max = accelerator_typeeach.value.Instance_Accelerators.instance_accelerator_requrirements.accelerator_total_memory_mib.max
+  }  
+
+  ######################
+  #- Instance Storage -#
+  ######################
+  local_storage = each.value.Instance_Storage.instance_storage_requirements.local_storage
+  local_storage_types = each.value.Instance_Storage.instance_storage_requirements.local_storage_types
+  total_local_storage_gb = {
+        min = each.value.Instance_Storage.instance_storage_requirements.total_local_storage_gb.min
+        max = each.value.Instance_Storage.instance_storage_requirements.total_local_storage_gb.max
+  }  
+  baseline_ebs_bandwidth_mbps = {
+        min = each.value.Instance_Storage.instance_storage_requirements.baseline_ebs_bandwidth_mbps.min
+        max = each.value.Instance_Storage.instance_storage_requirements.baseline_ebs_bandwidth_mbps.max
+  }
+
+  #########################
+  #- Instance Networking -#
+  #########################
+  network_interface_count = {
+        min = each.value.Instance_Networking.instance_networking_requirements.network_interface_count.min
+        max = each.value.Instance_Networking.instance_networking_requirements.network_interface_count.max
+  }
+
+  ######################
+  #- Instance Offline -#
+  ######################
+  require_hibernate_support = each.value.Instance_Offline.instance_offline_requirement.hibernation_option_enabled
+      
+  }
+
+  ######################################
+  #- Instance Offline -----------------#
+  ######################################
   maintenance_options = {
-    auto_recovery = "" # default | disabled
+    auto_recovery = each.value.Instance_Offline.auto_recovery_enabled
   }
+  disable_api_termination = each.value.Instance_Offline.disable_api_termination
+  instance_initiated_shutdown_behavior = each.value.Instance_Offline.instance_initiated_shutdown_behavior
   
-  ##########################################
-  #- System State -------------------------#
-  ##########################################
-  hibernation_options {
-    configured = false
-  }
-  kernel_id = ""
-  ram_disk_id = ""
-  ##########################################
-  #- CPU State ----------------------------#
-  ##########################################
   
-
-  
-  ##########################################
-  #- Block State --------------------------#
-  ##########################################
-
-  ##########################################
-  #- GPU State ----------------------------#
-  ##########################################
- 
-  ##########################################
-  #- Networking State ---------------------#
-  ##########################################
-  
- 
-  ##########################################
-  #- Security State -----------------------#
-  ##########################################
   
 
   ##########################################
@@ -516,61 +684,9 @@ for_each = local.launch_template
       valid_until = ""
     }
   }
-  license_specification {
-    license_configuration_arn = ""
-  }
+  
 
-  ##########################################
-  #- Instance Requirements ----------------#
-  ##########################################
-  instance_requirements = {
-        accelerator_count = { 
-          min = 0
-           max = 0 
-           }
-        accelerator_manufacturers = []
-        accelerator_names = []
-        accelerator_total_memory_mib = {
-          min = 0
-          max = 0
-        }
-        accelerator_types = []
-        bare_metal = "" # included | excluded | required
-      
-      baseline_ebs_bandwidth_mbps = {
-        min = 0
-        max = 0
-      }
-      burstable_performance = "" # included | excluded | required
-      cpu_manufacturers = []
-      excluded_instance_types = []
-      instance_generations = []
-      local_storage = "" # included | excluded | required
-      local_storage_types = []
-      memory_gib_per_vcpu = {
-        min = 0
-        max = 0
-      }
-      memory_mib = {
-        min = 0
-        max = 0
-      }
-      network_interface_count = {
-        min = 0
-        max = 0
-      }
-      on_demand_max_price_percentage_over_lowest_price = 0
-      spot_max_price_percentage_over_lowest_price = 0
-      require_hibernate_support = false
-      total_local_storage_gb = {
-        min = 0
-        max = 0
-      }
-      vcpu_count = {
-        min = 0
-        max = 0
-      }
-  }
+
   ##########################################
   #- Launch Template Tags -----------------#
   ##########################################
@@ -582,122 +698,54 @@ for_each = local.launch_template
 
 ################################################################################
 
-#####################################
-## Launch Template Security Groups ##
-#####################################
-
-data "aws_security_group" "lt_get_security_group" {
-for_each = { for o in local.join_merge_lt_sec_grp: o.secgrp_key => o }
-
-  tags = each.value.secgrp_value
-}
-
-
-resource "aws_security_group" "lt_create_security_group" {
-for_each = { for o in local.lt_create_sec_grp: o.secgrp_key => o }
-
-  vpc_id = var.vpc_id
-
-  dynamic "ingress" {
-  for_each = { for o in local.lt_create_sec_grp: o.rule_name => o if o.direction == "Ingress"}
-  content {
-      cidr_blocks = ingress.value.type == "IPv4" ? [ingress.value.type_value] : []
-      ipv6_cidr_blocks = ingress.value.type == "IPv6" ? [ingress.value.type_value] : []
-      security_groups = ingress.value.type == "Security_Groups" ? [ingress.value.type_value] : []
-      prefix_list_ids = ingress.value.type == "Prefix_List_IDs" ? [ingress.value.type_value] : []
-      protocol  = ingress.value.protocol
-      from_port = ingress.value.from_port
-      to_port   = ingress.value.to_port
-    }
-  }
-
-  dynamic "egress" {
-    for_each = { for o in local.default_security_group: o.rule_name => o if o.direction == "Egress"}
-    content {
-        cidr_blocks = egress.value.type == "IPv4" ? [egress.value.type_value] : []
-        ipv6_cidr_blocks = egress.value.type == "IPv6" ? [egress.value.type_value] : []
-        security_groups = egress.value.type == "Security_Groups" ? [egress.value.type_value] : []
-        prefix_list_ids = egress.value.type == "Prefix_List_IDs" ? [egress.value.type_value] : []
-        protocol  = egress.value.protocol
-        from_port = egress.value.from_port
-        to_port   = egress.value.to_port
-      }
-    }
-
-  tags = merge(
-    {
-      "Name" = each.value.default_security_group.security_group_name
-    },
-  )
-}
-
-
-
 ##########################################
 ## Launch Template: Auto Scaling Groups ##
 ##########################################
 
 resource "aws_autoscaling_group" "lt_auto_scaling_group" {
-  name = ""
-  name_prefix = ""
-  service_linked_role_arn = ""
+for_each = local.asg_object
+  name = var.asg_name
+  name_prefix = var.asg_prefix
+  service_linked_role_arn = var.asg_service_linked_role
 
-  #- PLacement -#
-  availability_zones = [] # Used for EC2 Classic
-  vpc_zone_identifier = []
-  placement_group = ""
-  load_balancers = [] # Classic Load Balancers Only
-  target_group_arns = []
-  min_elb_capacity = 0
-  wait_for_elb_capacity = 0
-
-  #- Scaling -#
-  max_size = 0
-  min_size = 0
-  metrics_granularity = ""
-  enabled_metrics = false
-  capacity_rebalance = false
-  default_cooldown = 0
-  desired_capacity = 0
-  wait_for_capacity_timeout = ""
-  health_check_grace_period = 300
-  health_check_type = "EC2"
-  protect_from_scale_in = false
-  instance_refresh {
-    triggers = []
-    strategy = "Rolling"
-    preferences {
-        checkpoint_delay = 0
-        checkpoint_percentages = 100
-        instance_warmup = 0
-        min_health_percentage = 0
-    } 
-  }
-  max_instance_lifetime = 0
-  suspended_processes = []
-  termination_policies = []
-  force_delete = false
- 
-  #- ASG Instances -#
+  #- Launch Template -#
   launch_template {
     id = ""
     name = ""
     version = ""
   }
-  warm_pool {
-    pool_state = ""
-    min_size = 0
-    instance_reuse_policy { reuse_on_scale_in = false }
-    max_group_prepared_capacity = 0
-  }
+
+  #- PLacement -#
+  vpc_zone_identifier = each.value.placement.vpc_zone_identifier
+  target_group_arns = each.value.placement.target_group_arns
+  min_elb_capacity = each.value.placement.min_elb_capacity
+  wait_for_elb_capacity = each.value.placement.wait_for_elb_capacity
+  placement_group = each.value.placement.placement_group
+  #- Classic Placement -#
+  availability_zones = each.value.placement.availability_zones
+  load_balancers = each.value.placement.load_balancers
+  #- Scaling -#
+  min_size = each.value.scaling.min_size
+  max_size = each.value.scaling.max_size
+  desired_capacity = each.value.scaling.desired_capacity
+  capacity_rebalance = each.value.scaling.capacity_rebalance
+  protect_from_scale_in = each.value.scaling.protect_from_scale_in
+  enabled_metrics = each.value.scaling.enabled_metrics
+  metrics_granularity = each.value.scaling.metrics_granularity
+  default_cooldown = each.value.default_cooldown
+  wait_for_capacity_timeout = each.value.scaling.wait_for_capacity_timeout
+  health_check_grace_period = each.value.scaling.health_check_grace_period
+  health_check_type = each.value.scaling.health_check_type
   mixed_instances_policy {
     instances_distribution {
-        on_demand_allocation_strategy = "prioritized"
-        on_demand_base_capacity = 0
-        on_demand_percentage_above_base_capacity = 100
-        spot_allocation_strategy = "" 
-        spot_instance_pools = 0
-        spot_max_price = ""
+      #- On-Demand Instance Distribution -#
+        on_demand_allocation_strategy = each.value.scaling.instances_distribution.on_demand_allocation_strategy
+        on_demand_base_capacity = each.value.scaling.instances_distribution.on_demand_base_capacity
+        on_demand_percentage_above_base_capacity = each.value.scaling.instances_distribution.on_demand_percentage_above_base_capacity
+      #- Spot Distribution -#
+        spot_allocation_strategy = each.value.scaling.spot_distribution.spot_allocation_strategy
+        spot_instance_pools = each.value.scaling.spot_distribution.spot_instance_pools
+        spot_max_price = each.value.scaling.spot_distribution.spot_max_price
     }
     launch_template {
         launch_template_specification {
@@ -768,6 +816,39 @@ resource "aws_autoscaling_group" "lt_auto_scaling_group" {
         }
       }
   }
+
+
+
+
+
+
+
+
+
+  instance_refresh {
+    triggers = []
+    strategy = "Rolling"
+    preferences {
+        checkpoint_delay = 0
+        checkpoint_percentages = 100
+        instance_warmup = 0
+        min_health_percentage = 0
+    } 
+  }
+  max_instance_lifetime = 0
+  suspended_processes = []
+  termination_policies = []
+  force_delete = false
+ 
+  #- ASG Instances -#
+  
+  warm_pool {
+    pool_state = ""
+    min_size = 0
+    instance_reuse_policy { reuse_on_scale_in = false }
+    max_group_prepared_capacity = 0
+  }
+  
 
   #-ASG Tags -#
   tag {
