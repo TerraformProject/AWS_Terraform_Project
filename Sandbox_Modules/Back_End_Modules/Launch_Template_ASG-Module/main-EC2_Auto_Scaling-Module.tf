@@ -185,45 +185,209 @@ eni_tag = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in 
                                       if element(split("_", secgrp), 0 ) == "create"
                               ] )
 
-## GET ASG Placement Values ##
-asg_enabled_placement_keys = flatten( [ for asg_placement, asg_placement_values in var.ASG_Placement: asg_placement_values.enabled_config_index_keys ] )
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-asg_enabled_scaling_keys = flatten( [for asg_scaling, asg_scaling_values in var.ASG_Scaling: asg_scaling_values.enabled_config_index_keys ] )
+## GET ASG SCALING and ASG PLACEMENT VALUES ##
 
-asg_enabled_policy_keys = flatten( [for asg_policies, asg_policy_values in var.ASG_Policies: asg_policy_values.enabled_config_index_keys ] )
+# SCALING #
+# Pulls values from the var.ASG_Scaling variable into a local variable (asg_scaling)
 
-asg_enabled_schedule_keys = flatten( [for asg_schedule, asg_schedule_values in var.ASG_Schedules: asg_schedule_values.enabled_config_index_keys ] )
+asg_scaling = flatten( [ for scale_keys, scaling_value in var.ASG_Scaling: {
+                              #- Index Key -#
+                              scaling_index_key = scale_keys
+                              #- Scaling Base -#
+                              min_size = scaling_value.min_size
+                              max_size = scaling_value.max_size
+                              desired_capacity = scaling_value.desired_capacity
+                              capacity_rebalance = scaling_value.capacity_rebalance
+                              protect_from_scale_in = scaling_value.protect_from_scale_in
+                              enabled_metrics = scaling_value.enabled_metrics
+                              metrics_granularity = scaling_value.metrics_granularity
+                              default_cooldown = scaling_value.default_cooldown
+                              wait_for_capacity_timeout = scaling_value.wait_for_capacity_timeout
+                              health_check_type = each.value.scaling.health_check_type
+                              health_check_grace_period = each.value.scaling.health_check_grace_period
+                              #- Policy + Hook Attachments -#
+                              asg_scaling_policies_config_index_keys = scaling_value.asg_scaling_policies_config_index_keys
+                              asg_schedule_policies_config_index_keys = scaling_value.asg_schedule_policies_config_index_keys
+                              asg_lifecycle_hook_config_index_keys = scaling_value.asg_lifecycle_hook_config_index_keys
+                              asg_notifications_config_index_keys = scaling_value.asg_notifications_config_index_keys
+                              #- On-Demand Instance Distribution -#
+                              instances_distribution = {
+                                on_demand_allocation_strategy = scaling_value.instances_distribution.on_demand_allocation_strategy
+                                on_demand_base_capacity = scaling_value.instances_distribution.on_demand_base_capacity
+                                on_demand_percentage_above_base_capacity = scaling_value.instances_distribution.on_demand_percentage_above_base_capacity
+                                on_demand_max_price_percentage_over_lowest_price = scaling_value.instances_distribution.on_demand_max_price_percentage_over_lowest_price
+                                #- Capcacity Reservations -#
+                                capacity_reservations = scaling_value.instances_distribution.capacity_reservations
+                              }
+                              #- Spot Distribution -#
+                              spot_distribution = {
+                                spot_allocation_strategy = scaling_value.spot_distribution.spot_allocation_strategy
+                                spot_instance_pools = scaling_value.spot_distribution.spot_instance_pools
+                                spot_max_price = scaling_value.spot_distribution.spot_max_price
+                                spot_max_price_percentage_over_lowest_price = scaling_value.spot_distribution.spot_max_price_percentage_over_lowest_price
+                              }
+                              #- Warm Pool Instances -#
+                              warm_pool = {
+                                pool_state = scaling_value.warm_pool.pool_state
+                                min_size = scaling_value.warm_pool.min_size
+                                reuse_on_scale_in = scaling_value.warm_pool.reuse_on_scale_in
+                                max_group_prepared_capacity = scaling_value.warm_pool.max_group_prepared_capacity
+                              }
+                              #- Launch Template Overrides -#
+                              launch_template_overrides = scaling_value.launch_template_overrides
+                              #- Instance Refresh -#
+                              instance_refresh = {
+                                triggers = scaling_value.instance_refresh.triggers
+                                strategy = scaling_value.instance_refresh.strategy
+                                checkpoint_delay_preference = scaling_value.instance_refresh.checkpoint_delay_preference
+                                checkpoint_percentages_preference = scaling_value.instance_refresh.checkpoint_percentages_preference
+                                instance_warmup_preference = scaling_value.instance_refresh.instance_warmup_preference
+                                min_health_percentage_preference = scaling_value.instance_refresh.min_health_percentage_preference
+                              }
+                              #- Instance Offline -#
+                              instance_offline = {
+                                max_instance_lifetime = scaling_value.instance_offline.max_instance_lifetime
+                                suspended_processes = scaling_value.instance_offline.suspended_processes
+                                termination_policies = scaling_value.instance_offline.termination_policies
+                                force_delete = scaling_value.instance_offline.force_delete
+                              } }
+                              if scale_keys == placement_value.asg_scaling_config_index_key
+                              ] )
 
-asg_enabled_lifecycle_hook_keys = flatten( [for asg_lifecycle_hook, asg_lifecycle_hook in var.ASG_lifecycle_hook: asg_lifecycle_hook_values.enabled_config_index_keys ] )
+asg_scaling_object = { for o in local.asg_scaling: o.scaling_index_key => o }
 
-auto_scaling_group = flatten( [ for asg_placement_keys, asg_placement_values in var.ASG_Placement: [
-                            for asg_placement, placement_values in asg_placement_values.configurations: {
-                            #- Placement -#
-                             placement_keys = asg_placement_keys
-                             #- Placement -#
-                             placement = placement_values
-                             #- ASG Scaling -#
-                             scaling = flatten( [ for asg_scaling_key, asg_scaling_values in var.ASG_Scaling: [
-                                                    for asg_scaling, scaling_values in asg_scaling_values.configurations: scaling_values  
-                                              ] if placement.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_scaling_keys, asg_scaling ) == true ] )
-                            #- Scaling Policies -#
-                             scaling_policies = flatten( [ for asg_policies_key, asg_policies_values in var.ASG_Policies: [
-                                                    for asg_policies, policies_values in asg_policies_values.configurations: policies_values  
-                                              ] if policies_values.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_policy_keys, asg_policies ) == true ] )
-                            #- Schedule -#
-                             schedule = flatten( [ for asg_schedule_key, asg_schedule_values in var.ASG_Schedules: [
-                                                    for asg_schedule, schedule_values in asg_schedule_values.configurations: schedule_values  
-                                              ] if schedule_values.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_schedule_keys, asg_schedule ) == true ] )
-                            #- Lifecycle Hook -#
-                             lifecycle_hook = flatten( [ for asg_lifecycle_hook_key, asg_lifecycle_hook_values in var.ASG_Lifecycle_Hooks: [
-                                                    for asg_lifecycle_hook, lifecycle_hook_values in asg_lifecycle_hook_values.configurations: lifecycle_hook_values  
-                                              ] if lifecycle_hook_values.asg_scaling_config_index_key == asg_scaling && contains( local.asg_enabled_lifecycle_hook_keys, asg_lifecycle_hook ) == true ] )
-                            }
-                          ]
-                          if contains(local.asg_enabled_placement_keys, asg_placement) == true  
-                        ] )
+# PLACEMENT #
+# Pulls values from the var.ASG_Placement variable into a local.variable
+# Based on asg_scaling_config_index_key, Pulls in scaling values from local.asg_scaling variable and sets it as element for asg_scale_pbject in asg_placement local variable
 
-asg_object = { for o in local.auto_scaling_group: "${var.asg_name}-${o.placement_keys}" => o }
+asg_placement = flatten( [ for place_keys, place_values in var.ASG_Placement: [
+                  for placement_key, placement_value in values.configurations: {
+                    placement_index_key = "${var.asg_name}-${place_keys}"
+                    vpc_zone_identifier = placement_value.vpc_zone_identifier
+                    target_group_arns = placement_value.target_group_arns
+                    min_elb_capacity = placement_value.min_elb_capacity
+                    wait_for_elb_capacity = placement_value.wait_for_elb_capacity
+                    placement_group = placement_value.placement_group
+                    #- Classic Placement -#
+                    availability_zone = placement_value.availability_zone
+                    load_balancers = placement_value.load_balancers
+                    #- Scaling Attachment -#
+                    asg_scaling_config_index_key = placement_value.asg_scaling_config_index_key
+                    asg_scale_object = element([ for key, value in asg_scaling_object: matchkeys( [value], [key], [placement_value.asg_scaling_config_index_key] )], 0)
+                    #- Tags -#
+                    asg_tags = placement_value.asg_tags
+                  }
+                  if contains(values.enabled_config_index_key, placement_key) == true
+                  ]
+              ] )
+
+# Policy + Hook attachments #
+# Creates an object of the asg_placement local variable to be used in policy + hook attachments below when doing a match keys function
+
+asg_placement_object = { for o in local.asg_placement: o.placement_index_key => o }
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+# GET ASG SCALING OBJECT AND ATTACH IT TO ASG SCALING POLICY ##
+
+scaling_policy_object = { for o in local.scaling_policies: o.policy_index_key => o }
+
+scaling_policies = flatten( [ for policy_key, policy_values in var.ASG_policies: {
+                                  policy_index_key = policies_key
+                                  policy_name = policy_values.policy_name
+                                  asg_scaling_config_index_keys = policy_values.asg_scaling_config_index_keys
+                                  policy_type = policy_values.policy_type
+                                  adjustment_type = policy_values.adjustment_type
+                                  estimated_instance_warmup = policy_values.estimated_instance_warmup
+                                  simple_scaling = policy_values.SimpleScaling
+                                  StepScaling = policy_values.StepScaling
+                                  target_tracking_scaling = policy_values.target_tracking_scaling
+                                  predictive_scaling = policy_values.predictive_scaling
+                                }
+                           ] )
+
+scaling_policy_attachment = flatten( [ for placement_key, placement_value in local.asg_placement_object: [
+                                        for scaling_key, scaling_value in placement_value.asg_scale_object: [
+                                          for scaling_attachment in scaling_value.asg_scaling_policies_config_index_keys: {
+                                            asg_index_key = placement_key
+                                            attachment_index_key = "${scaling_key}-${scaling_attachment}"
+                                            scaling_index_key = scaling_key
+                                            scaling_value = element( flatten([ for key, value in local.scaling_policy_object: matchkeys( [value], [key], [scaling_attachment] ) ]), 0 )
+                                    } ] ] ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+## GET ASG SCALING OBJECT AND ATTACH IT TO ASG SCHEDULE POLICY ##
+
+asg_schedule_object = { for o in local.asg_schedule: o.schedule_index_key => o }
+
+asg_schedule = flatten( [ for schedule_key, schedule in var.ASG_Schedules: {
+                            schedule_index_key = schedule_key
+                            scheduled_action_name = schedule.scheduled_action_name
+                            start_time = schedule.start_time
+                            end_time = schedule.end_time
+                            recurrence = schedule.recurrence
+                            time_zone = schedule.time_zone
+                            min_size = schedule.min_size
+                            max_size = schedule.max_size
+                            desired_capacity = schedule.desired_capacity
+                      } ] )
+
+schedule_policy_attachment = flatten( [ for placement_key, placement_value in local.asg_placement_object: [
+                                          for scaling_key, scaling_value in var.ASG_Scaling: [
+                                            for schedule_attachment in scaling_value.asg_schedule_policies_config_index_keys: {
+                                              asg_index_key = placement_key
+                                              attachment_index_key = "${scaling_key}-${schedule_attachment}"
+                                              scaling_index_key = scaling_key
+                                              scaling_value = element( flatten([ for key, value in local.schedule_policy_object: matchkeys( [value], [key], [schedule_attachment] ) ]), 0 )
+                                            } ] ] ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+## GET ASG SCALING OBJECT AND ATTACH IT TO ASG LIFECYCLE HOOK ##
+
+asg_lifescycle_hook = flatten( [ for hook_key, hook_value in var.ASG_Lifecycle_Hooks: {
+                                  lifecycle_hook_index_key = hook_key
+                                  lifecycle_hook_name = hook_value.lifecycle_hook_name
+                                  default_result         = hook_value.default_result
+                                  heartbeat_timeout      = hook_value.heartbeat_timeout
+                                  lifecycle_transition   = hook_value.lifecycle_transition
+                                  notification_target_arn = hook_value.notification_target_arn
+                                  role_arn                = hook_value.role_arn
+                                  notification_metadata = hook_value.notification_metadata
+                              } ] )
+
+asg_lifecycle_hook_object = { for o in local.asg_lifecycle_hook: o.lifecycle_hook_index_key => o }
+
+lifescycle_hook_attachment = flatten( [ for placement_key, placement_value in local.asg_placement_object: [
+                                          for scaling_key, scaling_value in var.ASG_Scaling: [
+                                            for lifecycle_hook_attachment in scaling_value.asg_lifecycle_hook_config_index_keys: {
+                                              asg_index_key = placement_key
+                                              attachment_index_key = "${scaling_key}-${lifecycle_hook_attachment}"
+                                              scaling_index_key = scaling_key
+                                              scaling_value = element( flatten([ for key, value in local.lifecycle_hook_object: matchkeys( [value], [key], [lifecycle_hook_attachment] ) ]), 0 )
+                                        } ] ] ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+asg_notification = flatten( [ for notification_key, notification_value in var.ASG_Notifications: {
+                                notification_index_key = notification_key
+                                notifications = notification_value.notifications
+                                sns_topic_name = notification_value.sns_topic_name
+                            } ] )
+
+asg_notification_object = { for o in local.asg_notification: o.notification_index_key => o }
+
+notification_attachment = flatten( [ for placement_key, placement_value in local.asg_placement_object: [
+                                      for scaling_key, scaling_value in var.ASG_Scaling: [
+                                        for notification_attachment in scaling_value.asg_notification_config_index_keys: {
+                                          asg_index_key = placement_key
+                                          attachment_index_key = "${scaling_key}-${notification_attachment}"
+                                          scaling_index_key = scaling_key
+                                          scaling_value = element( flatten([ for key, value in local.lifecycle_hook_object: matchkeys( [value], [key], [notification_attachment] ) ]), 0 )
+                                    } ] ] ] )
 
 }
 
@@ -703,17 +867,10 @@ for_each = local.launch_template
 ##########################################
 
 resource "aws_autoscaling_group" "lt_auto_scaling_group" {
-for_each = local.asg_object
+for_each = local.asg_placement_object
   name = var.asg_name
   name_prefix = var.asg_prefix
   service_linked_role_arn = var.asg_service_linked_role
-
-  #- Launch Template -#
-  launch_template {
-    id = ""
-    name = ""
-    version = ""
-  }
 
   #- PLacement -#
   vpc_zone_identifier = each.value.placement.vpc_zone_identifier
@@ -725,27 +882,27 @@ for_each = local.asg_object
   availability_zones = each.value.placement.availability_zones
   load_balancers = each.value.placement.load_balancers
   #- Scaling -#
-  min_size = each.value.scaling.min_size
-  max_size = each.value.scaling.max_size
-  desired_capacity = each.value.scaling.desired_capacity
-  capacity_rebalance = each.value.scaling.capacity_rebalance
-  protect_from_scale_in = each.value.scaling.protect_from_scale_in
-  enabled_metrics = each.value.scaling.enabled_metrics
-  metrics_granularity = each.value.scaling.metrics_granularity
-  default_cooldown = each.value.default_cooldown
-  wait_for_capacity_timeout = each.value.scaling.wait_for_capacity_timeout
-  health_check_grace_period = each.value.scaling.health_check_grace_period
-  health_check_type = each.value.scaling.health_check_type
+  min_size = each.value.asg_scale_object.min_size
+  max_size = each.value.asg_scale_object.max_size
+  desired_capacity = each.value.asg_scale_object.desired_capacity
+  capacity_rebalance = each.value.asg_scale_object.capacity_rebalance
+  protect_from_scale_in = each.value.asg_scale_object.protect_from_scale_in
+  enabled_metrics = each.value.asg_scale_object.enabled_metrics
+  metrics_granularity = each.value.asg_scale_object.metrics_granularity
+  default_cooldown = each.value.asg_scale_object.default_cooldown
+  wait_for_capacity_timeout = each.value.asg_scale_object.wait_for_capacity_timeout
+  health_check_type = each.value.asg_scale_object.health_check_type
+  health_check_grace_period = each.value.asg_scale_object.health_check_grace_period
   mixed_instances_policy {
     instances_distribution {
       #- On-Demand Instance Distribution -#
-        on_demand_allocation_strategy = each.value.scaling.instances_distribution.on_demand_allocation_strategy
-        on_demand_base_capacity = each.value.scaling.instances_distribution.on_demand_base_capacity
-        on_demand_percentage_above_base_capacity = each.value.scaling.instances_distribution.on_demand_percentage_above_base_capacity
+        on_demand_allocation_strategy = each.value.asg_scale_object.on_demand_distribution.on_demand_allocation_strategy
+        on_demand_base_capacity = each.value.asg_scale_object.on_demand_distribution.on_demand_base_capacity
+        on_demand_percentage_above_base_capacity = each.value.asg_scale_object.on_demand_distribution.on_demand_percentage_above_base_capacity
       #- Spot Distribution -#
-        spot_allocation_strategy = each.value.scaling.spot_distribution.spot_allocation_strategy
-        spot_instance_pools = each.value.scaling.spot_distribution.spot_instance_pools
-        spot_max_price = each.value.scaling.spot_distribution.spot_max_price
+        spot_allocation_strategy = each.value.asg_scale_object.spot_distribution.spot_allocation_strategy
+        spot_instance_pools = each.value.asg_scale_object.spot_distribution.spot_instance_pools
+        spot_max_price = each.value.asg_scale_object.spot_distribution.spot_max_price
     }
     launch_template {
         launch_template_specification {
@@ -753,145 +910,133 @@ for_each = local.asg_object
             launch_template_name = ""
             version = ""
         }
-        override {
-            weighted_capacity = 0
-            instance_type = ""
+        dynamic "override" {
+        for_each = each.value.asg_scale_object.launch_template_overrides
+        content {
+            weighted_capacity = override.value.weigted_capacity
+            instance_type = override.value.instance_type
             launch_template_specification {
-                  launch_template_id = ""
-                  launch_template_name = ""
-                  version = ""
+                  launch_template_id = override.value.launch_template.id
+                  launch_template_name = override.value.launch_template.name
+                  version = override.value.launch_template.version
             }
             instance_requirements {
                   #- Instances -#
-                  instance_generations = []
-                  excluded_instance_types = []
-                  on_demand_max_price_percentage_over_lowest_price = 0
-                  spot_max_price_percentage_over_lowest_price = 0
-                  bare_metal = ""
-                  require_hibernate_support = false
+                  instance_generations = lookup(override.value.instance_requirements, "instance_generations", [] )
+                  excluded_instance_types = lookup(override.value.instance_requirements, "excluded_instance_types", [] )
+                  on_demand_max_price_percentage_over_lowest_price = lookup(override.value.instance_requirements, "on_demand_max_price_percentage_over_lowest_price", null )
+                  spot_max_price_percentage_over_lowest_price = lookup(override.value.instance_requirements, "spot_max_price_percentage_over_lowest_price", null )
+                  bare_metal = lookup(override.value.instance_requirements, "bare_metal", null )
+                  require_hibernate_support = lookup(override.value.instance_requirements, "require_hibernate_support", false )
                   #- CPU -#
-                  cpu_manufacturers = []
-                  vcpu_count {
-                    min = 0
-                    max = 0
+                  cpu_manufacturers = lookup(override.value.instance_requirements, "cpu_manufacturers", [] )
+                  vcpu_count { 
+                    min = lookup(override.value.instance_requirements.vcpu_count, "min", null )
+                    max = lookup(override.value.instance_requirements.vcpu_count, "max", null )
                   }
-                  burstable_performance = ""
+                  burstable_performance = lookup(override.value.instance_requirements, "burstable_performance", null )
                   #- Accelerators -#
-                  accelerator_types = []
-                  accelerator_manufacturers = []
-                  accelerator_names = []
+                  accelerator_types = lookup(override.value.instance_requirements, "accelerator_types", null )
+                  accelerator_manufacturers = lookup(override.value.instance_requirements, "accelerator_manufacturers", null )
+                  accelerator_names = lookup(override.value.instance_requirements, "accelerator_names", null )
                   accelerator_count {
-                    min = 0
-                    max = 0
+                    min = lookup(override.value.instance_requirements.accelerator_count, "min", null )
+                    max = lookup(override.value.instance_requirements.accelerator_count, "max", null )
                   }
                   accelerator_total_memory_mib {
-                    min = 0
-                    max = 0
+                    min = lookup(override.value.instance_requirements.accelerator_total_memory_mib, "min", null )
+                    max = lookup(override.value.instance_requirements.accelerator_total_memory_mib, "max", null )
                   }
                   #- Memory -#
                   memory_gib_per_vcpu {
-                    min = 0
-                    max = 0
+                    min = lookup(override.value.instance_requirements.memory_gib_per_vcpu, "min", null )
+                    max = lookup(override.value.instance_requirements.memory_gib_per_vcpu, "max", null )
                   }
                   memory_mib {
-                    min = 0
-                    max = 0
+                    min = lookup(override.value.instance_requirements.memory_mib, "min", null )
+                    max = lookup(override.value.instance_requirements.memory_mib, "max", null )
                   }
                   #- Storage -#
                   local_storage = ""
                   total_local_storage_gb {
-                    min = 0
-                    max = 0
+                    min = lookup(override.value.instance_requirements.total_local_storage_gb, "min", null )
+                    max = lookup(override.value.instance_requirements.total_local_storage_gb, "max", null )
                   }
                   baseline_ebs_bandwidth_mbps {
-                    min = 0
-                    max = 0
+                    min = lookup(override.value.instance_requirements.baseline_ebs_bandwidth_mbps, "min", null )
+                    max = lookup(override.value.instance_requirements.baseline_ebs_bandwidth_mbps, "max", null )
                   }
                   #- Network -#
                   network_interface_count {
-                    min = 0
-                    max = 0
+                    min = lookup(override.value.instance_requirements.network_interface_count, "min", null )
+                    max = lookup(override.value.instance_requirements.network_interface_count, "max", null )
                   }     
-          }    
+            }    
+          }
         }
       }
   }
 
-
-
-
-
-
-
-
+warm_pool {
+    pool_state = each.value.asg_scale_object.warm_pool.pool_state
+    min_size = each.value.asg_scale_object.warm_pool.min_size
+    instance_reuse_policy { reuse_on_scale_in = each.value.asg_scale_object.warm_pool.reuse_on_scale_in }
+    max_group_prepared_capacity = each.value.asg_scale_object.warm_pool.max_group_prepared_capacity
+  }
 
   instance_refresh {
-    triggers = []
-    strategy = "Rolling"
+    triggers = each.value.asg_scale_object.instance_refresh.triggers
+    strategy = each.value.asg_scale_object.instance_refresh.strategy
     preferences {
-        checkpoint_delay = 0
-        checkpoint_percentages = 100
-        instance_warmup = 0
-        min_health_percentage = 0
+        checkpoint_delay = each.value.asg_scale_object.instance_refresh.checkpoint_delay
+        checkpoint_percentages = each.value.asg_scale_object.instance_refresh.checkpoint_percentages
+        instance_warmup = each.value.asg_scale_object.instance_refresh.instance_warmup
+        min_health_percentage = each.value.asg_scale_object.instance_refresh.min_health_percentage
     } 
   }
-  max_instance_lifetime = 0
-  suspended_processes = []
-  termination_policies = []
-  force_delete = false
- 
-  #- ASG Instances -#
-  
-  warm_pool {
-    pool_state = ""
-    min_size = 0
-    instance_reuse_policy { reuse_on_scale_in = false }
-    max_group_prepared_capacity = 0
-  }
-  
+
+  max_instance_lifetime = each.value.asg_scale_object.instance_offline.max_instance_lifetime
+  suspended_processes = each.value.asg_scale_object.instance_offline.suspended_processes
+  termination_policies = each.value.asg_scale_object.instance_offline.termination_policies
+  force_delete = each.value.asg_scale_object.instance_offline.force_delete
 
   #-ASG Tags -#
-  tag {
-        key = ""
-        value = ""
-        propgate_at_launch = false
-  }
-  tags = [
-        {
-        key = ""
-        value = ""
-        propgate_at_launch = false
-        }
-      ] 
+  tags = each.value.ASG_Placement.asg_tags
+
 }
 
 ################################################
 ## Launch Template: Auto Scaling Group Policy ##
 ################################################
 resource "aws_autoscaling_policy" "lt_auto_scaling_group_policy" {
-  enabled = false
-  name = ""
+for_each = local.auto_scaling_group
+  enabled = true
+  name = each.value.scaling_policies.policy_name
   autoscaling_group_name = ""
-  adjustment_type = "" # ChangeInCapacity | ExactCapacity | PercentChangeInCapacity
-  policy_type = "" # SimpleScaling | StepScaling | TargetTrackingScaling | PredictiveScaling
-  estimated_instance_warmup = 0
+  adjustment_type = each.value.scaling_policies.adjustment_type
+  policy_type = each.value.scaling_policies.policy_type
+  estimated_instance_warmup = each.value.scaling_policies.estimated_instance_warmup
   #- Only Applies to "SimpleScaling" and "StepScaling" -#
-  min_adjustment_magnitude = 0
+  min_adjustment_magnitude = lookup(each.value.scaling_policies.policy_values, "min_adjustment_magnitude", null)
   #- Only Applies to "SimpleScaling" -#
-  cooldown = 0
-  scaling_adjustment = 0 # adjustment_type detirmines how this is is interpreted: number | percent
+  cooldown = lookup(each.value.scaling_policies.policy_values, "cooldown", null)
+  scaling_adjustment = lookup(each.value.scaling_policies.policy_valuesm, "scaling_adjustment", null )
   #- Only Applies to "StepScaling" -#
-  metric_aggregation_type = "" # Minimum | Maximum | Average
+  metric_aggregation_type = lookup(each.value.scaling_policies.policy_values, "metric_aggregation_type", null)
   step_adjustment {
-    scaling_adjustment = 0
-    metric_interval_lower_inbound = 0
-    metric_interval_upper_bound = 0
+    scaling_adjustment = lookup(each.value.scaling_policies.policy_values.step_adjustment, "scaling_adjustment", null)
+    metric_interval_lower_inbound = lookup(each.value.scaling_policies.policy_values.step_adjustment, "metric_interval_lower_inbound", null)
+    metric_interval_upper_bound = lookup(each.value.scaling_policies.policy_values.step_adjustment, "metric_interval_upper_bound", null)
   }
   #- Only Applies to "TargetTrackingScaling" -#
   target_tracking_configuration {
-    predifined_metric_specification { # Conflicts with customize_metric_specification
+    dynamic "predifined_metric_specification" { # Conflicts with customize_metric_specification
+    for_each = {}
+    #for_each = lookup(each.value.scaling_policies.TargetTrackingScaling.values.
+    content {
         predifined_metric_type = ""
         resource_label = ""
+      }
     } 
     customized_metric_specification { # Conflicts with predifined_metric_specification
         metric_name = ""
