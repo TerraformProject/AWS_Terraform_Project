@@ -572,6 +572,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                         #------------------------------------#
                         load_metrics = {
                         type = "" # predifined | custom
+                        values = {
                             predifined = {
                                 predefined_metric_type = "" # ASGTotalCPUUtilization | ASGTotalNetworkIn | ASGTotalNetworkOut
                                 resource_label = ""
@@ -583,21 +584,24 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                                     label = ""
                                     return_data = false
                                     expression = ""
+                                }
+                                query_001 = {
+                                    id = ""
+                                    label = ""
+                                    return_data = false
                                     metric_stat = {
                                         metric_name = ""
                                         namespace = ""
                                         stat = ""
                                         unit = 0
-                                        dimensions = [
-                                            { name = "", value = ""},
-                                            { name = "", value = ""}
-                                        ]
+                                        dimensions = { name = "", value = ""}
                                 } }
                                 #----------------------------#
-                        } }
+                        } } }
                         #------------------------------------#
                         capacity_metrics = {
                         type = "" # predifined | custom
+                        values = {
                             predifined = {
                                 predifined_metric_type = "" # ASGCPUUtilization | ASGNetworkIn | ASDNetworkOut | ALBRequestCount
                                 resource_label = ""
@@ -620,10 +624,11 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                                         ]
                                 } }
                                 #----------------------------#
-                        } }
+                        } } }
                         #------------------------------------#
                         scaling_metrics = {
                         type = "" # predifined | custom
+                        values = {
                             predifined = {
                                 predifined_metric_type = ""# ASGAverageCPUUtilization | ASGAverageNetworkIN | ASGAverageNetworkOut | ALBRequestCountPerTarget
                                 resource_label = ""
@@ -646,7 +651,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
                                         ]
                                 } }
                                 #----------------------------#
-                        } }
+                        } } }
                         #------------------------------------#
                 } }
                 #--------------------------------------------#

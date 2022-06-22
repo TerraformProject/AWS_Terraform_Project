@@ -1,5 +1,7 @@
 locals {
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 ## Creating all in one object for resources below to reference #
 
 ## GET INSTANCE BOOT VALUES ##
@@ -10,6 +12,8 @@ instance_boot = flatten([ for Instance_Boot_Keys, Instance_Boot_Values in var.In
                           if Instance_Boot_Values.enabled_config_index_key == config ]
                         ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 ## GET INSTANCE TYPE VALUES ##
 instance_types = flatten([ for Instance_Type_Keys, Instance_Type_Values in var.Instance_Types: 
                           [ for config, config_values in Instance_Type_Values.configurations: {
@@ -17,6 +21,8 @@ instance_types = flatten([ for Instance_Type_Keys, Instance_Type_Values in var.I
                           } 
                           if Instance_Type_Values.enabled_config_index_key == config ]
                         ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 ## GET INSTANCE CPU VALUES ##
 instance_cpu = flatten([ for Instance_CPU_Keys, Instance_CPU_Values in var.Instance_CPU: 
@@ -26,6 +32,8 @@ instance_cpu = flatten([ for Instance_CPU_Keys, Instance_CPU_Values in var.Insta
                           if Instance_CPU_Values.enabled_config_index_key == config ]
                         ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 ## GET INSTANCE MEMORY VALUES ##
 instance_memory = flatten([ for Instance_Memory_Keys, Instance_Memory_Values in var.Instance_Memory: 
                           [ for config, config_values in Instance_Memory_Values.configurations: {
@@ -33,6 +41,8 @@ instance_memory = flatten([ for Instance_Memory_Keys, Instance_Memory_Values in 
                           } 
                           if Instance_Memory_Values.enabled_config_index_key == config ]
                         ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 ## GET INSTANCE GPU VALUES ##
 instance_gpu = flatten([ for Instance_GPU_Keys, Instance_GPU_Values in var.Instance_GPU: 
@@ -42,6 +52,8 @@ instance_gpu = flatten([ for Instance_GPU_Keys, Instance_GPU_Values in var.Insta
                           if Instance_GPU_Values.enabled_config_index_key == config ]
                         ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 ## GET INSTANCE ACCELERATOR VALUES ##
 instance_accelerators = flatten([ for Instance_Accelerator_Keys, Instance_Accelerator_Values in var.Instance_Accelerators: 
                           [ for config, config_values in Instance_Accelerator_Values.configurations: {
@@ -49,6 +61,8 @@ instance_accelerators = flatten([ for Instance_Accelerator_Keys, Instance_Accele
                           } 
                           if Instance_Accelerator_Values.enabled_config_index_key == config ]
                         ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 ## GET INSTANCE STORAGE ##
 instance_storage = flatten([ for Instance_Storage_Keys, Instance_Storage_Values in var.Instance_Storage: 
@@ -58,6 +72,8 @@ instance_storage = flatten([ for Instance_Storage_Keys, Instance_Storage_Values 
                           if Instance_Storage_Values.enabled_config_index_key == config ]
                         ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 ## GET INSTANCE NETWORKING VALUES ##
 instance_networking = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in var.Instance_Networking: 
                           [ for config, config_values in Instance_Networking_Values.configurations: {
@@ -65,7 +81,9 @@ instance_networking = flatten([ for Instance_Networking_Keys, Instance_Networkin
                           } 
                           if Instance_Networking_Values.enabled_config_index_key == config ]
                         ] )
-                      
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 ## MERGING ALL LAUNCH TEMPLATE VAlUES INTO LOCAL VARIABLED FOR REFERENCE BY RESOURCES ##
 # launch_template = { 
 #    lt_values = join(", ", concat(local.instance_boot, local.instance_types, local.instance_cpu, local.instance_memory, local.instance_gpu, local.instance_accelerators, local.instance_storage, local.instance_networking ) ) 
@@ -85,6 +103,8 @@ launch_template = {
 
 }
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 #- GET VALUES WHEN copy_ami IS SPECIFIED -#
   copy_ami = flatten([ for Instance_Boot_Keys, Instance_Boot_Values in var.Instance_Boot: 
                       [ for config, config_values in Instance_Boot_Values.configurations: {
@@ -100,6 +120,8 @@ launch_template = {
                     if Instance_Boot_Values.enabled_config_index_key == config && config_values.get_ami_type == "copy_ami"
                     ] ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 #- GET VALUES WHEN copy_ami_instance IS SPECIFIED -#
   copy_ami_instance = flatten([ for Instance_Boot_Keys, Instance_Boot_Values in var.Instance_Boot: 
                                   [ for config, config_values in Instance_Boot_Values.configurations: {
@@ -111,6 +133,8 @@ launch_template = {
                                 if Instance_Boot_Values.enabled_config_index_key == config && config_values.get_ami_type == "copy_ami_instance"
                                 ] ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 # - GET VALUES WHEN CREATING A NEW IAM INSTANCE PROFILE -#
   iam_instance_profile = flatten([ for Instance_Boot_Keys, Instance_Boot_Values in var.Instance_Boot: 
                                   [ for config, config_values in Instance_Boot_Values.configurations: {
@@ -121,6 +145,8 @@ launch_template = {
                                 if Instance_Boot_Values.enabled_config_index_key == config && config_values.iam_instance_profile.instance_profile_name != ""
                                 ] ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 #- GET VALUES WHEN SPECIFYING A NEW KEY PAIR FOR LAUNCH TEMPLATE -#
   key_pair = flatten([ for Instance_Boot_Keys, Instance_Boot_Values in var.Instance_Boot: 
                       [ for config, config_values in Instance_Boot_Values.configurations: {
@@ -129,6 +155,8 @@ launch_template = {
                       }
                     if Instance_Boot_Values.enabled_config_index_key == config && config_values.ssh_key_pair.public_key_file != ""
                     ] ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 #- GET VALUES WHEN KMS KEY IS CREATED AND WHEN create_kms_keys_index_keys == the index key of the created KMS key -#
 
@@ -147,6 +175,8 @@ kms_key = flatten([ for Instance_Storage_Keys, Instance_Storage_Values in var.In
                     if Instance_Storage_Values.enabled_config_index_key == config 
                     ] ] )
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
 #- GET NETWORK INTERFACE ID WHEN TAG IS SPECIFED -#
 
 eni_tag = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in var.Instance_Networking: 
@@ -157,6 +187,8 @@ eni_tag = flatten([ for Instance_Networking_Keys, Instance_Networking_Values in 
                     } ]
                     if Instance_Networking_Values.enabled_config_index_key == config && eni_values.get_eni_by_tag != {}
                     ] ] )
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 ## GATHERING GET/CREATE SECURITY GROUPS ##
 
@@ -316,6 +348,32 @@ scaling_policy_attachment = flatten( [ for placement_key, placement_value in loc
                                             scaling_index_key = scaling_key
                                             scaling_value = element( flatten([ for key, value in local.scaling_policy_object: matchkeys( [value], [key], [scaling_attachment] ) ]), 0 )
                                     } ] ] ] )
+
+predictive_load_metric_custom_data_queries = flatten([ for policy, policy_values in var.ASG_Policies: [
+                                                        for values, predictive_scaling_values in policy_values.PredictiveScaling: [
+                                                          for load_metric_values, load_metric_types in predictive_scaling_values.load_metrics: [
+                                                            for metric_data_query_key, metric_data_query_value in load_metric_values.custom: {
+                                                                index_key = metric_data_query_key
+                                                                id = metric_data_query.id
+                                                                label = metric_data_query.label
+                                                                return_data = metric_data_query.return_data
+                                                                expression = lookup(metric_data_query, "expression", null)
+                                                                metric_stat = lookup(metric_data_query, "metric_stat", null)
+                                                                # metric_stat = {
+                                                                #     metric_name = metric_data_query.
+                                                                #     namespace = metric_data_query.
+                                                                #     stat = metric_data_query.
+                                                                #     unit = metric_data_query.
+                                                                #     dimensions = { name = "", value = ""}
+                                                                # }
+                                                            }                                                   
+                                                          ]
+                                                        ]
+                                                      ] if policy_values.policy_type == "PredicitiveScaling" ])
+
+predictive_capacity_metric_custom_data_queries = flatten()
+
+predictive_scaling_metric_custom_data_queries = flatten()
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -1009,55 +1067,133 @@ warm_pool {
 ## Launch Template: Auto Scaling Group Policy ##
 ################################################
 resource "aws_autoscaling_policy" "lt_auto_scaling_group_policy" {
-for_each = local.auto_scaling_group
+for_each = { for o in local.scaling_policy_attachment: o.attachment_index_key => o }
   enabled = true
-  name = each.value.scaling_policies.policy_name
-  autoscaling_group_name = ""
-  adjustment_type = each.value.scaling_policies.adjustment_type
-  policy_type = each.value.scaling_policies.policy_type
-  estimated_instance_warmup = each.value.scaling_policies.estimated_instance_warmup
+  name = each.value.scaling_value.policy_name
+  autoscaling_group_name = aws_autoscaling_group.lt_auto_scaling_group[each.value.index_key].name
+  adjustment_type = each.value.scaling_value.adjustment_type
+  policy_type = each.value.scaling_value.policy_type
+  estimated_instance_warmup = each.value.scaling_value.estimated_instance_warmup
   #- Only Applies to "SimpleScaling" and "StepScaling" -#
-  min_adjustment_magnitude = lookup(each.value.scaling_policies.policy_values, "min_adjustment_magnitude", null)
+  min_adjustment_magnitude = each.value.scaling_value.policy_type == "SimpleScaling" ? lookup(each.value.scaling_value.SimpleScaling.values, "min_adjustment_magnitude", null) : each.value.scaling_value.policy_type == "StepScaling" ? lookup(each.value.scaling_value.StepScaling.values, "min_adjustment_magnitude", null) : null
   #- Only Applies to "SimpleScaling" -#
-  cooldown = lookup(each.value.scaling_policies.policy_values, "cooldown", null)
-  scaling_adjustment = lookup(each.value.scaling_policies.policy_valuesm, "scaling_adjustment", null )
+  cooldown = each.value.scaling_value.policy_type == "SimpleScaling" ? lookup(each.value.scaling_value.SimpleScaling.values, "cooldown", null) : null
+  scaling_adjustment = each.value.scaling_value.policy_type == "SimpleScaling" ? lookup(each.value.scaling_value.SimpleScaling.values, "scaling_adjustment", null) : null
+
   #- Only Applies to "StepScaling" -#
-  metric_aggregation_type = lookup(each.value.scaling_policies.policy_values, "metric_aggregation_type", null)
-  step_adjustment {
-    scaling_adjustment = lookup(each.value.scaling_policies.policy_values.step_adjustment, "scaling_adjustment", null)
-    metric_interval_lower_inbound = lookup(each.value.scaling_policies.policy_values.step_adjustment, "metric_interval_lower_inbound", null)
-    metric_interval_upper_bound = lookup(each.value.scaling_policies.policy_values.step_adjustment, "metric_interval_upper_bound", null)
+  metric_aggregation_type = each.value.scaling_value.policy_type == "StepScaling" ? lookup(each.value.scaling_value.StepScaling.values, "metric_aggregation_type", null) : null
+  dynmamic "step_adjustment" {
+  for_each = each.value.scaling_value.policy_type != "StepScaling" ? {} : each.value.scaling_value.StepScaling
+  content {
+    scaling_adjustment = step_adjustment.value.step_adjustment.scaling_adjustment
+    metric_interval_lower_inbound = step_adjustment.value.step_adjustment.metric_interval_lower_inbound
+    metric_interval_upper_bound = step_adjustment.value.step_adjustment.metric_interval_upper_bound
+  } 
   }
+
   #- Only Applies to "TargetTrackingScaling" -#
-  target_tracking_configuration {
+  dynamic "target_tracking_configuration" {
+  for_each = each.value.scaling_value.policy_type != "TargetTrackingScaling" ? {} : each.value.scaling_value.TargetTrackingScaling
+  content {
     dynamic "predifined_metric_specification" { # Conflicts with customize_metric_specification
-    for_each = {}
+    for_each = target_tracking_configuration.value.target_tracking_type == "predifined" ? toset([ for t, k in target_tracking_configuration.value.target_tracking_values: k if t == "predifined" ]) : []
     #for_each = lookup(each.value.scaling_policies.TargetTrackingScaling.values.
     content {
-        predifined_metric_type = ""
-        resource_label = ""
+        predifined_metric_type = predifined_metric_specification.value.predifined_metric_type
+        resource_label = predifined_metric_specification.value.resource_label
       }
     } 
-    customized_metric_specification { # Conflicts with predifined_metric_specification
-        metric_name = ""
+    dynamic "customized_metric_specification" { # Conflicts with predifined_metric_specification
+    for_each = target_tracking_configuration.value.target_tracking_type == "custom" ? toset([ for t, k in target_tracking_configuration.value.target_tracking_values: k if t == "custom" ]) : []
+    content {
+        metric_name = customized_metric_specification.value.metric_name
         metric_dimension {
-          name = ""
-          value = ""
+          name = customized_metric_specification.value.metric_dimension.name
+          value = customized_metric_specification.value.metric_dimension.value
         }
-        statistic = ""
-        unit = 0
-        namespace = ""
+        statistic = customized_metric_specification.value.statistic
+        unit = customized_metric_specification.value.unit
+        namespace = customized_metric_specification.value.namespace
+    } }
+    target_value = target_tracking_configuration.value.target_value
+    disable_scale_in = target_tracking_configuration.value.disable_scale_in
     } 
-    target_value = 0
-    disable_scale_in = false
-  }
-  predictive_scaling_configuration {
-    max_capacity_breach_behavior = "" # HonorMaxCapacity | IncreaseMaxCapacity 
-    max_capacity_buffer = 0
-    mode = "" # ForecastAndScale | ForecastOnly
-    scheduling_buffer_time = ""
-    target_value = 0
+    }
+
+  dynamic "predictive_scaling_configuration" {
+  for_each = each.value.scaling_value.policy_type != "PredictiveScaling" ? {} : each.value.scaling_value.PredictiveScaling 
+  content {
+    max_capacity_breach_behavior = predictive_scaling_configuration.value.max_capacity_breach_behavior
+    max_capacity_buffer = predictive_scaling_configuration.value.max_capacity_buffer
+    mode = predictive_scaling_configuration.value.mode
+    scheduling_buffer_time = predictive_scaling_configuration.value.scheduling_buffer_time
+    target_value = predictive_scaling_configuration.value.target_value
+
     metric_specification {
+      dynamic "predefined_load_metric_specification" {
+      for_each = lookup(predictive_scaling_configuration.value, "load_metrics", {} ) != {} toset([ for t, k in predictive_scaling_configuration.value.load_metrics.values: k if t == "predifined" ]) : []
+      content {
+          predefined_metric_type = predefined_load_metric_specification.value.predefined_metric_type
+          resource_label = predefined_load_metric_specification.value.resource_label
+        }
+      }
+      dynamic "customized_load_metric_specification" {
+      for_each = lookup(predictive_scaling_configuration.value, "load_metrics", {} ) != {} ? { for o in local.predictive_load_metric_custom_data_queries: o.index_key => o } : {}                                                                                                      
+      content {
+        metric_data_queries = {
+          id = each.value.id
+          label = each.value.label
+          return_data = each.value.return_data
+          expression = each.value.expression
+          metric_stat = {
+              stat = lookup(each.value.metric_stat, "")
+              unit = 0
+              metric = {
+                metric_name = ""
+                namespace = ""
+                dimensions = {
+                  name = ""
+                  value = ""
+                }
+              }
+          }
+        }
+      }
+      }
+
+
+
+
+
+
+
+                              # module_structure 
+                              # {
+                              #   # Expression | metric_stat
+                              #   # Not Both
+                              #   id = ""
+                              #   label = ""
+                              #   return_data = false
+                              #   expression = ""
+                              #   metric_stat {
+                              #     stat = ""
+                              #     unit = 0
+                              #     metric = {
+                              #       metric_name = ""
+                              #       namespace = ""
+                              #       dimensions = {
+                              #         name = ""
+                              #         value = ""
+                              #       }
+                              #     }
+                              #   }
+                              # }
+        }
+      }
+        predefined_scaling_metric_specification {
+            predefined_metric_type = "" # ASGAverageCPUUtilization | ASGAverageNetworkIN | ASGAverageNetworkOut | ALBRequestCountPerTarget
+            resource_label = ""
+        }
         customized_capacity_metric_specification { # Only valid when customized_load_metric_specification is used
             metric_data_queries = flatten([ for o, k in var.lt_asg_policies: [
                                               for v, m in k.predictive_scaling_configuration: m.metric_specification  
@@ -1085,31 +1221,9 @@ for_each = local.auto_scaling_group
                                   # }
           }
         }
-        customized_load_metric_specification {
-           metric_data_queries = flatten([ for o, k in var.lt_asg_policies: [
-                                              for v, m in k.predictive_scaling_configuration: m.metric_specification  
-                                          ] ] )
-                                  # module_structure 
-                                  # {
-                                  #   # Expression | metric_stat
-                                  #   # Not Both
-                                  #   id = ""
-                                  #   label = ""
-                                  #   return_data = false
-                                  #   expression = ""
-                                  #   metric_stat {
-                                  #     stat = ""
-                                  #     unit = 0
-                                  #     metric = {
-                                  #       metric_name = ""
-                                  #       namespace = ""
-                                  #       dimensions = {
-                                  #         name = ""
-                                  #         value = ""
-                                  #       }
-                                  #     }
-                                  #   }
-                                  # }
+         predefined_metric_pair_specification {
+            predefined_metric_type = "" # ASGCPUUtilization | ASGNetworkIn | ASDNetworkOut | ALBRequestCount
+            resource_label = ""
         }
         customized_scaling_metric_specification {
             metric_data_queries = flatten([ for o, k in var.lt_asg_policies: [
@@ -1137,19 +1251,11 @@ for_each = local.auto_scaling_group
                                   #   }
                                   # }
         }
-        predefined_load_metric_specification {
-            predefined_metric_type = "" # ASGTotalCPUUtilization | ASGTotalNetworkIn | ASGTotalNetworkOut
-            resource_label = ""
-        }
-        predefined_metric_pair_specification {
-            predefined_metric_type = "" # ASGCPUUtilization | ASGNetworkIn | ASDNetworkOut | ALBRequestCount
-            resource_label = ""
-        }
-        predefined_scaling_metric_specification {
-            predefined_metric_type = "" # ASGAverageCPUUtilization | ASGAverageNetworkIN | ASGAverageNetworkOut | ALBRequestCountPerTarget
-            resource_label = ""
-        }
+        
+       
+        
     }
+  }
 }
 
 ###########################################################
