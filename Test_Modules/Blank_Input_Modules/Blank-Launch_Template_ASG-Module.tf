@@ -14,7 +14,7 @@ source = "../Back_End_Modules/Launch_Template_ASG-Module"
     #- Launch Template ---------------------------------------#
     ###########################################################
     launch_template_name = ""
-    launch_template_name_prefix = ""
+    launch_template_name_prefix = false
     description = ""
     default_version = ""
     update_default_version = false

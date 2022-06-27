@@ -136,10 +136,17 @@
           "isOrdered": true,
           "folders": {},
           "files": {
-            "Jenkins": 0
+            "Installing Jenkins on Docker": 1,
+            "Jenkins on AWS Fargate": 0
           }
         }
       },
+      "files": {}
+    },
+    "Stage_Modules": {
+      "name": "Stage_Modules",
+      "isOrdered": true,
+      "folders": {},
       "files": {}
     }
   },
