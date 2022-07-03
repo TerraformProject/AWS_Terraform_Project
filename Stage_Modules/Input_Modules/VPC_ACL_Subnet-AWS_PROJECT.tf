@@ -10,14 +10,13 @@ vpc_id = module.VPC_AWS_PROJECT.vpc_001_id
 
 acl_group = {
     #------------------------------------------#
-    Public_Subnet_ACL = {
+    Public_Subnet_001_ACL = {
         ## ACL SETTINGS ##
         acl_name = "ACL_001_VPC_001"
         subnet_ids = [
             module.VPC_AWS_PROJECT.PubSub_001_VPC_001_id,
             module.VPC_AWS_PROJECT.PubSub_002_VPC_001_id
         ]
-        subnet_tags = {}
         ## INGRESS RULE DECLARATIONS ##
         acl_ingress_rules = {
             #----------------------------------#
@@ -65,6 +64,8 @@ acl_group = {
             "ACLs_VPC_001" = "ACL_001_VPC_001"
         }   }
     #------------------------------------------#
+
+
 }
 
 ###################

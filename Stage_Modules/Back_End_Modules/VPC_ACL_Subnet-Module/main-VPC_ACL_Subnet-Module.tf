@@ -1,13 +1,4 @@
 
-####################
-## Get Subnet IDs ##
-####################
-
-data "aws_subnets" "get_subnet_ids" {
-for_each = var.acl_group  
-
-  tags = each.value.subnet_tags
-}
 
 
 #################
@@ -19,7 +10,7 @@ for_each = var.acl_group
 
   vpc_id = var.vpc_id
 
-  subnet_ids = concat(each.value.subnet_ids, data.aws_subnets.get_subnet_ids[each.key].ids )
+  subnet_ids = each.value.subnet_ids
 
  dynamic "ingress" {
       for_each = lookup(each.value, "acl_ingress_rules", null)
@@ -62,3 +53,4 @@ for_each = var.acl_group
     var.vpc_id
   ]
 }
+

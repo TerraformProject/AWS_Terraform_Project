@@ -99,7 +99,41 @@
     "Test_Modules": {
       "name": "Test_Modules",
       "isOrdered": true,
-      "folders": {},
+      "folders": {
+        "Back_End_Modules": {
+          "name": "Back_End_Modules",
+          "isOrdered": true,
+          "folders": {},
+          "files": {}
+        },
+        "Blank_Input_Modules": {
+          "name": "Blank_Input_Modules",
+          "isOrdered": true,
+          "folders": {},
+          "files": {}
+        },
+        "Input_Modules": {
+          "name": "Input_Modules",
+          "isOrdered": true,
+          "folders": {},
+          "files": {}
+        },
+        "Module_Manuals": {
+          "name": "Module_Manuals",
+          "isOrdered": true,
+          "folders": {},
+          "files": {
+            "Launch_Template_ASG-Module-Manual": 0,
+            "EC2-Launch_Template-Module-Manual": 1
+          }
+        },
+        "Standby_Folder": {
+          "name": "Standby_Folder",
+          "isOrdered": true,
+          "folders": {},
+          "files": {}
+        }
+      },
       "files": {}
     },
     "Notes": {

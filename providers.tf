@@ -19,98 +19,18 @@ provider "aws" {
 }
 
 # ############################
-# ## Terraform Apply Folder ##
+# ## Terraform Test Folder ##
 # ############################       
 
-module "GET_TEST_INPUT_FOLDER" {
-source = "./Test_Modules/Input_Modules"
+# module "GET_TEST_INPUT_FOLDER" {
+# source = "./Test_Modules/Input_Modules"
+# }
+
+# ############################
+# ## Terraform Stage Folder ##
+# ############################       
+
+module "GET_STAGE_INPUT_FOLDER" {
+source = "./Stage_Modules/Input_Modules"
 }
 
-# module "GET_PROD_INPUT_FOLDER" {
-# source = "./Production_Modules/Input_Modules"
-# }
-
-# #####################
-# ## Compute Modules ##
-# #####################       
-
-/* module "GET_COMPUTE_MODULES" {
-source = "./Implemented_Modules/Compute"
-} */
-
-
-##################
-# CI/CD Modules ##
-##################
-
-#     ###########################
-#     ##  CI/CD Source Modules ##
-#     ###########################
-
-#     module "GET_CICD_SOURCE_MODULES" {
-#       source = "./Input-Values/CICD/Source"
-#     }
-
-#     ##########################
-#     ##  CI/CD Build Modules ##
-#     ##########################
-
-#     module "GET_CICD_BUILD_MODULES" {
-#       source = "./Input-Values/CICD/Build"
-#     }
-
-#     ###############################
-#     ##  CI/CD Deployemnt Modules ##
-#     ###############################
-
-#     module "GET_CICD_DEPLOYMENT_MODULES" {
-#       source = "./Input-Values/CICD/Deployment"
-#     }
-
-#     ############################
-#     ## CI/CD Pipeline Modules ##
-#     ############################
-
-#     module "GET_CICD_PIPELINE_MODULES" {
-#       source = "./Input-Values/CICD/Pipeline"
-#     }
-
-# ####################
-# # Network Modules ##
-# ####################
-
-#   module "GET_NETWORK_MODULES" {
-#     source = "./Input-Values/Network-Input-Values"
-#   }
-
-# #################
-# ## IAM Modules ##
-# #################       
-
-# module "GET_IAM_ROLES_POLICIES" {
-# source = "./Input-Values/Security/IAM"
-# }
-
-# ########################
-# ## Monitoring Modules ##
-# ########################
-
-# module "GET_MONITORING_MODULES" {
-#   source = "./Input-Values/Security/Monitoring"
-# }
-       
-# #####################
-# ## Storage Modules ##
-# #####################
-
-# module "GET_STORAGE_MODULES" {
-#   source = "./Input-Values/Storage"
-# }
-
-###################
-# Tesing Modules ##
-###################
-
-# module "GET_TESTING_MODULES" {
-#   source = "./Input-Values/Testing-Input"
-# }

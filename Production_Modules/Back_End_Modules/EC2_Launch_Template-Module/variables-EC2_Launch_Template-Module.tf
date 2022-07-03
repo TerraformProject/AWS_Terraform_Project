@@ -56,7 +56,7 @@ variable "instance_boot_configurations" {
             license_configuration_arn = string
             user_data = object({
                 file = string
-                env_vars = map(string)
+                vars = map(string)
             })
             metadata_options = object({
                 http_endpoint = string
@@ -119,6 +119,7 @@ variable "instance_types_configurations" {
                     tags = map(string)
                 })
             })
+            enable_placement = bool
             placement = object({
                 affinity = string
                 availability_zone = string
@@ -178,7 +179,7 @@ variable "instance_memory_enabled_config_index_key" {
 variable "instance_memory_configurations" {
   description = "Values to specify what Memory configurations to use for booted up instances"
   type = map(object({
-        kernel_id = string
+        kernal_id = string
         ram_disk_id = string
         requirements = map(map(number))
   }))
@@ -239,22 +240,7 @@ variable "instance_storage_configurations" {
     description = "Values to specify what storage configurations to use for boot up instances."
     type = map(object({
             ebs_optimized = bool
-            ebs_blocks = map(object({
-                device_name = string
-                no_device = string
-                virtual_name = string
-                ebs = object({
-                    delete_on_termination = bool
-                    encrypted = bool
-                    kms_key_id = string
-                    create_kms_key_index_key = string
-                    volume_type = string
-                    iops = number
-                    throughput = number
-                    volume_size = number
-                    snapshot_id = string
-                })
-            }))
+            block_device_mappings = any
             create_kms_keys = map(object({
                 kms_key_name = string
                 key_usage = string

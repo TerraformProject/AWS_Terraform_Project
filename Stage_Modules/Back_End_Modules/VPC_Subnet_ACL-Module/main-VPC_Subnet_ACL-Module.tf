@@ -65,9 +65,14 @@ for_each = { for o in local.get_acl_id: o.subnet_id => o }
 
   vpc_id = each.value.vpc_id
 
-  tags = {
-    (each.value.tag_key) = (each.value.tag_value)
+  filter {
+    name = "tag:${each.value.tag_key}"
+    values = toset([each.value.tag_value])
   }
+
+  # tags = {
+  #   (each.value.tag_key) = (each.value.tag_value)
+  # }
 
   depends_on = [
   aws_subnet.subnets,

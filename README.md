@@ -1,10 +1,35 @@
-### (In-Progress) - AWS Compute 
+### (In-Progress) - AWS Compute         
+
+**7/3/2022 Comment:** Hello! Apologies for the wait in pushing modules to production. A lot of changes happening within the past month.       
+
+To show some progress, although not a full deliverable, I have added the following Compute module to production for everyone to review.     
+
+#### EC2 Launch Template Module     
+
+[Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/EC2_Launch_Template-Module-Manual.md)    
+
+[Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-EC2_Launch_Template-Module.tf)     
+
+[Use Case Scenario: Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Input_Modules/EC2_Launch_Template-AWS_PROJECT.tf)         
+
+[Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/EC2_Launch_Template-Module)    
+
+**NOTE:** My next initiative will be to work with previous ECS modules I have created. Getting them working with the stage environment and then pushing to production. To view these modules being worked on, please reference the testing link below to the testing directory where they will be located.      
+
+If there are any questions, feel free to reach out.    
+
+Thank you all!     
+nzebar   
 
 **Modules currently being worked**    
 
-[Sandbox Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Sandbox_Modules/)    
+[Sandbox Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Sandbox_Modules/)     
       
-[Test Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules/)
+[Test Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules/)    
+
+**All modules currently in production**   
+
+[Production Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/)        
 
 #----------------------------------------------------------------------------------------------------#
 

@@ -19,7 +19,6 @@ variable "acl_group" {
     type = map(object({
         acl_name = string
         subnet_ids = list(string)
-        subnet_tags = map(string)
         acl_ingress_rules = map(object({
             action = string
             cidr_block = string

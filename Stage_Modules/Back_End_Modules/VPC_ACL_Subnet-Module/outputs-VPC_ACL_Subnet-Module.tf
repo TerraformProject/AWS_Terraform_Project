@@ -8,10 +8,6 @@
 # }
 #- Sample ------------------------#
 
-output "Database_Subnet_ACL_id" {
-  value = aws_network_acl.acl_group["Public_Subnet_ACL"].id
-}
-
-output "Private_Subnet_ACL_id" {
-  value = aws_network_acl.acl_group["Public_Subnet_ACL"].id
+output "Public_Subnet_001_ACL_id" {
+  value = aws_network_acl.acl_group["Public_Subnet_001_ACL"].id
 }

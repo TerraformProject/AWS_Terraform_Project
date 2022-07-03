@@ -59,7 +59,7 @@ vpc_group = {
                     cidr_block = "172.16.5.0/24"
                     ipv6_newbits_netnumb = "8|1"
                     assign_ipv6_address_on_creation = true
-                    map_public_ip_on_launch = false
+                    map_public_ip_on_launch = true
                     route_table_name = "Pub_RT_001_VPC_001"
                     subnet_tags = { "VPC_001_Public_Subnets" = "PubSub_001" }
                 }
@@ -71,7 +71,7 @@ vpc_group = {
                     cidr_block = "172.16.10.0/24"
                     ipv6_newbits_netnumb = "8|2"
                     assign_ipv6_address_on_creation = true
-                    map_public_ip_on_launch = false
+                    map_public_ip_on_launch = true
                     route_table_name = "Pub_RT_002_VPC_001"
                     subnet_tags = { "VPC_001_Public_Subnets" = "PubSub_002" }
                 }
