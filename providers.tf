@@ -22,15 +22,15 @@ provider "aws" {
 # ## Terraform Test Folder ##
 # ############################       
 
-# module "GET_TEST_INPUT_FOLDER" {
-# source = "./Test_Modules/Input_Modules"
-# }
+module "GET_TEST_INPUT_FOLDER" {
+source = "./Test_Modules/Input_Modules"
+}
 
 # ############################
 # ## Terraform Stage Folder ##
 # ############################       
 
-module "GET_STAGE_INPUT_FOLDER" {
-source = "./Stage_Modules/Input_Modules"
-}
+# module "GET_STAGE_INPUT_FOLDER" {
+# source = "./Stage_Modules/Input_Modules"
+# }
 

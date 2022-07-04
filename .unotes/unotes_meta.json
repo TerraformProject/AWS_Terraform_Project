@@ -173,6 +173,14 @@
             "Installing Jenkins on Docker": 1,
             "Jenkins on AWS Fargate": 0
           }
+        },
+        "AWS ECS": {
+          "name": "AWS ECS",
+          "isOrdered": true,
+          "folders": {},
+          "files": {
+            "AWS ECR-Notes": 0
+          }
         }
       },
       "files": {}

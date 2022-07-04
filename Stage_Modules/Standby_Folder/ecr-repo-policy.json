@@ -1,0 +1,24 @@
+{
+    "Version":"2012-10-17",
+    "Statement":[
+       {
+          "Sid":"CodeBuildAccess",
+          "Effect":"Allow",
+          "Principal":{
+             "Service":"codebuild.amazonaws.com"
+          },
+          "Action":[
+             "ecr:BatchGetImage",
+             "ecr:GetDownloadUrlForLayer"
+          ],
+          "Condition":{
+             "ArnLike":{
+                "aws:SourceArn":"arn:aws:codebuild:us-east-1:092968731555:project/project-name"
+             },
+             "StringEquals":{
+                "aws:SourceAccount":"092968731555"
+             }
+          }
+       }
+    ]
+ }

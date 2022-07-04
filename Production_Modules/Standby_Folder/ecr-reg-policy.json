@@ -1,0 +1,19 @@
+{
+    "Version":"2012-10-17",
+    "Statement":[
+        {
+            "Sid":"ReplicationAccessCrossAccount",
+            "Effect":"Allow",
+            "Principal":{
+                "AWS":"arn:aws:iam::my_account_numb:user/nzebar1356"
+            },
+            "Action":[
+                "ecr:CreateRepository",
+                "ecr:ReplicateImage"
+            ],
+            "Resource": [
+                "arn:aws:ecr:us-west-2:my_account_numb:repository/*"
+            ]
+        }
+    ]
+}
