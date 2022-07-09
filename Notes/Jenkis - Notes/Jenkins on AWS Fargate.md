@@ -107,5 +107,4 @@ You have the option of either installing the plugins with/without a Jenkins rest
 
 You will now see the selected plugins begin to install to install until completion.
 
-PluginInstallComplete.JPG
 ![PluginInstallComplete](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Notes/Jenkis%20-%20Notes/Jenkins%20AWS%20Fargate%20Imgs/PluginInstallComplete.JPG)
