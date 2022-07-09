@@ -1,64 +1,62 @@
-### (In-Progress) - AWS Compute  
+### (In-Progress) - AWS Compute
 
-**7/4/2022 Comment:" Hello Again! Another module has been pushed into production. Very happy that this was complete within a day. Still have several more compute modules to push into production before the next deliverable is complete. Nevertheless, there is progress to be shown!   
+\*\*7/4/2022 Comment:" Hello Again! Another module has been pushed into production. Very happy that this was complete within a day. Still have several more compute modules to push into production before the next deliverable is complete. Nevertheless, there is progress to be shown!
 
-#### ECR Elastic Container Registry (ECR) Module    
+#### ECR Elastic Container Registry (ECR) Module
 
-[Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/ECS_ECR-Module-Manual.md)    
+[Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/ECS_ECR-Module-Manual.md)
 
-[Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-ECS_ECR-Module.tf)     
+[Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-ECS_ECR-Module.tf)
 
-[Use Case Scenario: Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Input_Modules/ECS_ECR-AWS_PROJECT.tf)         
+[Use Case Scenario: Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Input_Modules/ECS_ECR-AWS_PROJECT.tf)
 
-[Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/ECS_ECR-Module)    
+[Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/ECS_ECR-Module)
 
-**Modules currently being worked**    
+**Modules currently being worked**
 
-[Sandbox Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Sandbox_Modules/)     
-      
-[Test Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules/)    
+[Sandbox Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Sandbox_Modules/)
 
-**All modules currently in production**   
+[Test Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules/)
 
-[Production Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/) 
+**All modules currently in production**
+
+[Production Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/)
 
 If there are any questions, feel free to reach out.
 
 Thank you all!
 nzebar
 
+**7/3/2022 Comment:** Hello! Apologies for the wait in pushing modules to production. A lot of changes happening within the past month.
 
-**7/3/2022 Comment:** Hello! Apologies for the wait in pushing modules to production. A lot of changes happening within the past month.       
+To show some progress, although not a full deliverable, I have added the following Compute module to production for everyone to review.
 
-To show some progress, although not a full deliverable, I have added the following Compute module to production for everyone to review.     
+#### EC2 Launch Template Module
 
+[Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/EC2_Launch_Template-Module-Manual.md)
 
-#### EC2 Launch Template Module     
+[Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-EC2_Launch_Template-Module.tf)
 
-[Module Manual](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Module_Manuals/EC2_Launch_Template-Module-Manual.md)    
+[Use Case Scenario: Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Input_Modules/EC2_Launch_Template-AWS_PROJECT.tf)
 
-[Blank Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Blank_Input_Modules/Blank-EC2_Launch_Template-Module.tf)     
+[Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/EC2_Launch_Template-Module)
 
-[Use Case Scenario: Input File](https://github.com/TerraformProject/AWS_Terraform_Project/blob/master/Production_Modules/Input_Modules/EC2_Launch_Template-AWS_PROJECT.tf)         
+**NOTE:** My next initiative will be to work with previous ECS modules I have created. Getting them working with the stage environment and then pushing to production. To view these modules being worked on, please reference the link below to the testing directory where they will be located.
 
-[Use Case Scenario: Back End Module](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/Back_End_Modules/EC2_Launch_Template-Module)    
+If there are any questions, feel free to reach out.
 
-**NOTE:** My next initiative will be to work with previous ECS modules I have created. Getting them working with the stage environment and then pushing to production. To view these modules being worked on, please reference the link below to the testing directory where they will be located.      
+Thank you all!
+nzebar
 
-If there are any questions, feel free to reach out.    
+**Modules currently being worked**
 
-Thank you all!     
-nzebar   
+[Sandbox Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Sandbox_Modules/)
 
-**Modules currently being worked**    
+[Test Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules/)
 
-[Sandbox Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Sandbox_Modules/)     
-      
-[Test Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Test_Modules/)    
+**All modules currently in production**
 
-**All modules currently in production**   
-
-[Production Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/)        
+[Production Modules](https://github.com/TerraformProject/AWS_Terraform_Project/tree/master/Production_Modules/)
 
 #----------------------------------------------------------------------------------------------------#
 

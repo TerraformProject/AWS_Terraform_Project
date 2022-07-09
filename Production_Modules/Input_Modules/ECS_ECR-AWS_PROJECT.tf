@@ -22,7 +22,7 @@ scan_rules = {
     #------------------------------#
     rule_001 = {
         enabled = true
-        filter = "jenkins"
+        filter = "jenkins*"
         scan_frequency = "SCAN_ON_PUSH" # SCAN_ON_PUSH | CONTINUOUS_SCAN 
     }
     #------------------------------#
